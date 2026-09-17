@@ -3,10 +3,11 @@
 :root {
   --color-navy: #0A3366;
   --color-navy-dark: #072244;
-  --color-navy-light: #124b94;
+  --color-navy-light: #0D4080;
   
   --color-blue-primary: #0066CC;
   --color-blue-hover: #0052A3;
+  --color-blue-light: #1E6FFB;
   --color-blue-subtle: #EBF4FC;
   --color-blue-tint: #F0F6FC;
 

@@ -4,9 +4,9 @@
 
 /* 1. Hero Clean Section */
 .hero-clean {
-  background: linear-gradient(135deg, #F0F6FC 0%, #FFFFFF 50%, #E8F2FC 100%);
-  padding: 3rem 0 3rem 0;
-  border-bottom: 1px solid var(--color-border);
+  background-color: #FFFFFF;
+  padding: 2.5rem 0 2.5rem 0;
+  border-bottom: 1px solid #E2E8F0;
 }
 
 .hero-grid {
@@ -19,10 +19,10 @@
 /* Featured Upcoming Webinar Panel in Hero */
 .featured-webinar-panel {
   background-color: #FFFFFF;
-  border: 1px solid #CBD5E1;
+  border: 1.5px solid #2B72B5;
   border-radius: 12px;
   padding: 1.5rem 1.65rem;
-  box-shadow: 0 6px 20px rgba(10, 51, 102, 0.08);
+  box-shadow: 0 4px 18px rgba(10, 51, 102, 0.06);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -30,8 +30,8 @@
 }
 
 .featured-webinar-panel:hover {
-  border-color: #0066CC;
-  box-shadow: 0 8px 26px rgba(10, 51, 102, 0.12);
+  border-color: #0A3366;
+  box-shadow: 0 8px 24px rgba(10, 51, 102, 0.1);
 }
 
 .featured-top-bar {
@@ -51,6 +51,7 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   background-color: #EFF6FF;
+  border: 1px solid #DBEAFE;
   padding: 0.22rem 0.6rem;
   border-radius: 4px;
 }
@@ -333,8 +334,8 @@
 
 .webinar-card-reference:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-  border-color: #0066CC;
+  box-shadow: 0 8px 20px rgba(36, 118, 162, 0.12);
+  border-color: #2476A2;
 }
 
 .card-top-link-wrap {
@@ -343,111 +344,155 @@
 }
 
 .card-graphic-banner {
-  height: 140px;
-  background: linear-gradient(135deg, #1C335A 0%, #2A4878 100%);
+  height: 145px;
+  background-color: #0A3366;
   position: relative;
   overflow: hidden;
-  padding: 0.75rem;
+  padding: 0.65rem;
   display: flex;
   justify-content: space-between;
 }
 
-/* Yellow Sticky Note Graphic on Card */
-.banner-note-card {
-  position: absolute;
-  left: 12px;
-  top: 12px;
-  width: 140px;
-  height: 80px;
-  background: #FFFBE6;
-  border: 1px solid #FFE58F;
-  box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
-  padding: 0.5rem;
-  transform: rotate(-3deg);
-  z-index: 1;
-}
-
-.note-card-inner {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.note-card-heading {
-  font-size: 0.72rem;
-  font-weight: 800;
-  color: #D46B08;
-  line-height: 1.2;
-  text-transform: uppercase;
-  font-family: var(--font-display);
-}
-
+/* Badge Live / On Demand at Bottom-Left */
 .banner-badge-left {
   position: absolute;
-  bottom: 10px;
-  left: 12px;
-  z-index: 2;
+  bottom: 8px;
+  left: 8px;
+  z-index: 3;
 }
 
 .badge-live-pill {
   background-color: #E03E3E;
   color: #FFFFFF;
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 800;
   letter-spacing: 0.04em;
-  padding: 0.25rem 0.6rem;
-  border-radius: var(--radius-xs);
+  padding: 0.22rem 0.6rem;
+  border-radius: 4px;
   display: inline-block;
+  text-transform: uppercase;
+}
+
+.badge-ondemand-pill {
+  background-color: #0056B3;
+}
+
+/* White Title Box in Left Area of Card */
+.card-notepad-graphic {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  width: 58%;
+  height: 90px;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.55rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+  z-index: 1;
+}
+
+.notepad-clip-bar {
+  display: none;
+}
+
+.notepad-category-text {
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: #0A3366;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-bottom: 0.2rem;
+  line-height: 1.2;
+}
+
+.notepad-main-text {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #0A3366;
+  line-height: 1.25;
+  text-transform: uppercase;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* Schedule Info Overlay on the right */
 .banner-schedule-box {
   position: absolute;
-  right: 12px;
-  top: 10px;
-  bottom: 10px;
+  right: 8px;
+  top: 8px;
+  bottom: 8px;
+  width: 36%;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  padding: 0.45rem 0.35rem;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
-  text-align: right;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
   z-index: 2;
 }
 
 .schedule-box-date {
-  color: #FFFFFF;
+  color: #0A3366;
   font-weight: 800;
-  font-size: 0.82rem;
-  letter-spacing: 0.02em;
+  font-size: 0.68rem;
+  letter-spacing: 0.01em;
 }
 
 .schedule-box-duration-pill {
-  background-color: rgba(255, 255, 255, 0.2);
-  color: #FFFFFF;
-  font-size: 0.65rem;
+  background-color: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  color: #475569;
+  font-size: 0.58rem;
   font-weight: 700;
-  padding: 0.15rem 0.5rem;
-  border-radius: var(--radius-xs);
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  text-transform: uppercase;
 }
 
 .schedule-box-times {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0.05rem;
 }
 
 .time-line {
-  color: #E2E8F0;
-  font-size: 0.72rem;
+  color: #64748B;
+  font-size: 0.62rem;
   font-weight: 600;
+  line-height: 1.2;
+}
+
+.schedule-box-recorded-label {
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #0A3366;
+  letter-spacing: 0.02em;
+}
+
+.schedule-box-dvd-badge {
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: #0066CC;
+  background-color: #EFF6FF;
+  border: 1px solid #BAE6FD;
+  padding: 0.15rem 0.35rem;
+  border-radius: 3px;
 }
 
 /* Card Body & Speaker Area */
 .card-info-area {
-  padding: 1rem 1.15rem 1.25rem 1.15rem;
+  padding: 0.85rem 1rem 1.1rem 1rem;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -456,28 +501,28 @@
 .card-speaker-block {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.85rem;
-  padding-bottom: 0.75rem;
+  gap: 0.65rem;
+  margin-bottom: 0.65rem;
+  padding-bottom: 0.65rem;
   border-bottom: 1px solid var(--color-border-light);
 }
 
 .card-speaker-img {
-  width: 38px;
-  height: 38px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   object-fit: cover;
-  border: 1px solid var(--color-border);
+  border: 1px solid #CBD5E1;
 }
 
 .card-speaker-fallback {
-  width: 38px;
-  height: 38px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background-color: var(--color-blue-subtle);
-  color: #0066CC;
+  color: #0A3366;
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -489,16 +534,16 @@
 }
 
 .card-speaker-name {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  color: #0A3366;
+  color: #1E293B;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .card-speaker-role {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   color: var(--color-text-muted);
   white-space: nowrap;
   overflow: hidden;
@@ -506,15 +551,15 @@
 }
 
 .card-title-text {
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   font-weight: 700;
   line-height: 1.35;
-  color: var(--color-text-main);
+  color: #0A3366;
   flex: 1;
 }
 
 .card-title-text a {
-  color: var(--color-text-main);
+  color: #0A3366;
   transition: color var(--transition-fast);
 }
 
@@ -526,23 +571,23 @@
 .view-more-container {
   display: flex;
   justify-content: center;
-  margin-top: 2.5rem;
+  margin-top: 2rem;
 }
 
 .btn-view-more {
   padding: 0.65rem 2rem;
-  background-color: #FFFFFF;
-  color: #0066CC;
-  border: 1.5px solid #0066CC;
-  border-radius: var(--radius-pill);
+  background-color: #0A3366;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
   font-weight: 700;
   font-size: 0.9rem;
-  transition: all var(--transition-fast);
+  transition: background-color var(--transition-fast);
+  cursor: pointer;
 }
 
 .btn-view-more:hover {
-  background-color: #0066CC;
-  color: #FFFFFF;
+  background-color: #072244;
 }
 
 /* 4. How You Can Learn Section */
@@ -591,8 +636,8 @@
 }
 
 .blue-icon {
-  background-color: #EBF4FC;
-  color: #0066CC;
+  background-color: #EBF5FF;
+  color: #007BFF;
 }
 
 .green-icon {
@@ -624,7 +669,7 @@
 }
 
 .red-link { color: #E03E3E; }
-.blue-link { color: #0066CC; }
+.blue-link { color: #007BFF; }
 .green-link { color: #108A58; }
 
 /* 5. Industries Trust Footer Strip */

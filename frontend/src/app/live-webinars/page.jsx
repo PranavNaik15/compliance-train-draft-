@@ -83,17 +83,14 @@ function LiveWebinarsContent() {
 
   return (
     <div className="live-webinars-page">
-      <section className="subpage-hero" style={{ background: 'linear-gradient(135deg, var(--color-navy) 0%, #0F284E 100%)', color: '#FFFFFF', padding: '3rem 0' }}>
+      <section className="subpage-hero" style={{ backgroundColor: '#0A3366', color: '#FFFFFF', padding: '3.5rem 0 3.25rem 0' }}>
         <div className="container">
-          <div style={{ maxWidth: '780px' }}>
-            <span className="badge-live" style={{ marginBottom: '1rem' }}>
-              Interactive Live Broadcasts
-            </span>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2.4rem', fontWeight: 800, marginBottom: '0.75rem', letterSpacing: '-0.025em' }}>
-              Live HIPAA &amp; SAMHSA Webinars
+          <div style={{ maxWidth: '820px' }}>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 800, marginBottom: '0.75rem', letterSpacing: '-0.025em' }}>
+              Live Healthcare Webinars
             </h1>
-            <p style={{ fontSize: '1.1rem', color: '#CBD5E1', lineHeight: 1.6 }}>
-              Expert-led, interactive compliance training sessions on the latest HIPAA Privacy &amp; Security Rules, SAMHSA 42 CFR Part 2 alignments, and OCR audits.
+            <p style={{ fontSize: '1.1rem', color: '#D6E4F0', lineHeight: 1.6 }}>
+              Interactive, instructor-led training sessions on HIPAA, SAMHSA 42 CFR Part 2, and OCR audit readiness with real-time Q&amp;A.
             </p>
           </div>
         </div>

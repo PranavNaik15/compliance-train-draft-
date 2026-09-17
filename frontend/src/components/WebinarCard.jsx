@@ -34,35 +34,61 @@ export default function WebinarCard({ webinar, isRecorded = false }) {
 
   const { pdt, edt } = getTimeDisplay();
   const speakerAvatarUrl = webinar.speaker?.avatarUrl || '/speaker-brian.jpg';
-  const badgeTitle = webinar.badgeLabel || webinar.title.toUpperCase();
+
+  const parseBadgeLabel = (label, title) => {
+    const raw = (label || title || '').toUpperCase();
+    if (raw.includes(':')) {
+      const parts = raw.split(':');
+      return {
+        category: parts[0].trim(),
+        main: parts.slice(1).join(':').trim()
+      };
+    }
+    return {
+      category: 'NEW HIPAA TRAINING',
+      main: raw.length > 36 ? `${raw.substring(0, 36)}...` : raw
+    };
+  };
+
+  const { category: badgeCategory, main: badgeMain } = parseBadgeLabel(webinar.badgeLabel, webinar.title);
 
   return (
     <article className="webinar-card-reference" aria-labelledby={`title-${webinar.id}`}>
       <Link href={`/webinars/${webinar.id}`} className="card-top-link-wrap">
         <div className="card-graphic-banner">
-          <div className="banner-note-card">
-            <div className="note-card-inner">
-              <span className="note-card-heading">
-                {badgeTitle.length > 40 ? `${badgeTitle.substring(0, 40)}...` : badgeTitle}
-              </span>
-            </div>
-          </div>
-
+          {/* Top Left Badge */}
           <div className="banner-badge-left">
-            <span className="badge-live-pill">
+            <span className={`badge-live-pill ${isRecorded ? 'badge-ondemand-pill' : ''}`}>
               {isRecorded ? 'ON DEMAND' : 'LIVE SESSION'}
             </span>
           </div>
 
+          {/* Centered / Left Notepad Graphic */}
+          <div className="card-notepad-graphic">
+            <div className="notepad-clip-bar"></div>
+            <div className="notepad-category-text">{badgeCategory}</div>
+            <div className="notepad-main-text">{badgeMain}</div>
+          </div>
+
+          {/* Right Schedule / Access Box */}
           <div className="banner-schedule-box">
-            <div className="schedule-box-date">{formattedDate}</div>
-            <div className="schedule-box-duration-pill">
-              {(webinar.duration || '90 MINUTES').toUpperCase()}
-            </div>
-            <div className="schedule-box-times">
-              <div className="time-line">{pdt}</div>
-              <div className="time-line">{edt}</div>
-            </div>
+            {isRecorded ? (
+              <>
+                <div className="schedule-box-recorded-label">ACCESS RECORDED</div>
+                <div className="schedule-box-dvd-badge">CD-DVD VERSION</div>
+              </>
+            ) : (
+              <>
+                <div className="schedule-box-date">{formattedDate}</div>
+                <div className="schedule-box-duration-pill">
+                  {(webinar.duration || '90 MINUTES').toUpperCase()}
+                </div>
+                <div className="schedule-box-times">
+                  <div className="time-line">{pdt}</div>
+                  <div className="time-line">{edt}</div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </Link>

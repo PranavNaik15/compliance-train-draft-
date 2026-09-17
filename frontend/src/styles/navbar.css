@@ -36,7 +36,7 @@
 .brand-badge-circle {
   width: 44px;
   height: 44px;
-  background: linear-gradient(135deg, #0A3366 0%, #0066CC 100%);
+  background-color: #0A3366;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -45,7 +45,6 @@
   font-family: var(--font-display);
   font-weight: 800;
   font-size: 1.15rem;
-  box-shadow: 0 2px 6px rgba(0, 102, 204, 0.25);
 }
 
 .brand-text {
@@ -57,7 +56,7 @@
   font-family: var(--font-display);
   font-size: 1.25rem;
   font-weight: 800;
-  line-height: 1.1;
+  line-height: 1.15;
   color: #0A3366;
 }
 
@@ -87,11 +86,11 @@
 .header-search-input {
   width: 100%;
   height: 40px;
-  padding: 0 42px 0 16px;
-  border: 1px solid var(--color-border);
+  padding: 0 46px 0 16px;
+  border: 1px solid #CBD5E1;
   border-radius: var(--radius-pill);
   font-size: 0.875rem;
-  background-color: #F8FAFC;
+  background-color: #FFFFFF;
   color: var(--color-text-main);
   outline: none;
   transition: all var(--transition-fast);
@@ -112,13 +111,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-text-muted);
+  background-color: #0A3366;
+  color: #FFFFFF;
   transition: all var(--transition-fast);
 }
 
 .header-search-btn:hover {
-  color: #0066CC;
-  background-color: var(--color-blue-subtle);
+  background-color: #072244;
 }
 
 /* Header Actions */
@@ -149,7 +148,7 @@
   gap: 0.4rem;
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--color-text-main);
+  color: #1E293B;
   cursor: pointer;
   position: relative;
 }
@@ -174,11 +173,11 @@
   align-items: center;
   gap: 0.35rem;
   padding: 0.45rem 1rem;
-  border: 1px solid var(--color-border);
+  border: 1px solid #CBD5E1;
   border-radius: var(--radius-pill);
   font-size: 0.85rem;
   font-weight: 600;
-  color: #0A3366;
+  color: #1E293B;
   background-color: #FFFFFF;
   transition: all var(--transition-fast);
 }
@@ -186,7 +185,6 @@
 .btn-pill-outline:hover {
   border-color: #0066CC;
   color: #0066CC;
-  background-color: var(--color-blue-subtle);
 }
 
 .btn-pill-primary {
@@ -222,18 +220,16 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  gap: 0.25rem;
 }
 
 .nav-item-link {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.8rem 1.15rem;
+  padding: 0.8rem 1.25rem;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #D6E4F0;
-  border-bottom: 3px solid transparent;
+  color: #FFFFFF;
   transition: all var(--transition-fast);
   white-space: nowrap;
 }
@@ -245,8 +241,7 @@
 
 .nav-item-link.active {
   color: #FFFFFF;
-  background-color: rgba(255, 255, 255, 0.12);
-  border-bottom-color: #E03E3E;
+  background-color: rgba(255, 255, 255, 0.14);
 }
 
 @media (max-width: 900px) {

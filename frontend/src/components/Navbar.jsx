@@ -31,7 +31,7 @@ export default function Navbar() {
               <span>CT</span>
             </div>
             <div className="brand-text">
-              <span className="brand-title">Compliance<br/><span className="brand-title-sub">Train</span></span>
+              <span className="brand-title">Compliance <span className="brand-title-sub">Train</span></span>
               <span className="brand-tagline">Trained by GRC Experts</span>
             </div>
           </Link>
