@@ -5,6 +5,7 @@ import Link from 'next/link';
 import '../../styles/membership.css';
 
 export default function MembershipPage() {
+  const [membershipType, setMembershipType] = useState('individual');
   const [expandedFaq, setExpandedFaq] = useState(null);
 
   const toggleFaq = (index) => {
@@ -190,81 +191,50 @@ export default function MembershipPage() {
         </div>
       </section>
 
-      {/* 2. Individual Membership Section */}
-      <section className="container membership-section" aria-labelledby="individual-heading">
-        <div className="section-header-block">
-          <h2 id="individual-heading" className="section-heading-title">
-            Individual Membership
-          </h2>
-          <p className="section-heading-sub">
-            For professionals who want ongoing access to compliance training.
-          </p>
-        </div>
+      {/* 2. Membership Plans Section with Toggle */}
+      <section className="container membership-section" aria-labelledby="membership-section-heading">
+        <div className="section-header-block section-header-with-toggle">
+          <div className="section-header-left">
+            <h2 id="membership-section-heading" className="section-heading-title">
+              {membershipType === 'individual' ? 'Individual Membership' : 'Corporate Membership'}
+            </h2>
+            <p className="section-heading-sub">
+              {membershipType === 'individual'
+                ? 'For professionals who want ongoing access to compliance training.'
+                : 'For organizations that need ongoing compliance training access for their teams.'}
+            </p>
+          </div>
 
-        <div className="membership-cards-row">
-          {individualPlans.map((plan) => (
-            <div
-              key={plan.id}
-              className={`membership-plan-card ${plan.isBestValue ? 'is-best-value' : ''}`}
+          <div className="membership-toggle-pill" role="tablist" aria-label="Membership Type">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={membershipType === 'individual'}
+              className={`toggle-tab-btn ${membershipType === 'individual' ? 'active' : ''}`}
+              onClick={() => setMembershipType('individual')}
             >
-              {plan.isBestValue && (
-                <span className="best-value-badge">BEST VALUE</span>
-              )}
-
-              <div className="card-top-area">
-                <h3 className="card-plan-title">{plan.name}</h3>
-                <p className="card-plan-desc">{plan.description}</p>
-                <div className="card-pricing-block">
-                  <div className="pricing-main-line">
-                    <span className="pricing-currency">$</span>
-                    <span className="pricing-amount">{plan.price.replace('$', '')}</span>
-                    <span className="pricing-frequency">{plan.frequency}</span>
-                  </div>
-                  <div className="pricing-effective-rate">
-                    {plan.effectiveRate ? plan.effectiveRate : ''}
-                  </div>
-                </div>
-              </div>
-
-              <div className="card-features-area">
-                <h4 className="features-heading">What&apos;s Included</h4>
-                <ul className="features-list">
-                  {plan.features.map((feat, idx) => (
-                    <li key={idx}>
-                      <span className="feature-check" aria-hidden="true">✔</span>
-                      <span>{feat}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="card-action-area">
-                <button
-                  type="button"
-                  className={`btn-subscribe ${plan.isBestValue ? 'btn-highlight' : ''}`}
-                  onClick={() => handleSubscribe(plan.name, `${plan.price} ${plan.frequency}`)}
-                >
-                  Subscribe
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 3. Corporate Membership Section */}
-      <section className="container membership-section" aria-labelledby="corporate-heading">
-        <div className="section-header-block">
-          <h2 id="corporate-heading" className="section-heading-title">
-            Corporate Membership
-          </h2>
-          <p className="section-heading-sub">
-            For organizations that need ongoing compliance training access for their teams.
-          </p>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style={{ marginRight: '6px' }}>
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+              Individual
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={membershipType === 'corporate'}
+              className={`toggle-tab-btn ${membershipType === 'corporate' ? 'active' : ''}`}
+              onClick={() => setMembershipType('corporate')}
+            >
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" style={{ marginRight: '6px' }}>
+                <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+              </svg>
+              Corporate
+            </button>
+          </div>
         </div>
 
         <div className="membership-cards-row">
-          {corporatePlans.map((plan) => (
+          {(membershipType === 'individual' ? individualPlans : corporatePlans).map((plan) => (
             <div
               key={plan.id}
               className={`membership-plan-card ${plan.isBestValue ? 'is-best-value' : ''}`}
