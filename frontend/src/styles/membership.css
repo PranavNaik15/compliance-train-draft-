@@ -1,0 +1,396 @@
+/* ==========================================================================
+   ComplianceTrain Membership Page Styles
+   Professional, corporate, restrained aesthetic tailored for 35-60 age group
+   ========================================================================== */
+
+.membership-page {
+  background-color: #F8FAFC;
+  min-height: 100vh;
+  color: #1E293B;
+}
+
+/* 1. Membership Page Hero */
+.membership-hero {
+  background: linear-gradient(135deg, #071E3D 0%, #10376B 100%);
+  color: #FFFFFF;
+  padding: 3.5rem 0 3.25rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.membership-hero-content {
+  max-width: 800px;
+}
+
+.membership-hero-title {
+  font-family: var(--font-display);
+  font-size: 2.35rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+  color: #FFFFFF;
+  margin-bottom: 0.4rem;
+}
+
+.membership-hero-subtitle {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-bottom: 0.65rem;
+  line-height: 1.35;
+}
+
+.membership-hero-desc {
+  font-size: 1.05rem;
+  color: #CBD5E1;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+/* 2. Membership Sections (Individual & Corporate) */
+.membership-section {
+  padding: 3.5rem 0 2rem 0;
+}
+
+.membership-section:first-of-type {
+  padding-top: 3rem;
+}
+
+.section-header-block {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #E2E8F0;
+  padding-bottom: 1rem;
+}
+
+.section-heading-title {
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #0A3366;
+  margin-bottom: 0.35rem;
+  letter-spacing: -0.015em;
+}
+
+.section-heading-sub {
+  font-size: 0.98rem;
+  color: #475569;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* 3. Cards Grid (3 Columns) */
+.membership-cards-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+  align-items: stretch;
+}
+
+.membership-plan-card {
+  background-color: #FFFFFF;
+  border: 1.5px solid #CBD5E1;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(10, 51, 102, 0.05);
+  position: relative;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.membership-plan-card:hover {
+  border-color: #0066CC;
+  box-shadow: 0 6px 18px rgba(10, 51, 102, 0.1);
+}
+
+/* Best Value Highlight */
+.membership-plan-card.is-best-value {
+  border: 2px solid #0066CC;
+  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.12);
+}
+
+.best-value-badge {
+  position: absolute;
+  top: -12px;
+  right: 1.25rem;
+  background-color: #8B1E1E;
+  color: #FFFFFF;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 0.25rem 0.65rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 4px rgba(139, 30, 30, 0.3);
+}
+
+.card-top-area {
+  padding: 1.75rem 1.75rem 1.25rem 1.75rem;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.card-plan-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #0A3366;
+  margin-bottom: 0.25rem;
+}
+
+.card-plan-desc {
+  font-size: 0.88rem;
+  color: #64748B;
+  line-height: 1.45;
+  margin-bottom: 1.25rem;
+  min-height: 2.6rem;
+}
+
+.card-pricing-block {
+  margin-bottom: 0.25rem;
+}
+
+.pricing-main-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.2rem;
+}
+
+.pricing-currency {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #8B1E1E;
+}
+
+.pricing-amount {
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: #8B1E1E;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.pricing-frequency {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+  margin-left: 0.15rem;
+}
+
+.pricing-effective-rate {
+  font-size: 0.82rem;
+  color: #0066CC;
+  font-weight: 700;
+  margin-top: 0.35rem;
+  min-height: 1.2rem;
+}
+
+/* Card Body / Features */
+.card-features-area {
+  padding: 1.5rem 1.75rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.features-heading {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.85rem;
+}
+
+.features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex-grow: 1;
+}
+
+.features-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: #334155;
+}
+
+.feature-check {
+  color: #0066CC;
+  font-weight: 800;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+
+/* Card Bottom / Subscribe */
+.card-action-area {
+  padding: 0 1.75rem 1.75rem 1.75rem;
+}
+
+.btn-subscribe {
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  background-color: #0066CC;
+  color: #FFFFFF;
+  border-radius: 4px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  text-align: center;
+  transition: background-color var(--transition-fast);
+}
+
+.btn-subscribe:hover {
+  background-color: #0052A3;
+}
+
+.btn-subscribe.btn-highlight {
+  background-color: #8B1E1E;
+}
+
+.btn-subscribe.btn-highlight:hover {
+  background-color: #701818;
+}
+
+/* 4. Comparison Section */
+.comparison-section {
+  padding: 3.5rem 0 2rem 0;
+}
+
+.comparison-table-wrapper {
+  background-color: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  overflow-x: auto;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.comparison-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.comparison-data-table th,
+.comparison-data-table td {
+  padding: 0.9rem 1.15rem;
+  border-bottom: 1px solid #E2E8F0;
+  vertical-align: middle;
+}
+
+.comparison-data-table th {
+  background-color: #0A3366;
+  color: #FFFFFF;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.88rem;
+  letter-spacing: 0.01em;
+}
+
+.comparison-data-table th:not(:first-child),
+.comparison-data-table td:not(:first-child) {
+  text-align: center;
+}
+
+.comparison-data-table tr:hover td {
+  background-color: #F8FAFC;
+}
+
+.col-feature-title {
+  font-weight: 600;
+  color: #1E293B;
+}
+
+.cell-check {
+  color: #0066CC;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.cell-dash {
+  color: #94A3B8;
+  font-size: 1rem;
+}
+
+/* 5. FAQ Section */
+.faq-section {
+  padding: 3.5rem 0 5rem 0;
+}
+
+.faq-accordion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  background-color: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: border-color var(--transition-fast);
+}
+
+.faq-item:hover {
+  border-color: #94A3B8;
+}
+
+.faq-question-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.15rem 1.35rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #0A3366;
+  font-family: var(--font-display);
+}
+
+.faq-question-btn:focus-visible {
+  outline: 2px solid #0066CC;
+  outline-offset: -2px;
+}
+
+.faq-icon-symbol {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #0066CC;
+  margin-left: 1rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.faq-answer-block {
+  padding: 0 1.35rem 1.25rem 1.35rem;
+  border-top: 1px solid #F1F5F9;
+}
+
+.faq-answer-block p {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: #334155;
+  margin: 0.75rem 0 0 0;
+}
+
+/* 6. Responsive */
+@media (max-width: 1024px) {
+  .membership-cards-row {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+}

@@ -1,0 +1,681 @@
+/* ==========================================================================
+   ComplianceTrain About Us & Contact Us Unified Page Styles
+   ========================================================================== */
+
+.about-contact-unified-page {
+  background-color: #FFFFFF;
+  min-height: 100vh;
+}
+
+/* 1. Top Section: About Us & Sidebar */
+.about-top-section {
+  padding: 3rem 0 3.5rem 0;
+  background-color: #FFFFFF;
+}
+
+.about-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr 310px;
+  gap: 3rem;
+  align-items: start;
+}
+
+/* Main Content Column */
+.about-main-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-heading-row,
+.mission-heading-row {
+  margin-bottom: 1.25rem;
+}
+
+.mission-heading-row {
+  margin-top: 2.25rem;
+}
+
+.about-red-title {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: #8B1E1E;
+  margin-bottom: 0.5rem;
+}
+
+.about-red-divider {
+  border: none;
+  border-top: 1px solid #E5E7EB;
+  width: 100%;
+}
+
+.about-paragraphs-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #1F2937;
+  text-align: justify;
+}
+
+.mission-bullet-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #1F2937;
+  text-align: justify;
+}
+
+.mission-bullet-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.bullet-dot {
+  color: #4B5563;
+  font-size: 1.3rem;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+
+/* Onsite Promotion Sidebar Card */
+.about-sidebar-col {
+  position: sticky;
+  top: 6rem;
+}
+
+.onsite-promo-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(10, 51, 102, 0.08);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.onsite-promo-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(10, 51, 102, 0.12);
+}
+
+.promo-img-frame {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+}
+
+.promo-top-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.promo-body {
+  padding: 1.25rem 1.4rem 1.4rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.promo-blue-heading {
+  color: #0080FF;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.35rem;
+}
+
+.promo-subheading {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #1E293B;
+  line-height: 1.3;
+  margin-bottom: 0.65rem;
+}
+
+.promo-accent-line {
+  width: 100%;
+  height: 2px;
+  background-color: #93C5FD;
+  margin-bottom: 0.85rem;
+}
+
+.promo-desc-text {
+  font-size: 0.82rem;
+  color: #475569;
+  line-height: 1.55;
+  margin-bottom: 1.25rem;
+}
+
+.promo-link-row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.promo-more-link {
+  color: #D97706;
+  font-weight: 800;
+  font-size: 0.92rem;
+  transition: color var(--transition-fast);
+}
+
+.promo-more-link:hover {
+  color: #B45309;
+}
+
+/* 2. Bottom Section: Contact Us */
+.contact-bottom-section {
+  background: linear-gradient(rgba(10, 26, 47, 0.9), rgba(10, 26, 47, 0.9)), url('/hero-executive.jpg') center/cover no-repeat;
+  padding: 4.5rem 0;
+  position: relative;
+}
+
+.contact-unified-card {
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+  padding: 2.75rem 2.5rem;
+  border: 1px solid #E2E8F0;
+  max-width: 1050px;
+  margin: 0 auto;
+}
+
+.contact-two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 3.5rem;
+  align-items: start;
+}
+
+/* Headings with Centered Blue Underline */
+.contact-col-heading-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.75rem;
+}
+
+.contact-col-heading {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #1E293B;
+  text-align: center;
+  margin-bottom: 0.4rem;
+}
+
+.contact-blue-underline {
+  width: 90px;
+  height: 3px;
+  background-color: #0066CC;
+  border-radius: 2px;
+}
+
+/* Contact Info Items (Left) */
+.contact-info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.contact-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.contact-detail-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #F0F6FC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.contact-detail-text {
+  font-style: normal;
+  font-size: 0.92rem;
+  color: #334155;
+  line-height: 1.5;
+}
+
+.email-link {
+  color: #0066CC;
+  font-weight: 600;
+}
+
+.email-link:hover {
+  text-decoration: underline;
+}
+
+.contact-map-frame {
+  margin-top: 0.75rem;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Contact Form (Right) */
+.contact-form-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-inputs-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.input-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.input-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.required-star {
+  color: #DC2626;
+}
+
+.icon-input-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 4px;
+  padding: 0 0.75rem;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.icon-input-wrapper:focus-within {
+  border-color: #0066CC;
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.12);
+}
+
+.input-prefix-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.6rem;
+  flex-shrink: 0;
+}
+
+.styled-form-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 0.65rem 0;
+  font-size: 0.88rem;
+  font-family: inherit;
+  color: #1E293B;
+  background: transparent;
+}
+
+select.styled-form-input {
+  cursor: pointer;
+}
+
+textarea.styled-form-input {
+  resize: vertical;
+  min-height: 85px;
+}
+
+.form-submit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.privacy-consent-text {
+  font-size: 0.78rem;
+  color: #64748B;
+  max-width: 320px;
+}
+
+.privacy-consent-text a {
+  color: #0066CC;
+  text-decoration: underline;
+}
+
+.btn-submit-query {
+  padding: 0.65rem 1.6rem;
+  background-color: #2B72B5;
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: 0 2px 4px rgba(43, 114, 181, 0.25);
+  margin-left: auto;
+}
+
+.btn-submit-query:hover {
+  background-color: #1E5C96;
+}
+
+.message-sent-confirmation {
+  background-color: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-radius: 6px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.sent-check-icon {
+  width: 48px;
+  height: 48px;
+  background-color: #108A58;
+  color: #FFFFFF;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem auto;
+}
+
+.message-sent-confirmation h3 {
+  color: #065F46;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.message-sent-confirmation p {
+  color: #475569;
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+}
+
+.btn-send-another {
+  padding: 0.5rem 1.2rem;
+  background-color: #0066CC;
+  color: #FFFFFF;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .about-layout-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .contact-two-columns {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .onsite-two-col-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+/* ==========================================================================
+   ComplianceTrain Onsite Training Page Styles
+   ========================================================================== */
+
+.onsite-clean-page {
+  background-color: #FFFFFF;
+  min-height: 100vh;
+  padding: 3rem 0 4rem 0;
+}
+
+.onsite-container {
+  max-width: 1200px;
+}
+
+.onsite-two-col-grid {
+  display: grid;
+  grid-template-columns: 1fr 390px;
+  gap: 3.5rem;
+  align-items: start;
+}
+
+.onsite-content-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.onsite-heading-block {
+  margin-bottom: 1.25rem;
+}
+
+.onsite-maroon-heading {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: #8B1E1E;
+  margin-bottom: 0.5rem;
+}
+
+.onsite-maroon-divider {
+  border: none;
+  border-top: 1px solid #E5E7EB;
+  width: 100%;
+}
+
+.onsite-desc-text {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #1F2937;
+  text-align: justify;
+  margin-bottom: 2rem;
+}
+
+.onsite-benefits-heading-block {
+  margin-bottom: 1.25rem;
+}
+
+.onsite-benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  font-size: 0.93rem;
+  line-height: 1.6;
+  color: #1F2937;
+}
+
+.onsite-benefits-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.benefit-dot {
+  color: #4B5563;
+  font-size: 1.3rem;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+
+/* REQUEST TO KNOW MORE Card */
+.onsite-form-col {
+  position: sticky;
+  top: 6rem;
+}
+
+.request-more-card {
+  background: linear-gradient(180deg, #F0F6FC 0%, #E8F1FB 100%);
+  border: 1.5px solid #CBD5E1;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(10, 51, 102, 0.08);
+  padding: 2rem 1.75rem 1.75rem 1.75rem;
+}
+
+.request-card-title {
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  font-weight: 900;
+  color: #1A538C;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.02em;
+}
+
+.request-form-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+}
+
+.request-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.request-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.req-star {
+  color: #DC2626;
+}
+
+.request-input-box {
+  display: flex;
+  align-items: center;
+  background-color: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 4px;
+  padding: 0 0.75rem;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.request-input-box:focus-within {
+  border-color: #0066CC;
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.12);
+}
+
+.request-field-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.6rem;
+  flex-shrink: 0;
+}
+
+.request-text-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 0.65rem 0;
+  font-size: 0.88rem;
+  font-family: inherit;
+  color: #1E293B;
+  background: transparent;
+}
+
+select.request-text-input {
+  cursor: pointer;
+}
+
+textarea.request-text-input {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.request-submit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.request-privacy-text {
+  font-size: 0.75rem;
+  color: #64748B;
+  max-width: 200px;
+  line-height: 1.4;
+}
+
+.request-privacy-text a {
+  color: #0066CC;
+  text-decoration: underline;
+}
+
+.btn-submit-training {
+  padding: 0.65rem 1.35rem;
+  background-color: #2B72B5;
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 0.88rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: 0 2px 4px rgba(43, 114, 181, 0.25);
+  margin-left: auto;
+}
+
+.btn-submit-training:hover {
+  background-color: #1E5C96;
+}
+
+.request-sent-box {
+  background-color: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-radius: 6px;
+  padding: 1.75rem;
+  text-align: center;
+}
+
+.request-sent-icon {
+  width: 44px;
+  height: 44px;
+  background-color: #108A58;
+  color: #FFFFFF;
+  border-radius: 50%;
+  font-size: 1.4rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.75rem auto;
+}
+
+.request-sent-box h3 {
+  color: #065F46;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.request-sent-box p {
+  color: #475569;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}

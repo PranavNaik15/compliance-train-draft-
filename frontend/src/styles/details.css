@@ -1,0 +1,600 @@
+/* ==========================================================================
+   ComplianceTrain Webinar & Seminar Details Page
+   ========================================================================== */
+
+.webinar-details-page-ct {
+  background-color: #F4F6F9;
+  min-height: 100vh;
+}
+
+/* 1. Breadcrumbs Bar */
+.breadcrumbs-bar {
+  background-color: #FFFFFF;
+  border-bottom: 1px solid var(--color-border);
+  padding: 0.75rem 0;
+}
+
+.breadcrumbs-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.breadcrumb-item {
+  color: #4B5563;
+  transition: color var(--transition-fast);
+}
+
+.breadcrumb-item:hover {
+  color: #0066CC;
+}
+
+.breadcrumb-separator {
+  color: #9CA3AF;
+}
+
+.breadcrumb-current {
+  color: #1F2937;
+  font-weight: 600;
+  max-width: 500px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 2. Dark Hero Banner */
+.webinar-details-hero {
+  background: linear-gradient(rgba(10, 26, 47, 0.92), rgba(10, 26, 47, 0.92)), url('/hero-executive.jpg') center/cover no-repeat;
+  color: #FFFFFF;
+  padding: 3rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hero-webinar-title {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.25;
+  margin-bottom: 0.75rem;
+  max-width: 900px;
+}
+
+.hero-urgency-badge {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #F59E0B;
+  margin-bottom: 1.75rem;
+}
+
+.hero-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: 1.25rem;
+  max-width: 820px;
+}
+
+.hero-meta-box {
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(6px);
+  border-radius: 6px;
+  padding: 0.9rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #FFFFFF;
+  text-align: left;
+}
+
+.calendar-action-box {
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.calendar-action-box:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: #FFFFFF;
+}
+
+.meta-box-icon {
+  color: #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.meta-box-text {
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: #E2E8F0;
+}
+
+.highlight-yellow {
+  color: #FCD34D;
+  font-weight: 700;
+}
+
+.add-calendar-text {
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  font-size: 0.88rem;
+  color: #FFFFFF;
+}
+
+/* 3. Main Content Two-Column Grid */
+.details-content-container {
+  padding: 2.5rem 0 3.5rem 0;
+}
+
+.details-two-col-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* Course Card (Left) */
+.details-course-card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 2.5rem 2.25rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.course-section-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.underlined-heading-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.underlined-section-heading {
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #0A3366;
+  text-align: center;
+  position: relative;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.underlined-section-heading::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  right: 20%;
+  height: 3px;
+  background-color: #1E6FFB;
+  border-radius: 2px;
+}
+
+.course-section-content {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #334155;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ct-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ct-checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #334155;
+}
+
+.check-blue {
+  color: #0066CC;
+  font-weight: 900;
+  font-size: 1.05rem;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+
+.benefited-orgs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem 1rem;
+  margin-top: 0.5rem;
+}
+
+.org-check-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+/* Sidebar Column (Right) */
+.details-sidebar-ct {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.registration-card-ct {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.registration-card-title {
+  color: #8B1E1E;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 1.25rem 1rem 0.75rem 1rem;
+}
+
+/* Selected Featured Price Block */
+.featured-price-block {
+  padding: 1rem 1.5rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.price-tag-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.radio-check-indicator {
+  width: 24px;
+  height: 24px;
+  background-color: #0066CC;
+  color: #FFFFFF;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.featured-price-amount {
+  font-family: var(--font-display);
+  font-size: 2.75rem;
+  font-weight: 900;
+  color: #8B1E1E;
+  line-height: 1;
+}
+
+.featured-option-name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1E293B;
+  margin-bottom: 0.35rem;
+}
+
+.featured-option-note {
+  font-size: 0.78rem;
+  color: #64748B;
+  line-height: 1.4;
+  margin-bottom: 1.25rem;
+  max-width: 280px;
+}
+
+.btn-add-to-cart {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: #1E4E79;
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.btn-add-to-cart:hover {
+  background-color: #163B5C;
+}
+
+/* Packages Radio List */
+.packages-radio-list {
+  padding: 0.5rem 1rem 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.package-radio-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.65rem 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.package-radio-row:hover {
+  background-color: #F8FAFC;
+}
+
+.package-radio-row.active-row {
+  background-color: #F0F6FC;
+}
+
+.package-native-radio {
+  margin-top: 0.25rem;
+  cursor: pointer;
+  accent-color: #0066CC;
+}
+
+.package-info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1;
+}
+
+.package-header-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.package-price-bold {
+  color: #8B1E1E;
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.package-title-text {
+  color: #1E293B;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.package-sub-desc {
+  font-size: 0.74rem;
+  color: #64748B;
+  line-height: 1.35;
+}
+
+/* Tags Card */
+.tags-card-ct {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem 1.5rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.tags-title {
+  color: #8B1E1E;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.tags-cloud-box {
+  background-color: #FAFAFA;
+  border: 1px solid #E5E7EB;
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+.tags-content-text {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #374151;
+  line-height: 1.8;
+}
+
+/* 4. Full-Width Speaker Details Section */
+.speaker-details-banner {
+  background: linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.88)), url('/hero-executive.jpg') center/cover no-repeat;
+  color: #FFFFFF;
+  padding: 3.5rem 0;
+  margin-bottom: 2.5rem;
+}
+
+.speaker-banner-title {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.speaker-banner-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 750px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+.speaker-profile-frame {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  flex-shrink: 0;
+}
+
+.speaker-banner-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.speaker-banner-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.speaker-banner-name {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+.speaker-banner-role {
+  font-size: 0.95rem;
+  color: #D1D5DB;
+}
+
+.btn-speaker-readmore {
+  padding: 0.45rem 1rem;
+  background-color: rgba(255, 255, 255, 0.85);
+  color: #1F2937;
+  font-weight: 700;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-left: auto;
+}
+
+.btn-speaker-readmore:hover {
+  background-color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.25);
+}
+
+/* 5. Refund Policy Section */
+.refund-policy-box {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-top: 3px solid #8B1E1E;
+  border-radius: 6px;
+  padding: 1.75rem 2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.refund-heading {
+  color: #8B1E1E;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.85rem;
+}
+
+.refund-text {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: #4B5563;
+}
+
+/* Modal */
+.bio-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1.5rem;
+}
+
+.bio-modal-content {
+  background: #FFFFFF;
+  border-radius: 8px;
+  max-width: 550px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.bio-modal-header {
+  background-color: #0A3366;
+  color: #FFFFFF;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bio-modal-header h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.btn-modal-close {
+  color: #FFFFFF;
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 0.2rem;
+}
+
+.bio-modal-body {
+  padding: 1.5rem;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: #334155;
+}
+
+@media (max-width: 1024px) {
+  .details-two-col-grid {
+    grid-template-columns: 1fr;
+  }
+  .benefited-orgs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-meta-grid {
+    grid-template-columns: 1fr;
+  }
+  .benefited-orgs-grid {
+    grid-template-columns: 1fr;
+  }
+  .speaker-banner-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .btn-speaker-readmore {
+    margin-left: 0;
+  }
+}
