@@ -157,95 +157,95 @@ export default function WebinarDetailsPage() {
         </div>
       </div>
 
-      {/* 2. Dark Hero Banner Section */}
-      <section className="webinar-details-hero">
-        <div className="container">
-          <div className="hero-layout-wrapper">
-            {/* Left / Main Area: Title + Limited Seats Message Centered */}
-            <div className="hero-main-left">
-              <h1 className="hero-webinar-title">{webinar.title}</h1>
-              <p className="hero-urgency-badge">Limited Seats. Hurry!! Reserve yours NOW!</p>
-            </div>
-
-            {/* Right Area: Vertically Stacked 4 Information Boxes */}
-            <div className="hero-meta-stack">
-              {/* Box 1: Faculty & Industry */}
-              <div className="hero-meta-box">
-                <div className="meta-box-icon" aria-hidden="true">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="3" y="4" width="18" height="16" rx="2"/>
-                    <circle cx="9" cy="10" r="2"/>
-                    <line x1="15" y1="8" x2="17" y2="8"/>
-                    <line x1="15" y1="12" x2="17" y2="12"/>
-                    <line x1="7" y1="16" x2="17" y2="16"/>
-                  </svg>
-                </div>
-                <div className="meta-box-text">
-                  <div>Faculty : <span className="highlight-yellow">{webinar.speaker?.name || 'Brian L Tuttle'}</span></div>
-                  <div>Industry : <span className="highlight-yellow">{webinar.category || 'Health Care & Hospital'}</span></div>
-                </div>
-              </div>
-
-              {/* Box 2: Live On & Time */}
-              <div className="hero-meta-box">
-                <div className="meta-box-icon" aria-hidden="true">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                    <line x1="16" y1="2" x2="16" y2="6"/>
-                    <line x1="8" y1="2" x2="8" y2="6"/>
-                    <line x1="3" y1="10" x2="21" y2="10"/>
-                  </svg>
-                </div>
-                <div className="meta-box-text">
-                  <div>Live On : <span className="highlight-yellow">{webinar.date}</span></div>
-                  <div className="highlight-yellow">{webinar.time || '10.00 AM PDT | 01.00 PM EDT'}</div>
-                </div>
-              </div>
-
-              {/* Box 3: Duration */}
-              <div className="hero-meta-box">
-                <div className="meta-box-icon" aria-hidden="true">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <polyline points="12 6 12 12 16 14"/>
-                  </svg>
-                </div>
-                <div className="meta-box-text">
-                  <div>Duration : <span className="highlight-yellow">{webinar.duration || '90 Mins'}</span></div>
-                </div>
-              </div>
-
-              {/* Box 4: Add To Calendar */}
-              <button 
-                type="button" 
-                className="hero-meta-box calendar-action-box"
-                onClick={handleAddToCalendar}
-                title="Add this session to your calendar"
-              >
-                <div className="meta-box-icon" aria-hidden="true">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                    <line x1="16" y1="2" x2="16" y2="6"/>
-                    <line x1="8" y1="2" x2="8" y2="6"/>
-                    <line x1="3" y1="10" x2="21" y2="10"/>
-                    <line x1="12" y1="13" x2="12" y2="17"/>
-                    <line x1="10" y1="15" x2="14" y2="15"/>
-                  </svg>
-                </div>
-                <div className="meta-box-text">
-                  <span className="add-calendar-text">ADD TO CALENDAR</span>
-                </div>
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. Main Content Grid (Left: Course Description, Right: Sticky Registration Sidebar) */}
+      {/* 2. Main Content Grid (Left: Hero + Course Content, Right: Registration Sidebar) */}
       <div className="container details-content-container">
         <div className="details-two-col-grid">
-          {/* Left Column: Full Course Curriculum */}
-          <main className="details-course-card">
+          {/* Left Column: Dark Hero Card + Full Course Curriculum */}
+          <div className="details-main-col">
+            {/* Dark Hero Card */}
+            <section className="webinar-details-hero">
+              <div className="hero-layout-wrapper">
+                {/* Left / Main Area: Title + Limited Seats Message Centered */}
+                <div className="hero-main-left">
+                  <h1 className="hero-webinar-title">{webinar.title}</h1>
+                  <p className="hero-urgency-badge">Limited Seats. Hurry!! Reserve yours NOW!</p>
+                </div>
+
+                {/* Right Area: Vertically Stacked 4 Information Boxes */}
+                <div className="hero-meta-stack">
+                  {/* Box 1: Faculty & Industry */}
+                  <div className="hero-meta-box">
+                    <div className="meta-box-icon" aria-hidden="true">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="3" y="4" width="18" height="16" rx="2"/>
+                        <circle cx="9" cy="10" r="2"/>
+                        <line x1="15" y1="8" x2="17" y2="8"/>
+                        <line x1="15" y1="12" x2="17" y2="12"/>
+                        <line x1="7" y1="16" x2="17" y2="16"/>
+                      </svg>
+                    </div>
+                    <div className="meta-box-text">
+                      <div>Faculty : <span className="highlight-yellow">{webinar.speaker?.name || 'Brian L Tuttle'}</span></div>
+                      <div>Industry : <span className="highlight-yellow">{webinar.category || 'Health Care & Hospital'}</span></div>
+                    </div>
+                  </div>
+
+                  {/* Box 2: Live On & Time */}
+                  <div className="hero-meta-box">
+                    <div className="meta-box-icon" aria-hidden="true">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                      </svg>
+                    </div>
+                    <div className="meta-box-text">
+                      <div>Live On : <span className="highlight-yellow">{webinar.date}</span></div>
+                      <div className="highlight-yellow">{webinar.time || '10.00 AM PDT | 01.00 PM EDT'}</div>
+                    </div>
+                  </div>
+
+                  {/* Box 3: Duration */}
+                  <div className="hero-meta-box">
+                    <div className="meta-box-icon" aria-hidden="true">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                      </svg>
+                    </div>
+                    <div className="meta-box-text">
+                      <div>Duration : <span className="highlight-yellow">{webinar.duration || '90 Mins'}</span></div>
+                    </div>
+                  </div>
+
+                  {/* Box 4: Add To Calendar */}
+                  <button 
+                    type="button" 
+                    className="hero-meta-box calendar-action-box"
+                    onClick={handleAddToCalendar}
+                    title="Add this session to your calendar"
+                  >
+                    <div className="meta-box-icon" aria-hidden="true">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                        <line x1="12" y1="13" x2="12" y2="17"/>
+                        <line x1="10" y1="15" x2="14" y2="15"/>
+                      </svg>
+                    </div>
+                    <div className="meta-box-text">
+                      <span className="add-calendar-text">ADD TO CALENDAR</span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            {/* Full Course Curriculum */}
+            <main className="details-course-card">
             {/* Section 1: Course Description */}
             <div className="course-section-block">
               <div className="underlined-heading-wrap">
@@ -352,6 +352,7 @@ export default function WebinarDetailsPage() {
               </div>
             </div>
           </main>
+          </div>
 
           {/* Right Column: Sticky Registration Options & Tags */}
           <aside className="details-sidebar-ct" aria-label="Registration Options">
