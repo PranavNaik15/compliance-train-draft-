@@ -53,28 +53,46 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.hero-layout-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.hero-main-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  padding: 0.5rem 0;
+}
+
 .hero-webinar-title {
   font-family: var(--font-display);
   font-size: 2.25rem;
   font-weight: 800;
   color: #FFFFFF;
   line-height: 1.25;
-  margin-bottom: 0.75rem;
-  max-width: 900px;
+  margin-bottom: 1.25rem;
+  max-width: 780px;
+  text-align: center;
 }
 
 .hero-urgency-badge {
   font-size: 1.05rem;
   font-weight: 700;
   color: #F59E0B;
-  margin-bottom: 1.75rem;
+  margin: 0;
+  text-align: center;
 }
 
-.hero-meta-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(280px, 1fr));
-  gap: 1.25rem;
-  max-width: 820px;
+.hero-meta-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
 }
 
 .hero-meta-box {
@@ -82,17 +100,20 @@
   background: rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(6px);
   border-radius: 6px;
-  padding: 0.9rem 1.25rem;
+  padding: 0.75rem 1.15rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.85rem;
   color: #FFFFFF;
   text-align: left;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .calendar-action-box {
   cursor: pointer;
   transition: all var(--transition-fast);
+  justify-content: flex-start;
 }
 
 .calendar-action-box:hover {
@@ -109,8 +130,8 @@
 }
 
 .meta-box-text {
-  font-size: 0.9rem;
-  line-height: 1.45;
+  font-size: 0.88rem;
+  line-height: 1.4;
   color: #E2E8F0;
 }
 
@@ -583,10 +604,14 @@
   }
 }
 
-@media (max-width: 640px) {
-  .hero-meta-grid {
+@media (max-width: 900px) {
+  .hero-layout-wrapper {
     grid-template-columns: 1fr;
+    gap: 2rem;
   }
+}
+
+@media (max-width: 640px) {
   .benefited-orgs-grid {
     grid-template-columns: 1fr;
   }
