@@ -158,6 +158,8 @@ export default function HomePage() {
                       </span>
                     </div>
 
+                    <div className="featured-meta-divider" aria-hidden="true"></div>
+
                     <div className="featured-meta-col">
                       <span className="featured-meta-label">Speaker</span>
                       <span className="featured-meta-val" title={featuredWebinar.speaker?.name}>
@@ -167,6 +169,8 @@ export default function HomePage() {
                         {featuredWebinar.speaker?.role || 'Health IT & Compliance Consultant'}
                       </span>
                     </div>
+
+                    <div className="featured-meta-divider" aria-hidden="true"></div>
 
                     <div className="featured-meta-col">
                       <span className="featured-meta-label">Format</span>
@@ -182,6 +186,9 @@ export default function HomePage() {
                       href={`/webinars/${featuredWebinar.id}`}
                       className="btn-featured-register"
                     >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                      </svg>
                       Register Now &rarr;
                     </Link>
                     <button 
@@ -189,6 +196,9 @@ export default function HomePage() {
                       className="btn-featured-secondary"
                       onClick={() => setShowSpeakerModal(true)}
                     >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                      </svg>
                       View Speaker
                     </button>
                     <button 
@@ -196,6 +206,12 @@ export default function HomePage() {
                       className="btn-featured-secondary"
                       onClick={() => handleAddToCalendar(featuredWebinar)}
                     >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                      </svg>
                       Add to Calendar
                     </button>
                   </div>
