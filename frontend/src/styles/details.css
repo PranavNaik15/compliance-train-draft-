@@ -413,6 +413,32 @@
   line-height: 1.35;
 }
 
+.view-more-packages-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.25rem;
+  padding-top: 0.25rem;
+}
+
+.btn-toggle-packages {
+  background: none;
+  border: 1px solid #0066CC;
+  color: #0066CC;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.4rem 1.25rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: center;
+  width: 100%;
+}
+
+.btn-toggle-packages:hover {
+  background-color: #0066CC;
+  color: #FFFFFF;
+}
+
 /* Tags Card */
 .tags-card-ct {
   background-color: #FFFFFF;

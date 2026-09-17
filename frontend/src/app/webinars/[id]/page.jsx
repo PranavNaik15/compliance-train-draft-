@@ -15,6 +15,7 @@ export default function WebinarDetailsPage() {
   const [error, setError] = useState(null);
   const [selectedOption, setSelectedOption] = useState('single');
   const [showBioModal, setShowBioModal] = useState(false);
+  const [showAllOptions, setShowAllOptions] = useState(false);
 
   const registrationOptions = [
     {
@@ -376,9 +377,9 @@ export default function WebinarDetailsPage() {
                 </button>
               </div>
 
-              {/* Radio List of All Available Packages */}
+              {/* Radio List of Available Packages (Top 3 initial, Expandable) */}
               <div className="packages-radio-list">
-                {registrationOptions.map((opt) => (
+                {(showAllOptions ? registrationOptions : registrationOptions.slice(0, 3)).map((opt) => (
                   <label 
                     key={opt.id} 
                     className={`package-radio-row ${selectedOption === opt.id ? 'active-row' : ''}`}
@@ -402,6 +403,18 @@ export default function WebinarDetailsPage() {
                     </div>
                   </label>
                 ))}
+
+                {registrationOptions.length > 3 && (
+                  <div className="view-more-packages-wrap">
+                    <button
+                      type="button"
+                      className="btn-toggle-packages"
+                      onClick={() => setShowAllOptions((prev) => !prev)}
+                    >
+                      {showAllOptions ? 'View Less' : 'View More'}
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
 
