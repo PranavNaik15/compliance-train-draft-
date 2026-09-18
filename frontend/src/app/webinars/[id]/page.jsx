@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { getWebinarById } from '../../../api/webinarApi';
+import { getWebinarById, getWebinars } from '../../../api/webinarApi';
 import '../../../styles/details.css';
 
 export default function WebinarDetailsPage() {
@@ -11,6 +11,7 @@ export default function WebinarDetailsPage() {
   const id = params?.id;
   const router = useRouter();
   const [webinar, setWebinar] = useState(null);
+  const [allWebinars, setAllWebinars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedOption, setSelectedOption] = useState('single');
@@ -76,9 +77,13 @@ export default function WebinarDetailsPage() {
       try {
         setLoading(true);
         setError(null);
-        const data = await getWebinarById(id);
+        const [detailData, listData] = await Promise.all([
+          getWebinarById(id),
+          getWebinars().catch(() => [])
+        ]);
         if (isMounted) {
-          setWebinar(data);
+          setWebinar(detailData);
+          setAllWebinars(Array.isArray(listData) ? listData : (listData?.data || []));
         }
       } catch (err) {
         if (isMounted) {
@@ -134,6 +139,20 @@ export default function WebinarDetailsPage() {
       </div>
     );
   }
+
+  const formatDuration = (dur) => {
+    if (!dur) return '90 min';
+    const lower = dur.toLowerCase();
+    const match = lower.match(/\d+/);
+    if (match) {
+      return `${match[0]} min`;
+    }
+    return dur;
+  };
+
+  const recommendedWebinars = allWebinars
+    .filter((w) => String(w.id) !== String(webinar?.id))
+    .slice(0, 3);
 
   const currentOption = registrationOptions.find((opt) => opt.id === selectedOption) || registrationOptions[0];
 
@@ -428,6 +447,87 @@ export default function WebinarDetailsPage() {
                 </p>
               </div>
             </div>
+
+            {/* NEW Recommended Webinars Box */}
+            {recommendedWebinars.length > 0 && (
+              <div className="recommended-webinars-card">
+                <div className="recommended-card-header">
+                  <h3 className="recommended-card-title">Recommended Webinars</h3>
+                  <Link href="/live-webinars" className="recommended-view-all">
+                    View All &rarr;
+                  </Link>
+                </div>
+
+                <div className="recommended-webinars-list">
+                  {recommendedWebinars.map((rec) => (
+                    <Link 
+                      key={rec.id} 
+                      href={`/webinars/${rec.id}`}
+                      className="recommended-webinar-item"
+                    >
+                      {/* Left Thumbnail with Pills */}
+                      <div className="rec-thumb-wrap">
+                        <div className="rec-live-pill">
+                          <span className="rec-live-dot" aria-hidden="true"></span>
+                          <span>Live webinar</span>
+                        </div>
+                        <div className="rec-duration-pill">
+                          <span>{formatDuration(rec.duration)}</span>
+                        </div>
+                        <div className="rec-thumb-graphic" aria-hidden="true">
+                          <div className="rec-thumb-circle">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#38BDF8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                              <circle cx="12" cy="11" r="2" fill="#38BDF8" />
+                              <path d="M12 13v2.5" strokeWidth="2.5" />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Right Details */}
+                      <div className="rec-details-col">
+                        <span className="rec-tag-text">{rec.yearTag || 'NEW FOR 2026'}</span>
+                        <h4 className="rec-title-text" title={rec.title}>{rec.title}</h4>
+                        <div className="rec-meta-row">
+                          <span className="rec-meta-item">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                              <line x1="16" y1="2" x2="16" y2="6"></line>
+                              <line x1="8" y1="2" x2="8" y2="6"></line>
+                              <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            {rec.date}
+                          </span>
+                        </div>
+                        <div className="rec-meta-row">
+                          <span className="rec-meta-item">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                              <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            {rec.speaker?.name || 'Brian L. Tuttle'}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Right Subtle Chevron Indicator */}
+                      <div className="rec-arrow-circle" aria-hidden="true">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+
+                <div className="recommended-card-footer">
+                  <Link href="/live-webinars" className="btn-view-more-recommended">
+                    View More Webinars
+                  </Link>
+                </div>
+              </div>
+            )}
           </aside>
         </div>
       </div>
