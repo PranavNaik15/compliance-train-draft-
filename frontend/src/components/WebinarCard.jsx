@@ -16,7 +16,6 @@ export default function WebinarCard({ webinar, isRecorded = false }) {
 
   const durationText = formatDuration(webinar.duration);
   const tagText = webinar.yearTag || 'NEW FOR 2026';
-  const descText = webinar.shortDescription || webinar.fullDescription || 'What changes and what to do';
   const speakerAvatarUrl = webinar.speaker?.avatarUrl || '/speaker-brian.jpg';
   const speakerName = webinar.speaker?.name || 'Brian L. Tuttle';
   const speakerRole = webinar.speaker?.role || 'Health IT & Compliance Consultant';
@@ -44,9 +43,6 @@ export default function WebinarCard({ webinar, isRecorded = false }) {
             <h3 className="card-banner-title">
               {webinar.title}
             </h3>
-            <p className="card-banner-desc">
-              {descText}
-            </p>
           </div>
 
           {/* Right Side Concentric Blue Circles with White Shield */}
