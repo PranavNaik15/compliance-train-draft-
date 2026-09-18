@@ -105,7 +105,27 @@ export default function WebinarDetailsPage() {
 
   const handleAddToCart = () => {
     const selected = registrationOptions.find((opt) => opt.id === selectedOption) || registrationOptions[0];
-    router.push(`/webinars/${webinar.id}/register?option=${selected.id}&price=${selected.price}`);
+    try {
+      const stored = localStorage.getItem('ct_cart_items');
+      let currentCart = stored ? JSON.parse(stored) : [];
+      if (!Array.isArray(currentCart)) currentCart = [];
+      const existingIndex = currentCart.findIndex((item) => item.id === webinar.id);
+      if (existingIndex > -1) {
+        currentCart[existingIndex].quantity = (currentCart[existingIndex].quantity || 1) + 1;
+      } else {
+        currentCart.push({
+          id: webinar.id,
+          title: webinar.title,
+          price: selected.price,
+          quantity: 1,
+          type: selected.title && selected.title.toUpperCase().includes('RECORD') ? 'RECORDED' : 'LIVE',
+          image: webinar.speaker?.image || '/speaker-brian.jpg',
+        });
+      }
+      localStorage.setItem('ct_cart_items', JSON.stringify(currentCart));
+      window.dispatchEvent(new Event('storage'));
+    } catch (e) {}
+    router.push('/cart');
   };
 
   const handleAddToCalendar = () => {
@@ -176,77 +196,72 @@ export default function WebinarDetailsPage() {
         </div>
       </div>
 
-      {/* 2. Main Content Grid (Left: Hero + Course Content, Right: Registration Sidebar) */}
+      {/* 2. Main Content Grid (Left: Hero + 4 Section Cards, Right: Sidebar) */}
       <div className="container details-content-container">
         <div className="details-two-col-grid">
-          {/* Left Column: Dark Hero Card + Full Course Curriculum */}
+          {/* Left Column: Dark Hero Card + 4 Separate Section Cards */}
           <div className="details-main-col">
-            {/* Dark Hero Card */}
+            {/* Dark Hero Banner */}
             <section className="webinar-details-hero">
               <div className="hero-layout-wrapper">
-                {/* Left / Main Area: Title + Limited Seats Message Centered */}
+                {/* Left Area: Live Pill + Title + Subtitle */}
                 <div className="hero-main-left">
+                  <div className="hero-live-badge">
+                    <span className="badge-dot" aria-hidden="true"></span>
+                    <span>Live Webinar</span>
+                  </div>
                   <h1 className="hero-webinar-title">{webinar.title}</h1>
-                  <p className="hero-urgency-badge">Limited Seats. Hurry!! Reserve yours NOW!</p>
+                  <p className="hero-subtitle-text">
+                    Stay compliant and prepare for the latest HIPAA regulatory changes, enforcement trends, and audit updates.
+                  </p>
                 </div>
 
-                {/* Right Area: Vertically Stacked 4 Information Boxes */}
+                {/* Right Area: Vertically Stacked Meta Card */}
                 <div className="hero-meta-stack">
-                  {/* Box 1: Faculty & Industry */}
-                  <div className="hero-meta-box">
-                    <div className="meta-box-icon" aria-hidden="true">
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <rect x="3" y="4" width="18" height="16" rx="2"/>
-                        <circle cx="9" cy="10" r="2"/>
-                        <line x1="15" y1="8" x2="17" y2="8"/>
-                        <line x1="15" y1="12" x2="17" y2="12"/>
-                        <line x1="7" y1="16" x2="17" y2="16"/>
-                      </svg>
-                    </div>
-                    <div className="meta-box-text">
-                      <div>Faculty : <span className="highlight-yellow">{webinar.speaker?.name || 'Brian L Tuttle'}</span></div>
-                      <div>Industry : <span className="highlight-yellow">{webinar.category || 'Health Care & Hospital'}</span></div>
-                    </div>
-                  </div>
-
-                  {/* Box 2: Live On & Time */}
-                  <div className="hero-meta-box">
-                    <div className="meta-box-icon" aria-hidden="true">
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  {/* Row 1: Live On & Time */}
+                  <div className="hero-meta-row">
+                    <div className="hero-meta-icon" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
                         <line x1="16" y1="2" x2="16" y2="6"/>
                         <line x1="8" y1="2" x2="8" y2="6"/>
                         <line x1="3" y1="10" x2="21" y2="10"/>
                       </svg>
                     </div>
-                    <div className="meta-box-text">
-                      <div>Live On : <span className="highlight-yellow">{webinar.date}</span></div>
-                      <div className="highlight-yellow">{webinar.time || '10.00 AM PDT | 01.00 PM EDT'}</div>
+                    <div className="hero-meta-info">
+                      <span className="hero-meta-label">Live On :</span>
+                      <span className="hero-meta-value">{webinar.date}</span>
+                      <span className="hero-meta-sub">{webinar.time || '10:00 AM PDT - 01:00 PM EDT'}</span>
                     </div>
                   </div>
 
-                  {/* Box 3: Duration */}
-                  <div className="hero-meta-box">
-                    <div className="meta-box-icon" aria-hidden="true">
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <div className="hero-meta-divider" />
+
+                  {/* Row 2: Duration */}
+                  <div className="hero-meta-row">
+                    <div className="hero-meta-icon" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <circle cx="12" cy="12" r="10"/>
                         <polyline points="12 6 12 12 16 14"/>
                       </svg>
                     </div>
-                    <div className="meta-box-text">
-                      <div>Duration : <span className="highlight-yellow">{webinar.duration || '90 Mins'}</span></div>
+                    <div className="hero-meta-info">
+                      <span className="hero-meta-label">Duration :</span>
+                      <span className="hero-meta-value">{webinar.duration || '90 minutes'}</span>
                     </div>
                   </div>
 
-                  {/* Box 4: Add To Calendar */}
+                  <div className="hero-meta-divider" />
+
+                  {/* Row 3: Add to Calendar */}
                   <button 
                     type="button" 
-                    className="hero-meta-box calendar-action-box"
+                    className="btn-hero-add-calendar"
                     onClick={handleAddToCalendar}
                     title="Add this session to your calendar"
                   >
-                    <div className="meta-box-icon" aria-hidden="true">
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <div className="hero-meta-icon" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
                         <line x1="16" y1="2" x2="16" y2="6"/>
                         <line x1="8" y1="2" x2="8" y2="6"/>
@@ -255,185 +270,275 @@ export default function WebinarDetailsPage() {
                         <line x1="10" y1="15" x2="14" y2="15"/>
                       </svg>
                     </div>
-                    <div className="meta-box-text">
-                      <span className="add-calendar-text">ADD TO CALENDAR</span>
-                    </div>
+                    <span>Add to Calendar</span>
                   </button>
                 </div>
               </div>
             </section>
 
-            {/* Full Course Curriculum */}
-            <main className="details-course-card">
             {/* Section 1: Course Description */}
-            <div className="course-section-block">
-              <div className="underlined-heading-wrap">
-                <h2 className="underlined-section-heading">Course Description:</h2>
+            <article className="detail-section-card">
+              <div className="section-card-header">
+                <span className="section-number-badge">1.</span>
+                <h2 className="section-card-title">Course Description</h2>
               </div>
-              <div className="course-section-content">
+              <div className="section-card-body">
                 <p>
-                  This 90-minute webinar on <strong>"{webinar.title}"</strong> will be addressing how practice/business managers (or compliance officers) need to get their HIPAA house in order as HIPAA HITECH is now fully enforced with bipartisan support. It will also address new congressional mandates, and the major changes and updates for 2026 and beyond – both for the HIPAA Privacy Rule and the HIPAA Security Rule. This will also include "proposed" changes to be on the look out for.
-                </p>
-                <p>
-                  We will be discussing current breaches, most common breaches, telemedicine, texting, emailing, and the OCR audit process.
-                </p>
-                <p>
-                  There's an enormous number of issues and risks for covered entities and business associates these days – we will speak to the most common violations and fines – and how to best avoid fines and headaches.
+                  This 90-minute webinar on <strong>"{webinar.title}"</strong> will help practice and business managers understand the latest HIPAA developments as HIPAA HITECH is now fully enforced with bipartisan support. We will cover new congressional mandates, key updates for the HIPAA Privacy Rule and Security Rule, and proposed changes to watch for.
                 </p>
               </div>
-            </div>
+            </article>
 
-            {/* Section 2: Why should you Attend? */}
-            <div className="course-section-block">
-              <div className="underlined-heading-wrap">
-                <h2 className="underlined-section-heading">Why should you Attend?</h2>
+            {/* Section 2: Why Should You Attend? */}
+            <article className="detail-section-card">
+              <div className="section-card-header">
+                <span className="section-number-badge">2.</span>
+                <h2 className="section-card-title">Why Should You Attend?</h2>
               </div>
-              <div className="course-section-content">
-                <p>
-                  Join Mr. Brian Tuttle in this 90-minute webinar on <strong>"{webinar.title}"</strong>. Are you prepared for the major overhaul with the HIPAA Security and Privacy Rule for 2026? The Office for Civil Rights is "finally" implementing some badly needed updates for the HIPAA Administrative Simplification (mainly the Security and Privacy Rules).
-                </p>
-                <p>
-                  More breaches of protected health information have occurred from 2022-2024 than the entire history of this regulation combined, hence, the government is taking major actions to strengthen these regulations (especially relating to security of electronic protected health information).
-                </p>
-                <p>
-                  What other changes (if any) can we expect under congressional mandates? Join me in this 90-minute webinar to explore what's new with HIPAA both from a regulation standpoint (new requirements), enforcement standpoint, and highest risks for breach.
-                </p>
-                <p>
-                  This once rarely enforced law has changed and you need to know what's going on! Protect your practice or business! What changes are being implemented from the OCR's Notice of Proposed Rulemaking (NPRM):
+              <div className="section-card-body">
+                <p className="section-intro-text">
+                  This webinar will help you understand what's new with HIPAA from a regulation, enforcement and risk standpoint. You will get clarity on the latest updates and practical guidance to protect your practice or business.
                 </p>
 
-                <ul className="ct-checklist">
-                  <li>
-                    <span className="check-blue">✔</span>
-                    <span>What about the major increase in cyber attacks and OCR's audit program?</span>
-                  </li>
-                  <li>
-                    <span className="check-blue">✔</span>
-                    <span>State laws are now in place increasing liability for patient remedies!</span>
-                  </li>
-                  <li>
-                    <span className="check-blue">✔</span>
-                    <span>What factors might spurn a lawsuit or a HIPAA audit? ...are you doing these things?</span>
-                  </li>
-                </ul>
+                <div className="attend-features-grid">
+                  {/* Feature 1 - Blue */}
+                  <div className="attend-feature-box blue-box">
+                    <div className="feature-icon-circle blue-icon" aria-hidden="true">
+                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                      </svg>
+                    </div>
+                    <div className="feature-text-content">
+                      <h4 className="feature-title blue-title">2026 HIPAA Changes</h4>
+                      <p className="feature-desc">Understand the latest regulatory updates and proposed changes.</p>
+                    </div>
+                  </div>
 
-                <p style={{ marginTop: '0.4rem' }}>
-                  Brian will be discussing 2026 changes taking place in Washington with the Health and Human Services regarding the bipartisan backed enforcement of the HIPAA laws already on the books (as well as some detailed discussions on the audit process) and some current events regarding HIPAA cases (both in courtrooms and from live audits).
-                </p>
-              </div>
-            </div>
+                  {/* Feature 2 - Red */}
+                  <div className="attend-feature-box red-box">
+                    <div className="feature-icon-circle red-icon" aria-hidden="true">
+                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                      </svg>
+                    </div>
+                    <div className="feature-text-content">
+                      <h4 className="feature-title red-title">Enforcement & Audits</h4>
+                      <p className="feature-desc">Learn about OCR's audit program, current enforcement trends and real-life cases.</p>
+                    </div>
+                  </div>
 
-            {/* Section 3: Areas Covered */}
-            <div className="course-section-block">
-              <div className="underlined-heading-wrap">
-                <h2 className="underlined-section-heading">Areas Covered:</h2>
-              </div>
-              <div className="course-section-content">
-                <ul className="ct-checklist">
-                  <li><span className="check-blue">✔</span><span>HIPAA Administrative Simplification Updates (Privacy Rule and Security Rule)</span></li>
-                  <li><span className="check-blue">✔</span><span>NPRM's for the HIPAA Security Rule &bull; Updates for the HIPAA Privacy Rule</span></li>
-                  <li><span className="check-blue">✔</span><span>Rights of Access &bull; Care Coordination &bull; Information Sharing</span></li>
-                  <li><span className="check-blue">✔</span><span>Notice of Privacy Practices &bull; 21st Century Cures Act &bull; Telemedicine (Do's and Don'ts)</span></li>
-                  <li><span className="check-blue">✔</span><span>Fines &bull; Portable devices &bull; Texting and Emailing – new guidelines</span></li>
-                  <li><span className="check-blue">✔</span><span>New Definition of protected health information &bull; Real life audits and litigated cases</span></li>
-                  <li><span className="check-blue">✔</span><span>Business associates and the increased burden &bull; Breach notification &bull; Risk factors</span></li>
-                </ul>
-              </div>
-            </div>
+                  {/* Feature 3 - Blue */}
+                  <div className="attend-feature-box blue-box">
+                    <div className="feature-icon-circle blue-icon" aria-hidden="true">
+                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                      </svg>
+                    </div>
+                    <div className="feature-text-content">
+                      <h4 className="feature-title blue-title">Security & Breach Risks</h4>
+                      <p className="feature-desc">Get insights on increasing cyber attacks, state laws and liability for patient remedies.</p>
+                    </div>
+                  </div>
 
-            {/* Section 4: Who will benefit? */}
-            <div className="course-section-block">
-              <div className="underlined-heading-wrap">
-                <h2 className="underlined-section-heading">Who will benefit?</h2>
-              </div>
-              <div className="course-section-content">
-                <p>This webcast will be of a valuable assistance to the below audience.</p>
-
-                <ul className="ct-checklist" style={{ marginTop: '0.4rem' }}>
-                  <li>
-                    <span className="check-blue">✔</span>
-                    <span><strong>Practice Managers &bull; MD's and other Medical Professionals &bull; Any business associates</strong> who work with medical practices or hospitals (i.e. billing companies, transcription companies, IT companies, answering services, home health, coders, attorneys, etc)</span>
-                  </li>
-                </ul>
-
-                <h4 style={{ color: '#0A3366', fontWeight: 700, margin: '0.65rem 0 0.25rem 0', fontSize: '0.95rem' }}>Companies/Organizations</h4>
-                <div className="benefited-orgs-grid">
-                  <div className="org-check-item"><span className="check-blue">✔</span><span>Private practice</span></div>
-                  <div className="org-check-item"><span className="check-blue">✔</span><span>Hospitals</span></div>
-                  <div className="org-check-item"><span className="check-blue">✔</span><span>Billing companies</span></div>
-                  <div className="org-check-item"><span className="check-blue">✔</span><span>Transcriptions companies</span></div>
-                  <div className="org-check-item"><span className="check-blue">✔</span><span>Home health groups</span></div>
-                  <div className="org-check-item"><span className="check-blue">✔</span><span>Health insurance</span></div>
-                  <div className="org-check-item"><span className="check-blue">✔</span><span>Ambulatory</span></div>
-                  <div className="org-check-item"><span className="check-blue">✔</span><span>IT companies</span></div>
-                  <div className="org-check-item"><span className="check-blue">✔</span><span>Attorneys</span></div>
+                  {/* Feature 4 - Red */}
+                  <div className="attend-feature-box red-box">
+                    <div className="feature-icon-circle red-icon" aria-hidden="true">
+                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                      </svg>
+                    </div>
+                    <div className="feature-text-content">
+                      <h4 className="feature-title red-title">Practical Compliance Guidance</h4>
+                      <p className="feature-desc">Learn actionable steps to avoid fines, reduce risk and stay compliant.</p>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </main>
+            </article>
+
+            {/* Section 3: Areas Covered */}
+            <article className="detail-section-card">
+              <div className="section-card-header">
+                <span className="section-number-badge">3.</span>
+                <h2 className="section-card-title">Areas Covered</h2>
+              </div>
+              <div className="section-card-body">
+                <div className="areas-two-col-grid">
+                  <div className="areas-col">
+                    <div className="area-check-row">
+                      <span className="area-check-badge" aria-hidden="true">✓</span>
+                      <span>HIPAA Administrative Simplification Updates (Privacy Rule and Security Rule)</span>
+                    </div>
+                    <div className="area-check-row">
+                      <span className="area-check-badge" aria-hidden="true">✓</span>
+                      <span>NPRM's for the HIPAA Security Rule and updates for the HIPAA Privacy Rule</span>
+                    </div>
+                    <div className="area-check-row">
+                      <span className="area-check-badge" aria-hidden="true">✓</span>
+                      <span>Rights of Access, Care Coordination and Information Sharing</span>
+                    </div>
+                    <div className="area-check-row">
+                      <span className="area-check-badge" aria-hidden="true">✓</span>
+                      <span>Notice of Privacy Practices, 21st Century Cures Act and Telemedicine (Do's and Don'ts)</span>
+                    </div>
+                  </div>
+
+                  <div className="areas-col">
+                    <div className="area-check-row">
+                      <span className="area-check-badge" aria-hidden="true">✓</span>
+                      <span>Fines, Portable Devices, Texting and Emailing – New Guidelines</span>
+                    </div>
+                    <div className="area-check-row">
+                      <span className="area-check-badge" aria-hidden="true">✓</span>
+                      <span>New Definition of Protected Health Information</span>
+                    </div>
+                    <div className="area-check-row">
+                      <span className="area-check-badge" aria-hidden="true">✓</span>
+                      <span>Real-Life Audits and Litigated Cases</span>
+                    </div>
+                    <div className="area-check-row">
+                      <span className="area-check-badge" aria-hidden="true">✓</span>
+                      <span>Business Associates and the Increased Burden</span>
+                    </div>
+                    <div className="area-check-row">
+                      <span className="area-check-badge" aria-hidden="true">✓</span>
+                      <span>Breach Notification and Risk Factors</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            {/* Section 4: Who Will Benefit? */}
+            <article className="detail-section-card">
+              <div className="section-card-header">
+                <span className="section-number-badge">4.</span>
+                <h2 className="section-card-title">Who Will Benefit?</h2>
+              </div>
+              <div className="section-card-body">
+                <div className="benefit-two-boxes-grid">
+                  {/* Healthcare Professionals Box */}
+                  <div className="benefit-card-box blue-box">
+                    <div className="benefit-icon-circle blue-icon" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                      </svg>
+                    </div>
+                    <div className="benefit-box-content">
+                      <h4 className="benefit-box-title blue-title">Healthcare Professionals</h4>
+                      <ul className="benefit-bullet-list">
+                        <li>Practice Managers</li>
+                        <li>MD's and other Medical Professionals</li>
+                        <li>Compliance Officers</li>
+                        <li>Business Associates working with medical practices or hospitals</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Companies / Organizations Box */}
+                  <div className="benefit-card-box red-box">
+                    <div className="benefit-icon-circle red-icon" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+                        <line x1="9" y1="22" x2="9" y2="22.01"></line>
+                        <line x1="15" y1="22" x2="15" y2="22.01"></line>
+                        <line x1="9" y1="6" x2="9" y2="6.01"></line>
+                        <line x1="15" y1="6" x2="15" y2="6.01"></line>
+                        <line x1="9" y1="10" x2="9" y2="10.01"></line>
+                        <line x1="15" y1="10" x2="15" y2="10.01"></line>
+                        <line x1="9" y1="14" x2="9" y2="14.01"></line>
+                        <line x1="15" y1="14" x2="15" y2="14.01"></line>
+                        <line x1="9" y1="18" x2="9" y2="18.01"></line>
+                        <line x1="15" y1="18" x2="15" y2="18.01"></line>
+                      </svg>
+                    </div>
+                    <div className="benefit-box-content">
+                      <h4 className="benefit-box-title red-title">Companies / Organizations</h4>
+                      <div className="orgs-subcolumns">
+                        <ul className="benefit-bullet-list">
+                          <li>Private Practice</li>
+                          <li>Hospitals</li>
+                          <li>Billing Companies</li>
+                          <li>Transcription Companies</li>
+                          <li>Home Health Groups</li>
+                        </ul>
+                        <ul className="benefit-bullet-list">
+                          <li>Health insurance</li>
+                          <li>Ambulatory Services</li>
+                          <li>IT Companies</li>
+                          <li>Attorneys</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
           </div>
 
-          {/* Right Column: Sticky Registration Options & Tags */}
+          {/* Right Column: Registration Options, Tags & Recommended Webinars */}
           <aside className="details-sidebar-ct" aria-label="Registration Options">
             {/* Registration Options Card */}
             <div className="registration-card-ct">
               <h3 className="registration-card-title">Registration Options</h3>
 
-              {/* Selected Featured Option Banner */}
-              <div className="featured-price-block">
-                <div className="price-tag-row">
-                  <div className="radio-check-indicator active">✓</div>
-                  <div className="featured-price-amount">${currentOption.price}</div>
+              {/* Selected Featured Option */}
+              <div className="selected-option-block">
+                <div className="selected-option-header">
+                  <span className="selected-radio-dot" aria-hidden="true"></span>
+                  <span className="selected-option-price">${currentOption.price}</span>
+                  <span className="selected-option-title">{currentOption.title}</span>
                 </div>
-                <div className="featured-option-name">{currentOption.title}</div>
-                <div className="featured-option-note">{currentOption.desc}</div>
+                <div className="selected-option-note">{currentOption.desc}</div>
 
                 <button 
                   type="button" 
-                  className="btn-add-to-cart"
+                  className="btn-sidebar-add-cart"
                   onClick={handleAddToCart}
                 >
                   Add to cart
                 </button>
               </div>
 
-              {/* Radio List of Available Packages (Top 3 initial, Expandable) */}
-              <div className="packages-radio-list">
-                {(showAllOptions ? registrationOptions : registrationOptions.slice(0, 3)).map((opt) => (
-                  <label 
+              {/* Unselected Options List */}
+              <div className="unselected-options-list">
+                {(showAllOptions ? registrationOptions.slice(1) : registrationOptions.slice(1, 3)).map((opt) => (
+                  <div 
                     key={opt.id} 
-                    className={`package-radio-row ${selectedOption === opt.id ? 'active-row' : ''}`}
+                    className="unselected-option-row"
+                    onClick={() => setSelectedOption(opt.id)}
                   >
-                    <input 
-                      type="radio" 
-                      name="registrationPackage" 
-                      value={opt.id}
-                      checked={selectedOption === opt.id}
-                      onChange={() => setSelectedOption(opt.id)}
-                      className="package-native-radio"
-                    />
-                    <div className="package-info-col">
-                      <div className="package-header-line">
-                        <span className="package-price-bold">${opt.price}</span>
-                        <span className="package-title-text">{opt.title}</span>
+                    <span className="unselected-radio-circle" aria-hidden="true"></span>
+                    <div className="unselected-option-info">
+                      <div className="unselected-option-header">
+                        <span className="unselected-price">${opt.price}</span>
+                        <span className="unselected-title">{opt.title}</span>
                       </div>
                       {opt.desc && (
-                        <p className="package-sub-desc">{opt.desc}</p>
+                        <span className="unselected-desc">{opt.desc}</span>
                       )}
                     </div>
-                  </label>
+                  </div>
                 ))}
 
                 {registrationOptions.length > 3 && (
-                  <div className="view-more-packages-wrap">
-                    <button
-                      type="button"
-                      className="btn-toggle-packages"
-                      onClick={() => setShowAllOptions((prev) => !prev)}
-                    >
-                      {showAllOptions ? 'View Less' : 'View More'}
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    className="btn-view-more-packages-outline"
+                    onClick={() => setShowAllOptions((prev) => !prev)}
+                  >
+                    {showAllOptions ? 'View Less' : 'View More'}
+                  </button>
                 )}
               </div>
             </div>
@@ -441,10 +546,16 @@ export default function WebinarDetailsPage() {
             {/* Tags Box */}
             <div className="tags-card-ct">
               <h3 className="tags-title">Tags</h3>
-              <div className="tags-cloud-box">
-                <p className="tags-content-text">
-                  HIPAA 2026 Changes, HIPAA 2026 updates, HIPAA Changes, HIPAA Security, HIPAA Audit, Omnibus Rule, HIPAA 2026 Law, HIPAA cases, Health Insurance Portability and Accountability Act, Health and Human Services, Health Care, New HIPAA Rules, HIPAA Business Associate, HIPAA Violations and Fines, HIPAA Best Practices
-                </p>
+              <div className="tags-pills-wrap">
+                <span className="tag-pill-badge">HIPAA 2026 Changes</span>
+                <span className="tag-pill-badge">HIPAA 2026</span>
+                <span className="tag-pill-badge">HIPAA Security</span>
+                <span className="tag-pill-badge">HIPAA Seudle</span>
+                <span className="tag-pill-badge">Health Insurance</span>
+                <span className="tag-pill-badge">Accountability Act</span>
+                <span className="tag-pill-badge">Health and Human Services</span>
+                <span className="tag-pill-badge">Health Care</span>
+                <span className="tag-pill-badge">New HIPAA Rules</span>
               </div>
             </div>
 
@@ -476,7 +587,7 @@ export default function WebinarDetailsPage() {
                         </div>
                         <div className="rec-thumb-graphic" aria-hidden="true">
                           <div className="rec-thumb-circle">
-                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#38BDF8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#38BDF8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                               <circle cx="12" cy="11" r="2" fill="#38BDF8" />
                               <path d="M12 13v2.5" strokeWidth="2.5" />
@@ -491,7 +602,7 @@ export default function WebinarDetailsPage() {
                         <h4 className="rec-title-text" title={rec.title}>{rec.title}</h4>
                         <div className="rec-meta-row">
                           <span className="rec-meta-item">
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                               <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                               <line x1="16" y1="2" x2="16" y2="6"></line>
                               <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -502,7 +613,7 @@ export default function WebinarDetailsPage() {
                         </div>
                         <div className="rec-meta-row">
                           <span className="rec-meta-item">
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                               <circle cx="12" cy="7" r="4"></circle>
                             </svg>
@@ -513,7 +624,7 @@ export default function WebinarDetailsPage() {
 
                       {/* Right Subtle Chevron Indicator */}
                       <div className="rec-arrow-circle" aria-hidden="true">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                           <polyline points="9 18 15 12 9 6"></polyline>
                         </svg>
                       </div>
