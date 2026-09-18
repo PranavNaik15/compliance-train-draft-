@@ -317,7 +317,7 @@ export default function WebinarDetailsPage() {
                   </li>
                 </ul>
 
-                <p style={{ marginTop: '1rem' }}>
+                <p style={{ marginTop: '0.4rem' }}>
                   Brian will be discussing 2026 changes taking place in Washington with the Health and Human Services regarding the bipartisan backed enforcement of the HIPAA laws already on the books (as well as some detailed discussions on the audit process) and some current events regarding HIPAA cases (both in courtrooms and from live audits).
                 </p>
               </div>
@@ -349,14 +349,14 @@ export default function WebinarDetailsPage() {
               <div className="course-section-content">
                 <p>This webcast will be of a valuable assistance to the below audience.</p>
 
-                <ul className="ct-checklist" style={{ marginTop: '0.75rem' }}>
+                <ul className="ct-checklist" style={{ marginTop: '0.4rem' }}>
                   <li>
                     <span className="check-blue">✔</span>
                     <span><strong>Practice Managers &bull; MD's and other Medical Professionals &bull; Any business associates</strong> who work with medical practices or hospitals (i.e. billing companies, transcription companies, IT companies, answering services, home health, coders, attorneys, etc)</span>
                   </li>
                 </ul>
 
-                <h4 style={{ color: '#0A3366', fontWeight: 700, margin: '1.25rem 0 0.5rem 0' }}>Companies/Organizations</h4>
+                <h4 style={{ color: '#0A3366', fontWeight: 700, margin: '0.65rem 0 0.25rem 0', fontSize: '0.95rem' }}>Companies/Organizations</h4>
                 <div className="benefited-orgs-grid">
                   <div className="org-check-item"><span className="check-blue">✔</span><span>Private practice</span></div>
                   <div className="org-check-item"><span className="check-blue">✔</span><span>Hospitals</span></div>
