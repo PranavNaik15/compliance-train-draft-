@@ -152,7 +152,7 @@ export default function WebinarDetailsPage() {
 
   const recommendedWebinars = allWebinars
     .filter((w) => String(w.id) !== String(webinar?.id))
-    .slice(0, 3);
+    .slice(0, 4);
 
   const currentOption = registrationOptions.find((opt) => opt.id === selectedOption) || registrationOptions[0];
 
