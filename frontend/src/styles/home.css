@@ -330,179 +330,174 @@
   gap: 1.5rem;
 }
 
-/* Webinar Card ComplianceTrain Style */
+/* Webinar Card: Top Template Banner + Bottom Speaker Details */
 .webinar-card-reference {
   background-color: #FFFFFF;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 8px rgba(10, 51, 102, 0.06);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  position: relative;
 }
 
 .webinar-card-reference:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(36, 118, 162, 0.12);
-  border-color: #2476A2;
+  box-shadow: 0 8px 20px rgba(10, 51, 102, 0.14);
+  border-color: #CBD5E1;
 }
 
-.card-top-link-wrap {
-  display: block;
+/* 1. Top Dark Blue Graphic Banner */
+.card-top-banner-link {
+  background-color: #0A2540;
+  padding: 1.05rem 1.1rem 1.15rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
   text-decoration: none;
 }
 
-.card-graphic-banner {
-  height: 145px;
-  background-color: #0A3366;
-  position: relative;
-  overflow: hidden;
-  padding: 0.65rem;
+/* Top Pill Bar */
+.card-template-top {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-}
-
-/* Badge Live / On Demand at Bottom-Left */
-.banner-badge-left {
-  position: absolute;
-  bottom: 8px;
-  left: 8px;
+  margin-bottom: 0.85rem;
   z-index: 3;
 }
 
-.badge-live-pill {
-  background-color: #E03E3E;
+/* Red Live Webinar Pill */
+.card-live-pill {
+  background-color: #E63946;
   color: #FFFFFF;
-  font-size: 0.65rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  padding: 0.22rem 0.6rem;
-  border-radius: 4px;
-  display: inline-block;
-  text-transform: uppercase;
-}
-
-.badge-ondemand-pill {
-  background-color: #0056B3;
-}
-
-/* White Title Box in Left Area of Card */
-.card-notepad-graphic {
-  position: absolute;
-  left: 8px;
-  top: 8px;
-  width: 58%;
-  height: 90px;
-  background: #FFFFFF;
-  border: 1px solid #CBD5E1;
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  padding: 0.55rem 0.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: left;
-  z-index: 1;
-}
-
-.notepad-clip-bar {
-  display: none;
-}
-
-.notepad-category-text {
-  font-size: 0.6rem;
-  font-weight: 800;
-  color: #0A3366;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  margin-bottom: 0.2rem;
-  line-height: 1.2;
-}
-
-.notepad-main-text {
-  font-size: 0.72rem;
-  font-weight: 800;
-  color: #0A3366;
-  line-height: 1.25;
-  text-transform: uppercase;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* Schedule Info Overlay on the right */
-.banner-schedule-box {
-  position: absolute;
-  right: 8px;
-  top: 8px;
-  bottom: 8px;
-  width: 36%;
-  background: #FFFFFF;
-  border: 1px solid #CBD5E1;
-  border-radius: 6px;
-  padding: 0.45rem 0.35rem;
-  display: flex;
-  flex-direction: column;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.22rem 0.65rem;
+  border-radius: 9999px;
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  text-align: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-  z-index: 2;
-}
-
-.schedule-box-date {
-  color: #0A3366;
-  font-weight: 800;
-  font-size: 0.68rem;
+  gap: 0.4rem;
   letter-spacing: 0.01em;
 }
 
-.schedule-box-duration-pill {
+.card-live-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #FFFFFF;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* White/Light Duration Pill */
+.card-duration-pill {
   background-color: #F1F5F9;
-  border: 1px solid #E2E8F0;
-  color: #475569;
-  font-size: 0.58rem;
+  color: #0A2540;
+  font-size: 0.7rem;
   font-weight: 700;
-  padding: 0.1rem 0.35rem;
-  border-radius: 3px;
+  padding: 0.22rem 0.65rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Banner Body Layout */
+.card-template-body {
+  display: flex;
+  position: relative;
+  min-height: 100px;
+}
+
+.card-content-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 66%;
+  z-index: 2;
+}
+
+.card-label-tag {
+  color: #60A5FA;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
-.schedule-box-times {
-  display: flex;
-  flex-direction: column;
-  gap: 0.05rem;
-}
-
-.time-line {
-  color: #64748B;
-  font-size: 0.62rem;
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-.schedule-box-recorded-label {
-  font-size: 0.62rem;
+.card-banner-title {
+  color: #FFFFFF;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
   font-weight: 800;
-  color: #0A3366;
-  letter-spacing: 0.02em;
+  line-height: 1.25;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.schedule-box-dvd-badge {
-  font-size: 0.58rem;
-  font-weight: 700;
-  color: #0066CC;
-  background-color: #EFF6FF;
-  border: 1px solid #BAE6FD;
-  padding: 0.15rem 0.35rem;
-  border-radius: 3px;
+.card-banner-desc {
+  color: #CBD5E1;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Card Body & Speaker Area */
+/* Right-Side Concentric Blue Circles */
+.card-visual-right {
+  position: absolute;
+  right: -24px;
+  bottom: -20px;
+  width: 130px;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.card-concentric-outer {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: #113B6E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.card-concentric-inner {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: #1A5499;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.card-shield-icon {
+  width: 36px;
+  height: 36px;
+  color: #FFFFFF;
+}
+
+/* 2. Lower White Speaker & Full Title Section */
 .card-info-area {
-  padding: 0.85rem 1rem 1.1rem 1rem;
+  background-color: #FFFFFF;
+  padding: 0.85rem 1rem 1rem 1rem;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -514,7 +509,7 @@
   gap: 0.65rem;
   margin-bottom: 0.65rem;
   padding-bottom: 0.65rem;
-  border-bottom: 1px solid var(--color-border-light);
+  border-bottom: 1px solid #E2E8F0;
 }
 
 .card-speaker-img {
@@ -561,15 +556,17 @@
 }
 
 .card-title-text {
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   font-weight: 700;
   line-height: 1.35;
   color: #0A3366;
   flex: 1;
+  margin: 0;
 }
 
 .card-title-text a {
   color: #0A3366;
+  text-decoration: none;
   transition: color var(--transition-fast);
 }
 

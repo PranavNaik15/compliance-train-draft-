@@ -4,100 +4,80 @@ import React from 'react';
 import Link from 'next/link';
 
 export default function WebinarCard({ webinar, isRecorded = false }) {
-  const formatDateHeader = (dateStr) => {
-    try {
-      const parts = dateStr.replace(',', '').split(' ');
-      if (parts.length >= 3) {
-        return `${parts[0].substring(0, 3).toUpperCase()} ${parts[1]}, ${parts[2]}`;
-      }
-    } catch (e) {
-      // fallback
+  const formatDuration = (dur) => {
+    if (!dur) return '90 min';
+    const lower = dur.toLowerCase();
+    const match = lower.match(/\d+/);
+    if (match) {
+      return `${match[0]} min`;
     }
-    return dateStr.toUpperCase();
+    return dur;
   };
 
-  const formattedDate = formatDateHeader(webinar.date);
-
-  const getTimeDisplay = () => {
-    if (webinar.time && webinar.time.includes('PDT') && webinar.time.includes('EDT')) {
-      const times = webinar.time.split(' - ');
-      return {
-        pdt: times[0] || '10:00 AM PDT',
-        edt: times[1] || '01:00 PM EDT'
-      };
-    }
-    return {
-      pdt: '10:00 AM PDT',
-      edt: '01:00 PM EDT'
-    };
-  };
-
-  const { pdt, edt } = getTimeDisplay();
+  const durationText = formatDuration(webinar.duration);
+  const tagText = webinar.yearTag || 'NEW FOR 2026';
+  const descText = webinar.shortDescription || webinar.fullDescription || 'What changes and what to do';
   const speakerAvatarUrl = webinar.speaker?.avatarUrl || '/speaker-brian.jpg';
-
-  const parseBadgeLabel = (label, title) => {
-    const raw = (label || title || '').toUpperCase();
-    if (raw.includes(':')) {
-      const parts = raw.split(':');
-      return {
-        category: parts[0].trim(),
-        main: parts.slice(1).join(':').trim()
-      };
-    }
-    return {
-      category: 'NEW HIPAA TRAINING',
-      main: raw.length > 36 ? `${raw.substring(0, 36)}...` : raw
-    };
-  };
-
-  const { category: badgeCategory, main: badgeMain } = parseBadgeLabel(webinar.badgeLabel, webinar.title);
+  const speakerName = webinar.speaker?.name || 'Brian L. Tuttle';
+  const speakerRole = webinar.speaker?.role || 'Health IT & Compliance Consultant';
 
   return (
     <article className="webinar-card-reference" aria-labelledby={`title-${webinar.id}`}>
-      <Link href={`/webinars/${webinar.id}`} className="card-top-link-wrap">
-        <div className="card-graphic-banner">
-          {/* Top Left Badge */}
-          <div className="banner-badge-left">
-            <span className={`badge-live-pill ${isRecorded ? 'badge-ondemand-pill' : ''}`}>
-              {isRecorded ? 'ON DEMAND' : 'LIVE SESSION'}
-            </span>
+      {/* 1. Top Dark Blue Graphic Banner (Matching Reference Template) */}
+      <Link href={`/webinars/${webinar.id}`} className="card-top-banner-link">
+        {/* Top Header Row: Live Pill (Left) & Duration Pill (Right) */}
+        <div className="card-template-top">
+          <div className="card-live-pill">
+            <span className="card-live-dot" aria-hidden="true"></span>
+            <span>{isRecorded ? 'On demand' : 'Live webinar'}</span>
           </div>
 
-          {/* Centered / Left Notepad Graphic */}
-          <div className="card-notepad-graphic">
-            <div className="notepad-clip-bar"></div>
-            <div className="notepad-category-text">{badgeCategory}</div>
-            <div className="notepad-main-text">{badgeMain}</div>
+          <div className="card-duration-pill">
+            <span>{durationText}</span>
+          </div>
+        </div>
+
+        {/* Banner Content (Left: Label, Title, Desc; Right: Concentric Shield) */}
+        <div className="card-template-body">
+          <div className="card-content-left">
+            <span className="card-label-tag">{tagText}</span>
+            <h3 className="card-banner-title">
+              {webinar.title}
+            </h3>
+            <p className="card-banner-desc">
+              {descText}
+            </p>
           </div>
 
-          {/* Right Schedule / Access Box */}
-          <div className="banner-schedule-box">
-            {isRecorded ? (
-              <>
-                <div className="schedule-box-recorded-label">ACCESS RECORDED</div>
-                <div className="schedule-box-dvd-badge">CD-DVD VERSION</div>
-              </>
-            ) : (
-              <>
-                <div className="schedule-box-date">{formattedDate}</div>
-                <div className="schedule-box-duration-pill">
-                  {(webinar.duration || '90 MINUTES').toUpperCase()}
-                </div>
-                <div className="schedule-box-times">
-                  <div className="time-line">{pdt}</div>
-                  <div className="time-line">{edt}</div>
-                </div>
-              </>
-            )}
+          {/* Right Side Concentric Blue Circles with White Shield */}
+          <div className="card-visual-right" aria-hidden="true">
+            <div className="card-concentric-outer">
+              <div className="card-concentric-inner">
+                <svg
+                  className="card-shield-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  <circle cx="12" cy="10" r="2.2" fill="currentColor" />
+                  <path d="M12 12v3.5" strokeWidth="2.5" />
+                </svg>
+              </div>
+            </div>
           </div>
         </div>
       </Link>
 
+      {/* 2. Lower White Speaker & Full Title Section (Preserved) */}
       <div className="card-info-area">
         <div className="card-speaker-block">
           <img 
             src={speakerAvatarUrl} 
-            alt={webinar.speaker.name}
+            alt={speakerName}
             className="card-speaker-img"
             onError={(e) => {
               e.target.style.display = 'none';
@@ -107,12 +87,12 @@ export default function WebinarCard({ webinar, isRecorded = false }) {
             }}
           />
           <div className="card-speaker-fallback" style={{ display: 'none' }}>
-            {webinar.speaker.name.slice(0, 2).toUpperCase()}
+            {speakerName.slice(0, 2).toUpperCase()}
           </div>
           <div className="card-speaker-meta">
-            <h4 className="card-speaker-name">{webinar.speaker.name}</h4>
-            <p className="card-speaker-role" title={`${webinar.speaker.role} at ${webinar.speaker.company}`}>
-              {webinar.speaker.role}
+            <h4 className="card-speaker-name">{speakerName}</h4>
+            <p className="card-speaker-role" title={`${speakerRole} at ${webinar.speaker?.company || 'ComplianceTrain'}`}>
+              {speakerRole}
             </p>
           </div>
         </div>
