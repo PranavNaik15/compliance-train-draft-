@@ -201,98 +201,103 @@ export default function WebinarDetailsPage() {
         <div className="details-two-col-grid">
           {/* Left Column: Dark Hero Card + 4 Separate Section Cards */}
           <div className="details-main-col">
-            {/* Dark Hero Banner */}
+            {/* Combined Large Dark Hero Banner Card */}
             <section className="webinar-details-hero">
-              <div className="hero-layout-wrapper">
-                {/* Left Area: Live Pill + Title + Subtitle */}
-                <div className="hero-main-left">
-                  <div className="hero-live-badge">
-                    <span className="badge-dot" aria-hidden="true"></span>
-                    <span>Live Webinar</span>
+              <div className="hero-top-badge-row">
+                <div className="hero-live-badge">
+                  <span className="badge-dot" aria-hidden="true"></span>
+                  <span>Live Webinar</span>
+                </div>
+              </div>
+
+              <h1 className="hero-webinar-title">{webinar.title}</h1>
+
+              <p className="hero-description-text">
+                {webinar.shortDescription ||
+                  'Stay compliant and prepare for the latest HIPAA regulatory changes, enforcement trends, and audit updates. Learn key updates, real-world cases, and practical steps to protect your practice or business.'}
+              </p>
+
+              {/* Bottom Row: 4 Clean Separated Meta Blocks */}
+              <div className="hero-meta-bottom-row">
+                {/* Block 1: Live On */}
+                <div className="hero-meta-col">
+                  <div className="hero-meta-icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                      <line x1="16" y1="2" x2="16" y2="6"/>
+                      <line x1="8" y1="2" x2="8" y2="6"/>
+                      <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
                   </div>
-                  <h1 className="hero-webinar-title">{webinar.title}</h1>
-                  <p className="hero-subtitle-text">
-                    Stay compliant and prepare for the latest HIPAA regulatory changes, enforcement trends, and audit updates.
-                  </p>
+                  <div className="hero-meta-text">
+                    <span className="hero-meta-label">Live On</span>
+                    <span className="hero-meta-highlight">{webinar.date}</span>
+                    <span className="hero-meta-sub">{webinar.time || '10:00 AM PDT - 01:00 PM EDT'}</span>
+                  </div>
                 </div>
 
-                {/* Right Area: Vertically Stacked Meta Card */}
-                <div className="hero-meta-stack">
-                  {/* Row 1: Live On & Time */}
-                  <div className="hero-meta-row">
-                    <div className="hero-meta-icon" aria-hidden="true">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                        <line x1="16" y1="2" x2="16" y2="6"/>
-                        <line x1="8" y1="2" x2="8" y2="6"/>
-                        <line x1="3" y1="10" x2="21" y2="10"/>
-                      </svg>
-                    </div>
-                    <div className="hero-meta-info">
-                      <span className="hero-meta-label">Live On :</span>
-                      <span className="hero-meta-value">{webinar.date}</span>
-                      <span className="hero-meta-sub">{webinar.time || '10:00 AM PDT - 01:00 PM EDT'}</span>
-                    </div>
+                <div className="hero-meta-vsep" aria-hidden="true" />
+
+                {/* Block 2: Speaker */}
+                <div className="hero-meta-col">
+                  <div className="hero-meta-icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
                   </div>
-
-                  <div className="hero-meta-divider" />
-
-                  {/* Row 2: Duration */}
-                  <div className="hero-meta-row">
-                    <div className="hero-meta-icon" aria-hidden="true">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polyline points="12 6 12 12 16 14"/>
-                      </svg>
-                    </div>
-                    <div className="hero-meta-info">
-                      <span className="hero-meta-label">Duration :</span>
-                      <span className="hero-meta-value">{webinar.duration || '90 minutes'}</span>
-                    </div>
+                  <div className="hero-meta-text">
+                    <span className="hero-meta-label">Speaker</span>
+                    <span className="hero-meta-highlight">{webinar.speaker?.name || 'Brian L. Tuttle'}</span>
+                    <span className="hero-meta-sub">{webinar.speaker?.role || 'Compliance Expert'}</span>
                   </div>
-
-                  <div className="hero-meta-divider" />
-
-                  {/* Row 3: Add to Calendar */}
-                  <button 
-                    type="button" 
-                    className="btn-hero-add-calendar"
-                    onClick={handleAddToCalendar}
-                    title="Add this session to your calendar"
-                  >
-                    <div className="hero-meta-icon" aria-hidden="true">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                        <line x1="16" y1="2" x2="16" y2="6"/>
-                        <line x1="8" y1="2" x2="8" y2="6"/>
-                        <line x1="3" y1="10" x2="21" y2="10"/>
-                        <line x1="12" y1="13" x2="12" y2="17"/>
-                        <line x1="10" y1="15" x2="14" y2="15"/>
-                      </svg>
-                    </div>
-                    <span>Add to Calendar</span>
-                  </button>
                 </div>
+
+                <div className="hero-meta-vsep" aria-hidden="true" />
+
+                {/* Block 3: Duration */}
+                <div className="hero-meta-col">
+                  <div className="hero-meta-icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                  </div>
+                  <div className="hero-meta-text">
+                    <span className="hero-meta-label">Duration</span>
+                    <span className="hero-meta-highlight">{webinar.duration || '90 minutes'}</span>
+                  </div>
+                </div>
+
+                <div className="hero-meta-vsep" aria-hidden="true" />
+
+                {/* Block 4: Add to Calendar */}
+                <button 
+                  type="button" 
+                  className="hero-meta-col btn-hero-add-calendar"
+                  onClick={handleAddToCalendar}
+                  title="Add this session to your calendar"
+                >
+                  <div className="hero-meta-icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                      <line x1="16" y1="2" x2="16" y2="6"/>
+                      <line x1="8" y1="2" x2="8" y2="6"/>
+                      <line x1="3" y1="10" x2="21" y2="10"/>
+                      <line x1="12" y1="13" x2="12" y2="17"/>
+                      <line x1="10" y1="15" x2="14" y2="15"/>
+                    </svg>
+                  </div>
+                  <div className="hero-meta-text">
+                    <span className="hero-meta-calendar-link">Add to Calendar</span>
+                  </div>
+                </button>
               </div>
             </section>
 
-            {/* Section 1: Course Description */}
+            {/* Why Should You Attend? (No number badge) */}
             <article className="detail-section-card">
               <div className="section-card-header">
-                <span className="section-number-badge">1.</span>
-                <h2 className="section-card-title">Course Description</h2>
-              </div>
-              <div className="section-card-body">
-                <p>
-                  This 90-minute webinar on <strong>"{webinar.title}"</strong> will help practice and business managers understand the latest HIPAA developments as HIPAA HITECH is now fully enforced with bipartisan support. We will cover new congressional mandates, key updates for the HIPAA Privacy Rule and Security Rule, and proposed changes to watch for.
-                </p>
-              </div>
-            </article>
-
-            {/* Section 2: Why Should You Attend? */}
-            <article className="detail-section-card">
-              <div className="section-card-header">
-                <span className="section-number-badge">2.</span>
                 <h2 className="section-card-title">Why Should You Attend?</h2>
               </div>
               <div className="section-card-body">
@@ -365,10 +370,9 @@ export default function WebinarDetailsPage() {
               </div>
             </article>
 
-            {/* Section 3: Areas Covered */}
+            {/* Areas Covered (No number badge) */}
             <article className="detail-section-card">
               <div className="section-card-header">
-                <span className="section-number-badge">3.</span>
                 <h2 className="section-card-title">Areas Covered</h2>
               </div>
               <div className="section-card-body">
@@ -418,10 +422,9 @@ export default function WebinarDetailsPage() {
               </div>
             </article>
 
-            {/* Section 4: Who Will Benefit? */}
+            {/* Who Will Benefit? (No number badge) */}
             <article className="detail-section-card">
               <div className="section-card-header">
-                <span className="section-number-badge">4.</span>
                 <h2 className="section-card-title">Who Will Benefit?</h2>
               </div>
               <div className="section-card-body">
