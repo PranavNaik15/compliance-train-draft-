@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { getWebinarById, getWebinars } from '../../../api/webinarApi';
+import WebinarCardVisual from '../../../components/WebinarCardVisual';
 import '../../../styles/details.css';
 
 export default function WebinarDetailsPage() {
@@ -172,7 +173,7 @@ export default function WebinarDetailsPage() {
 
   const recommendedWebinars = allWebinars
     .filter((w) => String(w.id) !== String(webinar?.id))
-    .slice(0, 4);
+    .slice(0, 3);
 
   const currentOption = registrationOptions.find((opt) => opt.id === selectedOption) || registrationOptions[0];
 
@@ -217,10 +218,10 @@ export default function WebinarDetailsPage() {
                   'Stay compliant and prepare for the latest HIPAA regulatory changes, enforcement trends, and audit updates. Learn key updates, real-world cases, and practical steps to protect your practice or business.'}
               </p>
 
-              {/* Bottom Row: 4 Clean Separated Meta Blocks */}
-              <div className="hero-meta-bottom-row">
+              {/* Bottom 2x2 Grid: Live On, Speaker, Duration, Add to Calendar */}
+              <div className="hero-meta-2x2-grid">
                 {/* Block 1: Live On */}
-                <div className="hero-meta-col">
+                <div className="hero-meta-box">
                   <div className="hero-meta-icon" aria-hidden="true">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
@@ -236,10 +237,8 @@ export default function WebinarDetailsPage() {
                   </div>
                 </div>
 
-                <div className="hero-meta-vsep" aria-hidden="true" />
-
                 {/* Block 2: Speaker */}
-                <div className="hero-meta-col">
+                <div className="hero-meta-box">
                   <div className="hero-meta-icon" aria-hidden="true">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -249,14 +248,12 @@ export default function WebinarDetailsPage() {
                   <div className="hero-meta-text">
                     <span className="hero-meta-label">Speaker</span>
                     <span className="hero-meta-highlight">{webinar.speaker?.name || 'Brian L. Tuttle'}</span>
-                    <span className="hero-meta-sub">{webinar.speaker?.role || 'Compliance Expert'}</span>
+                    <span className="hero-meta-sub">{webinar.speaker?.role || 'Health IT & Compliance Consultant'}</span>
                   </div>
                 </div>
 
-                <div className="hero-meta-vsep" aria-hidden="true" />
-
                 {/* Block 3: Duration */}
-                <div className="hero-meta-col">
+                <div className="hero-meta-box">
                   <div className="hero-meta-icon" aria-hidden="true">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="12" cy="12" r="10"/>
@@ -269,12 +266,10 @@ export default function WebinarDetailsPage() {
                   </div>
                 </div>
 
-                <div className="hero-meta-vsep" aria-hidden="true" />
-
                 {/* Block 4: Add to Calendar */}
                 <button 
                   type="button" 
-                  className="hero-meta-col btn-hero-add-calendar"
+                  className="hero-meta-box btn-hero-add-calendar"
                   onClick={handleAddToCalendar}
                   title="Add this session to your calendar"
                 >
@@ -323,16 +318,16 @@ export default function WebinarDetailsPage() {
                     </div>
                   </div>
 
-                  {/* Feature 2 - Red */}
-                  <div className="attend-feature-box red-box">
-                    <div className="feature-icon-circle red-icon" aria-hidden="true">
+                  {/* Feature 2 - Blue */}
+                  <div className="attend-feature-box blue-box">
+                    <div className="feature-icon-circle blue-icon" aria-hidden="true">
                       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                       </svg>
                     </div>
                     <div className="feature-text-content">
-                      <h4 className="feature-title red-title">Enforcement & Audits</h4>
+                      <h4 className="feature-title blue-title">Enforcement & Audits</h4>
                       <p className="feature-desc">Learn about OCR's audit program, current enforcement trends and real-life cases.</p>
                     </div>
                   </div>
@@ -351,9 +346,9 @@ export default function WebinarDetailsPage() {
                     </div>
                   </div>
 
-                  {/* Feature 4 - Red */}
-                  <div className="attend-feature-box red-box">
-                    <div className="feature-icon-circle red-icon" aria-hidden="true">
+                  {/* Feature 4 - Blue */}
+                  <div className="attend-feature-box blue-box">
+                    <div className="feature-icon-circle blue-icon" aria-hidden="true">
                       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                         <circle cx="9" cy="7" r="4"></circle>
@@ -362,7 +357,7 @@ export default function WebinarDetailsPage() {
                       </svg>
                     </div>
                     <div className="feature-text-content">
-                      <h4 className="feature-title red-title">Practical Compliance Guidance</h4>
+                      <h4 className="feature-title blue-title">Practical Compliance Guidance</h4>
                       <p className="feature-desc">Learn actionable steps to avoid fines, reduce risk and stay compliant.</p>
                     </div>
                   </div>
@@ -449,8 +444,8 @@ export default function WebinarDetailsPage() {
                   </div>
 
                   {/* Companies / Organizations Box */}
-                  <div className="benefit-card-box red-box">
-                    <div className="benefit-icon-circle red-icon" aria-hidden="true">
+                  <div className="benefit-card-box blue-box">
+                    <div className="benefit-icon-circle blue-icon" aria-hidden="true">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
                         <line x1="9" y1="22" x2="9" y2="22.01"></line>
@@ -466,7 +461,7 @@ export default function WebinarDetailsPage() {
                       </svg>
                     </div>
                     <div className="benefit-box-content">
-                      <h4 className="benefit-box-title red-title">Companies / Organizations</h4>
+                      <h4 className="benefit-box-title blue-title">Companies / Organizations</h4>
                       <div className="orgs-subcolumns">
                         <ul className="benefit-bullet-list">
                           <li>Private Practice</li>
@@ -546,30 +541,11 @@ export default function WebinarDetailsPage() {
               </div>
             </div>
 
-            {/* Tags Box */}
-            <div className="tags-card-ct">
-              <h3 className="tags-title">Tags</h3>
-              <div className="tags-pills-wrap">
-                <span className="tag-pill-badge">HIPAA 2026 Changes</span>
-                <span className="tag-pill-badge">HIPAA 2026</span>
-                <span className="tag-pill-badge">HIPAA Security</span>
-                <span className="tag-pill-badge">HIPAA Seudle</span>
-                <span className="tag-pill-badge">Health Insurance</span>
-                <span className="tag-pill-badge">Accountability Act</span>
-                <span className="tag-pill-badge">Health and Human Services</span>
-                <span className="tag-pill-badge">Health Care</span>
-                <span className="tag-pill-badge">New HIPAA Rules</span>
-              </div>
-            </div>
-
-            {/* NEW Recommended Webinars Box */}
+            {/* Recommended Webinars Box */}
             {recommendedWebinars.length > 0 && (
               <div className="recommended-webinars-card">
                 <div className="recommended-card-header">
                   <h3 className="recommended-card-title">Recommended Webinars</h3>
-                  <Link href="/live-webinars" className="recommended-view-all">
-                    View All &rarr;
-                  </Link>
                 </div>
 
                 <div className="recommended-webinars-list">
@@ -577,59 +553,67 @@ export default function WebinarDetailsPage() {
                     <Link 
                       key={rec.id} 
                       href={`/webinars/${rec.id}`}
-                      className="recommended-webinar-item"
+                      className="rec-large-card"
                     >
-                      {/* Left Thumbnail with Pills */}
-                      <div className="rec-thumb-wrap">
-                        <div className="rec-live-pill">
-                          <span className="rec-live-dot" aria-hidden="true"></span>
-                          <span>Live webinar</span>
+                      {/* Top Dark Navy Section */}
+                      <div className="rec-card-top-navy">
+                        {/* Top Badges Row */}
+                        <div className="rec-top-badges-row">
+                          <div className="rec-live-badge">
+                            <span className="rec-live-dot" aria-hidden="true"></span>
+                            <span>Live webinar</span>
+                          </div>
+                          <div className="rec-duration-badge">
+                            <span>{formatDuration(rec.duration)}</span>
+                          </div>
                         </div>
-                        <div className="rec-duration-pill">
-                          <span>{formatDuration(rec.duration)}</span>
-                        </div>
-                        <div className="rec-thumb-graphic" aria-hidden="true">
-                          <div className="rec-thumb-circle">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#38BDF8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                              <circle cx="12" cy="11" r="2" fill="#38BDF8" />
-                              <path d="M12 13v2.5" strokeWidth="2.5" />
-                            </svg>
+
+                        {/* Title & Shield Graphic Grid */}
+                        <div className="rec-top-content-row">
+                          <div className="rec-top-title-block">
+                            <span className="rec-year-tag">{rec.yearTag || 'NEW FOR 2026'}</span>
+                            <h4 className="rec-large-title" title={rec.title}>
+                              {rec.title}
+                            </h4>
+                          </div>
+
+                          {/* Thematic Topic Graphic */}
+                          <div className="rec-shield-graphic" aria-hidden="true">
+                            <WebinarCardVisual webinar={rec} size="small" />
                           </div>
                         </div>
                       </div>
 
-                      {/* Right Details */}
-                      <div className="rec-details-col">
-                        <span className="rec-tag-text">{rec.yearTag || 'NEW FOR 2026'}</span>
-                        <h4 className="rec-title-text" title={rec.title}>{rec.title}</h4>
-                        <div className="rec-meta-row">
-                          <span className="rec-meta-item">
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                              <line x1="16" y1="2" x2="16" y2="6"></line>
-                              <line x1="8" y1="2" x2="8" y2="6"></line>
-                              <line x1="3" y1="10" x2="21" y2="10"></line>
-                            </svg>
-                            {rec.date}
-                          </span>
+                      {/* Bottom White Section */}
+                      <div className="rec-card-bottom-white">
+                        {/* Speaker Row */}
+                        <div className="rec-bottom-speaker-row">
+                          <img
+                            src={rec.speaker?.avatarUrl || rec.speaker?.image || '/speaker-brian.jpg'}
+                            alt={rec.speaker?.name || 'Speaker'}
+                            className="rec-speaker-avatar"
+                          />
+                          <div className="rec-speaker-meta">
+                            <span className="rec-speaker-name">{rec.speaker?.name || 'Brian L. Tuttle'}</span>
+                            <span className="rec-speaker-role">{rec.speaker?.role || 'Health IT & Compliance Consultant'}</span>
+                          </div>
                         </div>
-                        <div className="rec-meta-row">
-                          <span className="rec-meta-item">
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                              <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
-                            {rec.speaker?.name || 'Brian L. Tuttle'}
-                          </span>
-                        </div>
-                      </div>
 
-                      {/* Right Subtle Chevron Indicator */}
-                      <div className="rec-arrow-circle" aria-hidden="true">
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="9 18 15 12 9 6"></polyline>
-                        </svg>
+                        {/* Divider */}
+                        <div className="rec-bottom-divider" aria-hidden="true"></div>
+
+                        {/* Title & Arrow Row */}
+                        <div className="rec-bottom-title-row">
+                          <span className="rec-bottom-title" title={rec.title}>
+                            {rec.title}
+                          </span>
+                          <div className="rec-arrow-btn" aria-hidden="true">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <line x1="5" y1="12" x2="19" y2="12" />
+                              <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                          </div>
+                        </div>
                       </div>
                     </Link>
                   ))}

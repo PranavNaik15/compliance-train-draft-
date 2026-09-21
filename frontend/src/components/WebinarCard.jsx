@@ -3,6 +3,8 @@
 import React from 'react';
 import Link from 'next/link';
 
+import WebinarCardVisual from './WebinarCardVisual';
+
 export default function WebinarCard({ webinar, isRecorded = false }) {
   const formatDuration = (dur) => {
     if (!dur) return '90 min';
@@ -22,7 +24,7 @@ export default function WebinarCard({ webinar, isRecorded = false }) {
 
   return (
     <article className="webinar-card-reference" aria-labelledby={`title-${webinar.id}`}>
-      {/* 1. Top Dark Blue Graphic Banner (Matching Reference Template) */}
+      {/* 1. Top Dark Blue Graphic Banner (Dynamic Thematic Template) */}
       <Link href={`/webinars/${webinar.id}`} className="card-top-banner-link">
         {/* Top Header Row: Live Pill (Left) & Duration Pill (Right) */}
         <div className="card-template-top">
@@ -36,7 +38,7 @@ export default function WebinarCard({ webinar, isRecorded = false }) {
           </div>
         </div>
 
-        {/* Banner Content (Left: Label, Title, Desc; Right: Concentric Shield) */}
+        {/* Banner Content (Left: Label, Title; Right: Topic Themed Graphic) */}
         <div className="card-template-body">
           <div className="card-content-left">
             <span className="card-label-tag">{tagText}</span>
@@ -45,25 +47,9 @@ export default function WebinarCard({ webinar, isRecorded = false }) {
             </h3>
           </div>
 
-          {/* Right Side Concentric Blue Circles with White Shield */}
+          {/* Right Side Topic Themed Visual Artwork */}
           <div className="card-visual-right" aria-hidden="true">
-            <div className="card-concentric-outer">
-              <div className="card-concentric-inner">
-                <svg
-                  className="card-shield-icon"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                  <circle cx="12" cy="10" r="2.2" fill="currentColor" />
-                  <path d="M12 12v3.5" strokeWidth="2.5" />
-                </svg>
-              </div>
-            </div>
+            <WebinarCardVisual webinar={webinar} />
           </div>
         </div>
       </Link>

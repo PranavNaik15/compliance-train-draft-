@@ -40,46 +40,52 @@ export default function HomePage() {
     };
   }, []);
 
-  // Helper function to dynamically calculate the NEXT upcoming webinar based on date/time
-  const getFeaturedUpcomingWebinar = (webinarsList) => {
-    if (!webinarsList || webinarsList.length === 0) return null;
+  const [featuredIndex, setFeaturedIndex] = useState(0);
+  const [showSpeakerModal, setShowSpeakerModal] = useState(false);
 
-    const now = Date.now();
-
-    const parseWebinarDate = (webinar) => {
-      if (!webinar || !webinar.date) return 0;
-      const dateStr = webinar.date;
-      if (webinar.time) {
-        const parts = webinar.time.split('-');
-        const endPart = parts[parts.length - 1].trim();
-        const combined = new Date(`${dateStr} ${endPart}`);
-        if (!isNaN(combined.getTime())) {
-          return combined.getTime();
+  // Helper function to find initial upcoming webinar index
+  useEffect(() => {
+    if (webinars && webinars.length > 0) {
+      const now = Date.now();
+      const parseWebinarDate = (webinar) => {
+        if (!webinar || !webinar.date) return 0;
+        const dateStr = webinar.date;
+        if (webinar.time) {
+          const parts = webinar.time.split('-');
+          const endPart = parts[parts.length - 1].trim();
+          const combined = new Date(`${dateStr} ${endPart}`);
+          if (!isNaN(combined.getTime())) return combined.getTime();
         }
-      }
-      const endOfDay = new Date(`${dateStr} 23:59:59`);
-      if (!isNaN(endOfDay.getTime())) {
-        return endOfDay.getTime();
-      }
-      const fallback = new Date(dateStr);
-      return isNaN(fallback.getTime()) ? 0 : fallback.getTime();
-    };
+        const endOfDay = new Date(`${dateStr} 23:59:59`);
+        if (!isNaN(endOfDay.getTime())) return endOfDay.getTime();
+        const fallback = new Date(dateStr);
+        return isNaN(fallback.getTime()) ? 0 : fallback.getTime();
+      };
 
-    const futureWebinars = webinarsList
-      .map((w) => ({ webinar: w, timestamp: parseWebinarDate(w) }))
-      .filter((item) => item.timestamp >= now)
-      .sort((a, b) => a.timestamp - b.timestamp);
+      const upcoming = webinars
+        .map((w, index) => ({ index, timestamp: parseWebinarDate(w) }))
+        .filter((item) => item.timestamp >= now)
+        .sort((a, b) => a.timestamp - b.timestamp);
 
-    if (futureWebinars.length > 0) {
-      return futureWebinars[0].webinar;
+      if (upcoming.length > 0) {
+        setFeaturedIndex(upcoming[0].index);
+      } else {
+        setFeaturedIndex(0);
+      }
     }
+  }, [webinars]);
 
-    // Fallback if all dates are in the past
-    return webinarsList[0];
+  const handlePrevWebinar = () => {
+    if (!webinars || webinars.length === 0) return;
+    setFeaturedIndex((prev) => (prev > 0 ? prev - 1 : webinars.length - 1));
   };
 
-  const [showSpeakerModal, setShowSpeakerModal] = useState(false);
-  const featuredWebinar = getFeaturedUpcomingWebinar(webinars);
+  const handleNextWebinar = () => {
+    if (!webinars || webinars.length === 0) return;
+    setFeaturedIndex((prev) => (prev < webinars.length - 1 ? prev + 1 : 0));
+  };
+
+  const featuredWebinar = webinars && webinars.length > 0 ? webinars[featuredIndex] : null;
 
   const formatFeaturedDate = (dateStr) => {
     if (!dateStr) return '';
@@ -107,146 +113,183 @@ export default function HomePage() {
 
   return (
     <div className="home-page-clean">
-      {/* 1. Hero Section: Left Side = Featured Upcoming Webinar Panel, Right Side = Professional Image (Unchanged) */}
+      {/* 1. Hero Section: Left Side = Featured Upcoming Webinar Panel, Right Side = Professional Image (Carousel Enabled) */}
       <section className="hero-clean" aria-labelledby="hero-featured-heading">
         <div className="container">
-          <div className="hero-grid">
-            {/* Left Side: Featured Upcoming Webinar Panel */}
-            <div className="hero-featured-left">
-              {loading ? (
-                <div className="featured-webinar-panel featured-loading-state">
-                  <div className="skeleton-box" style={{ width: '35%', height: '22px', marginBottom: '0.85rem' }}></div>
-                  <div className="skeleton-box" style={{ width: '85%', height: '30px', marginBottom: '0.65rem' }}></div>
-                  <div className="skeleton-box" style={{ width: '95%', height: '16px', marginBottom: '0.4rem' }}></div>
-                  <div className="skeleton-box" style={{ width: '70%', height: '16px', marginBottom: '1.25rem' }}></div>
-                  <div className="skeleton-box" style={{ width: '100%', height: '60px', marginBottom: '1.25rem' }}></div>
-                  <div style={{ display: 'flex', gap: '0.75rem' }}>
-                    <div className="skeleton-box" style={{ width: '130px', height: '38px' }}></div>
-                    <div className="skeleton-box" style={{ width: '120px', height: '38px' }}></div>
-                    <div className="skeleton-box" style={{ width: '130px', height: '38px' }}></div>
+          <div className="hero-carousel-wrapper">
+            {/* Left Carousel Arrow */}
+            {webinars.length > 1 && (
+              <div className="hero-nav-arrow-wrap hero-nav-arrow-left">
+                <button
+                  type="button"
+                  className="btn-hero-carousel-nav"
+                  onClick={handlePrevWebinar}
+                  aria-label="Previous upcoming webinar"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                </button>
+                <span className="hero-nav-tooltip">Previous</span>
+              </div>
+            )}
+
+            <div className="hero-grid">
+              {/* Left Side: Featured Upcoming Webinar Panel */}
+              <div className="hero-featured-left">
+                {loading ? (
+                  <div className="featured-webinar-panel featured-loading-state">
+                    <div className="skeleton-box" style={{ width: '35%', height: '22px', marginBottom: '0.85rem' }}></div>
+                    <div className="skeleton-box" style={{ width: '85%', height: '30px', marginBottom: '0.65rem' }}></div>
+                    <div className="skeleton-box" style={{ width: '95%', height: '16px', marginBottom: '0.4rem' }}></div>
+                    <div className="skeleton-box" style={{ width: '70%', height: '16px', marginBottom: '1.25rem' }}></div>
+                    <div className="skeleton-box" style={{ width: '100%', height: '60px', marginBottom: '1.25rem' }}></div>
+                    <div style={{ display: 'flex', gap: '0.75rem' }}>
+                      <div className="skeleton-box" style={{ width: '130px', height: '38px' }}></div>
+                      <div className="skeleton-box" style={{ width: '120px', height: '38px' }}></div>
+                      <div className="skeleton-box" style={{ width: '130px', height: '38px' }}></div>
+                    </div>
                   </div>
-                </div>
-              ) : featuredWebinar ? (
-                <div className="featured-webinar-panel" aria-labelledby="hero-featured-heading">
-                  <div className="featured-top-bar">
+                ) : featuredWebinar ? (
+                  <div className="featured-webinar-panel" aria-labelledby="hero-featured-heading">
+                    <div className="featured-top-bar">
+                      <span className="featured-category-badge">Upcoming Webinar</span>
+                      <div className="featured-schedule-pill">
+                        <span className="featured-date-badge">
+                          {formatFeaturedDate(featuredWebinar.date)}
+                        </span>
+                        <span className="featured-duration-badge">
+                          {(featuredWebinar.duration || '90 MINUTES').toUpperCase()}
+                        </span>
+                      </div>
+                    </div>
+
+                    <h1 id="hero-featured-heading" className="featured-webinar-title">
+                      <Link href={`/webinars/${featuredWebinar.id}`}>
+                        {featuredWebinar.title}
+                      </Link>
+                    </h1>
+
+                    <p className="featured-webinar-desc">
+                      {featuredWebinar.shortDescription || featuredWebinar.fullDescription}
+                    </p>
+
+                    <div className="featured-meta-grid">
+                      <div className="featured-meta-col">
+                        <span className="featured-meta-label">Time</span>
+                        <span className="featured-meta-val" title={featuredWebinar.time}>
+                          {featuredWebinar.time || '10:00 AM PDT - 01:00 PM EDT'}
+                        </span>
+                      </div>
+
+                      <div className="featured-meta-divider" aria-hidden="true"></div>
+
+                      <div className="featured-meta-col">
+                        <span className="featured-meta-label">Speaker</span>
+                        <span className="featured-meta-val" title={featuredWebinar.speaker?.name}>
+                          {featuredWebinar.speaker?.name || 'Brian L. Tuttle'}
+                        </span>
+                        <span className="featured-meta-sub" title={featuredWebinar.speaker?.role}>
+                          {featuredWebinar.speaker?.role || 'Health IT & Compliance Consultant'}
+                        </span>
+                      </div>
+
+                      <div className="featured-meta-divider" aria-hidden="true"></div>
+
+                      <div className="featured-meta-col">
+                        <span className="featured-meta-label">Format</span>
+                        <span className="featured-live-pill">
+                          <span className="featured-live-dot" aria-hidden="true"></span>
+                          Live Session
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="featured-actions-row">
+                      <Link 
+                        href={`/webinars/${featuredWebinar.id}`}
+                        className="btn-featured-register"
+                      >
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                        Register Now &rarr;
+                      </Link>
+                      <button 
+                        type="button" 
+                        className="btn-featured-secondary"
+                        onClick={() => setShowSpeakerModal(true)}
+                      >
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                        View Speaker
+                      </button>
+                      <button 
+                        type="button" 
+                        className="btn-featured-secondary"
+                        onClick={() => handleAddToCalendar(featuredWebinar)}
+                      >
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                          <line x1="16" y1="2" x2="16" y2="6"/>
+                          <line x1="8" y1="2" x2="8" y2="6"/>
+                          <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                        Add to Calendar
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="featured-webinar-panel">
                     <span className="featured-category-badge">Upcoming Webinar</span>
-                    <div className="featured-schedule-pill">
-                      <span className="featured-date-badge">
-                        {formatFeaturedDate(featuredWebinar.date)}
-                      </span>
-                      <span className="featured-duration-badge">
-                        {(featuredWebinar.duration || '90 MINUTES').toUpperCase()}
-                      </span>
+                    <h2 className="featured-webinar-title" style={{ marginTop: '0.75rem' }}>
+                      Scheduled Compliance Webinars
+                    </h2>
+                    <p className="featured-webinar-desc">
+                      Explore our upcoming expert-led healthcare compliance and regulatory training sessions.
+                    </p>
+                    <div className="featured-actions-row">
+                      <Link href="/live-webinars" className="btn-featured-register">
+                        Explore Webinars &rarr;
+                      </Link>
                     </div>
                   </div>
+                )}
+              </div>
 
-                  <h1 id="hero-featured-heading" className="featured-webinar-title">
-                    <Link href={`/webinars/${featuredWebinar.id}`}>
-                      {featuredWebinar.title}
-                    </Link>
-                  </h1>
-
-                  <p className="featured-webinar-desc">
-                    {featuredWebinar.shortDescription || featuredWebinar.fullDescription}
-                  </p>
-
-                  <div className="featured-meta-grid">
-                    <div className="featured-meta-col">
-                      <span className="featured-meta-label">Time</span>
-                      <span className="featured-meta-val" title={featuredWebinar.time}>
-                        {featuredWebinar.time || '10:00 AM PDT - 01:00 PM EDT'}
-                      </span>
-                    </div>
-
-                    <div className="featured-meta-divider" aria-hidden="true"></div>
-
-                    <div className="featured-meta-col">
-                      <span className="featured-meta-label">Speaker</span>
-                      <span className="featured-meta-val" title={featuredWebinar.speaker?.name}>
-                        {featuredWebinar.speaker?.name || 'Brian L. Tuttle'}
-                      </span>
-                      <span className="featured-meta-sub" title={featuredWebinar.speaker?.role}>
-                        {featuredWebinar.speaker?.role || 'Health IT & Compliance Consultant'}
-                      </span>
-                    </div>
-
-                    <div className="featured-meta-divider" aria-hidden="true"></div>
-
-                    <div className="featured-meta-col">
-                      <span className="featured-meta-label">Format</span>
-                      <span className="featured-live-pill">
-                        <span className="featured-live-dot" aria-hidden="true"></span>
-                        Live Session
-                      </span>
-                    </div>
+              {/* Right Side: Professional Image */}
+              <div className="hero-visual-wrapper">
+                <div className="hero-image-frame">
+                  <img 
+                    src="/hero-executive.jpg" 
+                    alt="Brian L Tuttle and health IT compliance consultants leading live healthcare training" 
+                    className="hero-main-img"
+                  />
+                  <div className="hero-floating-badge" aria-hidden="true">
+                    <p className="floating-badge-bold">Practical. Relevant.</p>
+                    <p className="floating-badge-sub">Expert-Led HIPAA &amp; SAMHSA.</p>
                   </div>
-
-                  <div className="featured-actions-row">
-                    <Link 
-                      href={`/webinars/${featuredWebinar.id}`}
-                      className="btn-featured-register"
-                    >
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                      </svg>
-                      Register Now &rarr;
-                    </Link>
-                    <button 
-                      type="button" 
-                      className="btn-featured-secondary"
-                      onClick={() => setShowSpeakerModal(true)}
-                    >
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                      </svg>
-                      View Speaker
-                    </button>
-                    <button 
-                      type="button" 
-                      className="btn-featured-secondary"
-                      onClick={() => handleAddToCalendar(featuredWebinar)}
-                    >
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                        <line x1="16" y1="2" x2="16" y2="6"/>
-                        <line x1="8" y1="2" x2="8" y2="6"/>
-                        <line x1="3" y1="10" x2="21" y2="10"/>
-                      </svg>
-                      Add to Calendar
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="featured-webinar-panel">
-                  <span className="featured-category-badge">Upcoming Webinar</span>
-                  <h2 className="featured-webinar-title" style={{ marginTop: '0.75rem' }}>
-                    Scheduled Compliance Webinars
-                  </h2>
-                  <p className="featured-webinar-desc">
-                    Explore our upcoming expert-led healthcare compliance and regulatory training sessions.
-                  </p>
-                  <div className="featured-actions-row">
-                    <Link href="/live-webinars" className="btn-featured-register">
-                      Explore Webinars &rarr;
-                    </Link>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="hero-visual-wrapper">
-              <div className="hero-image-frame">
-                <img 
-                  src="/hero-executive.jpg" 
-                  alt="Brian L Tuttle and health IT compliance consultants leading live healthcare training" 
-                  className="hero-main-img"
-                />
-                <div className="hero-floating-badge" aria-hidden="true">
-                  <p className="floating-badge-bold">Practical. Relevant.</p>
-                  <p className="floating-badge-sub">Expert-Led HIPAA &amp; SAMHSA.</p>
                 </div>
               </div>
             </div>
+
+            {/* Right Carousel Arrow */}
+            {webinars.length > 1 && (
+              <div className="hero-nav-arrow-wrap hero-nav-arrow-right">
+                <button
+                  type="button"
+                  className="btn-hero-carousel-nav"
+                  onClick={handleNextWebinar}
+                  aria-label="Next upcoming webinar"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </button>
+                <span className="hero-nav-tooltip">Next</span>
+              </div>
+            )}
           </div>
         </div>
       </section>
