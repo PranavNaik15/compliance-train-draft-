@@ -47,13 +47,13 @@
 
 /* 2. Main Content Two-Column Grid */
 .details-content-container {
-  padding: 1.25rem 0 2.5rem 0;
-  max-width: 1240px;
+  padding-top: 1.25rem;
+  padding-bottom: 2.5rem;
 }
 
 .details-two-col-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 390px;
+  grid-template-columns: minmax(0, 1fr) 380px;
   gap: 1.5rem;
   align-items: start;
 }
