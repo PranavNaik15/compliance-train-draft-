@@ -15,34 +15,50 @@ export default function WebinarDetailsPage() {
   const [allWebinars, setAllWebinars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedOption, setSelectedOption] = useState('single');
+  const [selectedOption, setSelectedOption] = useState('transcript');
+  const [selectedAttendee, setSelectedAttendee] = useState(1);
+  const [showMoreAttendees, setShowMoreAttendees] = useState(true);
+  const [recordedTier, setRecordedTier] = useState('single');
   const [showBioModal, setShowBioModal] = useState(false);
-  const [showAllOptions, setShowAllOptions] = useState(false);
+  const [showAllOptions, setShowAllOptions] = useState(true);
+
+  const liveAttendeeOptions = [
+    { count: 1, price: 179, label: '1 Attendee - $179' },
+    { count: 2, price: 259, label: '2 Attendees - $259 (SAVE $99)' },
+    { count: 3, price: 299, label: '3 Attendees - $299 (SAVE $238)' },
+    { count: 4, price: 339, label: '4 Attendees - $339 (SAVE $377)' },
+    { count: 5, price: 379, label: '5 Attendees - $379 (SAVE $516)' },
+    { count: 6, price: 419, label: '6 Attendees - $419 (SAVE $655)' },
+    { count: 7, price: 459, label: '7 Attendees - $459 (SAVE $794)' },
+    { count: 8, price: 499, label: '8 Attendees - $499 (SAVE $933)' },
+    { count: 9, price: 539, label: '9 Attendees - $539 (SAVE $1072)' },
+    { count: 10, price: 579, label: '10 Attendees - $579 (SAVE $1211)' },
+  ];
 
   const registrationOptions = [
     {
       id: 'single',
       price: 179,
-      title: 'Live Session for One Participant',
+      title: 'Live Session',
       desc: "If you signup & can't make it, do not worry! We have alternate arrangements."
     },
     {
-      id: 'group5',
-      price: 499,
-      title: 'Group 5 Live Session',
-      desc: 'Max 5 participants from a single location with 1 Dial-In.'
-    },
-    {
-      id: 'group10',
-      price: 699,
-      title: 'Group 10 Live Session',
-      desc: 'Max 10 participants from a single location with 2 Dial-in.'
-    },
-    {
       id: 'recorded',
-      price: 239,
+      price: 199,
       title: 'Access Recorded Version',
-      desc: 'Avail 12 months unlimited access for a single user.'
+      desc: 'Avail 3 months unlimited access for a single user.'
+    },
+    {
+      id: 'transcript',
+      price: 219,
+      title: 'Transcript',
+      desc: 'PDF Transcript of Training & Available in 2 business days, after Live Event'
+    },
+    {
+      id: 'combo',
+      price: 299,
+      title: 'Combo Offer',
+      desc: 'Avail recording + Attend live session for a single participant.'
     },
     {
       id: 'dvd_live',
@@ -55,18 +71,6 @@ export default function WebinarDetailsPage() {
       price: 399,
       title: 'Get a Flash Drive + Access Recording + Attend Single Live',
       desc: 'Recorded session valid for 180 days & Flash Drive shipped within 15 days post-webinar completion & get lifetime access for unlimited participants.'
-    },
-    {
-      id: 'combo',
-      price: 299,
-      title: 'Combo Offer',
-      desc: 'Avail recording + Attend live session for a single participant.'
-    },
-    {
-      id: 'corporate',
-      price: 999,
-      title: 'Corporate Live Session',
-      desc: 'Unlimited participants for max 5 locations.'
     }
   ];
 
@@ -78,13 +82,35 @@ export default function WebinarDetailsPage() {
       try {
         setLoading(true);
         setError(null);
-        const [detailData, listData] = await Promise.all([
-          getWebinarById(id),
-          getWebinars().catch(() => [])
-        ]);
+        let detailData = null;
+        let listData = [];
+
+        try {
+          listData = await getWebinars().catch(() => []);
+        } catch (e) {}
+
+        const listArray = Array.isArray(listData) ? listData : (listData?.data || []);
+
+        try {
+          detailData = await getWebinarById(id);
+        } catch (err) {
+          // If direct fetch fails (e.g. numeric ID like '1'), attempt lookup from list
+          if (listArray && listArray.length > 0) {
+            const numIndex = parseInt(id, 10);
+            if (!isNaN(numIndex) && numIndex >= 1 && numIndex <= listArray.length) {
+              detailData = listArray[numIndex - 1];
+            } else {
+              detailData = listArray.find((w) => String(w.id) === String(id) || String(w.id).endsWith(`-${id}`)) || listArray[0];
+            }
+          }
+          if (!detailData) {
+            throw err;
+          }
+        }
+
         if (isMounted) {
           setWebinar(detailData);
-          setAllWebinars(Array.isArray(listData) ? listData : (listData?.data || []));
+          setAllWebinars(listArray);
         }
       } catch (err) {
         if (isMounted) {
@@ -105,7 +131,22 @@ export default function WebinarDetailsPage() {
   }, [id]);
 
   const handleAddToCart = () => {
-    const selected = registrationOptions.find((opt) => opt.id === selectedOption) || registrationOptions[0];
+    let finalPrice = 179;
+    let packageType = 'LIVE';
+
+    if (selectedOption === 'single') {
+      const attendeeOpt = liveAttendeeOptions.find((opt) => opt.count === selectedAttendee) || liveAttendeeOptions[0];
+      finalPrice = attendeeOpt.price;
+      packageType = 'LIVE';
+    } else if (selectedOption === 'recorded') {
+      finalPrice = recordedTier === 'single' ? 199 : 239;
+      packageType = 'RECORDED';
+    } else {
+      const selected = registrationOptions.find((opt) => opt.id === selectedOption) || registrationOptions[0];
+      finalPrice = selected.price;
+      packageType = selected.id === 'transcript' ? 'TRANSCRIPT' : (selected.title && selected.title.toUpperCase().includes('RECORD') ? 'RECORDED' : 'LIVE');
+    }
+
     try {
       const stored = localStorage.getItem('ct_cart_items');
       let currentCart = stored ? JSON.parse(stored) : [];
@@ -113,13 +154,15 @@ export default function WebinarDetailsPage() {
       const existingIndex = currentCart.findIndex((item) => item.id === webinar.id);
       if (existingIndex > -1) {
         currentCart[existingIndex].quantity = (currentCart[existingIndex].quantity || 1) + 1;
+        currentCart[existingIndex].price = finalPrice;
+        currentCart[existingIndex].type = packageType;
       } else {
         currentCart.push({
           id: webinar.id,
           title: webinar.title,
-          price: selected.price,
+          price: finalPrice,
           quantity: 1,
-          type: selected.title && selected.title.toUpperCase().includes('RECORD') ? 'RECORDED' : 'LIVE',
+          type: packageType,
           image: webinar.speaker?.image || '/speaker-brian.jpg',
         });
       }
@@ -152,10 +195,12 @@ export default function WebinarDetailsPage() {
   if (error || !webinar) {
     return (
       <div className="container" style={{ padding: '4rem 0' }}>
-        <Link href="/" className="breadcrumb-link">&larr; Back to all webinars</Link>
-        <div className="state-box" style={{ borderColor: 'var(--color-red-accent)', marginTop: '1rem' }}>
+        <div className="state-box" style={{ borderColor: 'var(--color-red-accent)' }}>
           <h3 style={{ color: 'var(--color-red-accent)' }}>Webinar Not Found</h3>
-          <p>{error || 'The requested webinar could not be located.'}</p>
+          <p>{error || 'The requested webinar could not be loaded.'}</p>
+          <Link href="/" className="btn btn-red" style={{ marginTop: '1rem' }}>
+            &larr; Back to all webinars
+          </Link>
         </div>
       </div>
     );
@@ -173,9 +218,17 @@ export default function WebinarDetailsPage() {
 
   const recommendedWebinars = allWebinars
     .filter((w) => String(w.id) !== String(webinar?.id))
-    .slice(0, 3);
+    .slice(0, 2);
 
-  const currentOption = registrationOptions.find((opt) => opt.id === selectedOption) || registrationOptions[0];
+  const currentAttendeeOpt = liveAttendeeOptions.find((opt) => opt.count === selectedAttendee) || liveAttendeeOptions[0];
+  const currentLivePrice = currentAttendeeOpt.price;
+  const currentRecordedPrice = recordedTier === 'single' ? 199 : 239;
+
+  const currentOption = selectedOption === 'single'
+    ? { ...registrationOptions[0], price: currentLivePrice }
+    : selectedOption === 'recorded'
+    ? { ...registrationOptions[1], price: currentRecordedPrice }
+    : (registrationOptions.find((opt) => opt.id === selectedOption) || registrationOptions[0]);
 
   return (
     <div className="webinar-details-page-ct">
@@ -490,55 +543,243 @@ export default function WebinarDetailsPage() {
             <div className="registration-card-ct">
               <h3 className="registration-card-title">Registration Options</h3>
 
-              {/* Selected Featured Option */}
-              <div className="selected-option-block">
-                <div className="selected-option-header">
-                  <span className="selected-radio-dot" aria-hidden="true"></span>
-                  <span className="selected-option-price">${currentOption.price}</span>
-                  <span className="selected-option-title">{currentOption.title}</span>
+              {/* 1. Live Session Section */}
+              <div 
+                className={`live-session-wrapper ${selectedOption === 'single' ? 'selected' : ''}`}
+                onClick={() => {
+                  if (selectedOption !== 'single') setSelectedOption('single');
+                }}
+              >
+                <div className="live-session-radio-col">
+                  <span className={`option-radio-indicator ${selectedOption === 'single' ? 'selected' : ''}`} aria-hidden="true"></span>
                 </div>
-                <div className="selected-option-note">{currentOption.desc}</div>
 
-                <button 
-                  type="button" 
-                  className="btn-sidebar-add-cart"
-                  onClick={handleAddToCart}
-                >
-                  Add to cart
-                </button>
+                <div className="live-session-content-box">
+                  {/* Live Session Header */}
+                  <div className="live-session-header-row">
+                    <div className="live-session-header-left">
+                      <span className="live-session-price">${selectedOption === 'single' ? currentLivePrice : 179}</span>
+                      <span className="live-session-title">Live Session</span>
+                    </div>
+                  </div>
+
+                  {/* Attendees List */}
+                  <div className="attendee-options-list">
+                    {selectedOption === 'single' ? (
+                      <>
+                        {(showMoreAttendees ? liveAttendeeOptions : liveAttendeeOptions.slice(0, 1)).map((att) => {
+                          const isSelected = selectedAttendee === att.count;
+                          return (
+                            <div key={att.count} className="attendee-option-group">
+                              <div 
+                                className={`attendee-option-row ${isSelected ? 'selected' : ''}`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedOption('single');
+                                  setSelectedAttendee(att.count);
+                                }}
+                              >
+                                <div className="attendee-row-left">
+                                  <span className={`attendee-checkbox ${isSelected ? 'checked' : ''}`} aria-hidden="true">
+                                    {isSelected && (
+                                      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <polyline points="20 6 9 17 4 12" />
+                                      </svg>
+                                    )}
+                                  </span>
+                                  <span className="attendee-label">{att.label}</span>
+                                </div>
+                              </div>
+
+                              {/* Dynamic Single Information Box */}
+                              {isSelected && (
+                                <div className="attendee-details-box">
+                                  <ul className="attendee-details-bullets">
+                                    <li>Access Credentials to be shared the day before or on the day of the webinar</li>
+                                    <li>Access Credentials will be shared via email, and can be accessed from My Account</li>
+                                    <li>Add/Edit attendees using My Account</li>
+                                    <li>Certificate of Participation will be provided to the attendees</li>
+                                  </ul>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+
+                        {/* More / Less Attendees Toggle Button */}
+                        <button
+                          type="button"
+                          className="btn-toggle-more-attendees"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowMoreAttendees((prev) => !prev);
+                          }}
+                        >
+                          {showMoreAttendees ? '⌃ Less Attendees' : '⌄ More Attendees'}
+                        </button>
+                      </>
+                    ) : (
+                      <div className="attendee-option-group">
+                        <div 
+                          className="attendee-option-row"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedOption('single');
+                            setSelectedAttendee(1);
+                          }}
+                        >
+                          <div className="attendee-row-left">
+                            <span className="attendee-checkbox" aria-hidden="true"></span>
+                            <span className="attendee-label">1 Attendee - $179</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
 
-              {/* Unselected Options List */}
-              <div className="unselected-options-list">
-                {(showAllOptions ? registrationOptions.slice(1) : registrationOptions.slice(1, 3)).map((opt) => (
+              {/* 2. Access Recorded Version Section (Expandable with Single User & Multiple Users) */}
+              <div 
+                className={`recorded-session-wrapper ${selectedOption === 'recorded' ? 'selected' : ''}`}
+                onClick={() => {
+                  if (selectedOption !== 'recorded') setSelectedOption('recorded');
+                }}
+              >
+                <div className="recorded-session-radio-col">
+                  <span className={`option-radio-indicator ${selectedOption === 'recorded' ? 'selected' : ''}`} aria-hidden="true"></span>
+                </div>
+
+                <div className="recorded-session-content-box">
+                  {/* Recorded Version Header */}
+                  <div className="recorded-session-header-row">
+                    <div className="recorded-session-header-left">
+                      <span className="recorded-session-price">${currentRecordedPrice}</span>
+                      <span className="recorded-session-title">Access Recorded Version</span>
+                    </div>
+                  </div>
+
+                  {/* Sub-Options: Single User & Multiple Users */}
+                  <div className="recorded-suboptions-list">
+                    {/* Option A: Single User */}
+                    <div className="recorded-suboption-group">
+                      <div 
+                        className={`recorded-suboption-row ${selectedOption === 'recorded' && recordedTier === 'single' ? 'selected' : ''}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedOption('recorded');
+                          setRecordedTier('single');
+                        }}
+                      >
+                        <div className="recorded-row-left">
+                          <span className={`recorded-checkbox ${selectedOption === 'recorded' && recordedTier === 'single' ? 'checked' : ''}`} aria-hidden="true">
+                            {selectedOption === 'recorded' && recordedTier === 'single' && (
+                              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                              </svg>
+                            )}
+                          </span>
+                          <span className="recorded-label">Single User</span>
+                        </div>
+                      </div>
+
+                      {/* Single User Info Details Box */}
+                      {selectedOption === 'recorded' && recordedTier === 'single' && (
+                        <div className="recorded-details-box">
+                          <ul className="recorded-details-bullets">
+                            <li>Play video on the website itself</li>
+                            <li>Available in 24 hours after Live Event</li>
+                            <li>3 months unlimited access</li>
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Option B: Multiple Users */}
+                    <div className="recorded-suboption-group">
+                      <div 
+                        className={`recorded-suboption-row ${selectedOption === 'recorded' && recordedTier === 'multiple' ? 'selected' : ''}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedOption('recorded');
+                          setRecordedTier('multiple');
+                        }}
+                      >
+                        <div className="recorded-row-left">
+                          <span className={`recorded-checkbox ${selectedOption === 'recorded' && recordedTier === 'multiple' ? 'checked' : ''}`} aria-hidden="true">
+                            {selectedOption === 'recorded' && recordedTier === 'multiple' && (
+                              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                              </svg>
+                            )}
+                          </span>
+                          <span className="recorded-label">Multiple Users - $239</span>
+                        </div>
+                      </div>
+
+                      {/* Multiple Users Info Details Box */}
+                      {selectedOption === 'recorded' && recordedTier === 'multiple' && (
+                        <div className="recorded-details-box">
+                          <ul className="recorded-details-bullets">
+                            <li>Up to 10 users get access</li>
+                            <li>Add users using My Account</li>
+                            <li>Available in 24 hours after Live Event</li>
+                            <li>Play video on the website itself</li>
+                            <li>3 months unlimited access</li>
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. Other Registration Options (Transcript, Combo, DVD, Flash Drive) */}
+              <div className="other-registration-options-list">
+                {(showAllOptions ? registrationOptions.slice(2) : registrationOptions.slice(2, 4)).map((opt) => (
                   <div 
                     key={opt.id} 
-                    className="unselected-option-row"
+                    className={`other-option-row ${selectedOption === opt.id ? 'selected' : ''}`}
                     onClick={() => setSelectedOption(opt.id)}
                   >
-                    <span className="unselected-radio-circle" aria-hidden="true"></span>
-                    <div className="unselected-option-info">
-                      <div className="unselected-option-header">
-                        <span className="unselected-price">${opt.price}</span>
-                        <span className="unselected-title">{opt.title}</span>
+                    <div className="other-option-radio-col">
+                      <span className={`option-radio-indicator ${selectedOption === opt.id ? 'selected' : ''}`} aria-hidden="true"></span>
+                    </div>
+
+                    <div className="other-option-content-box">
+                      <div className="other-option-header-row">
+                        <span className="other-price">${opt.price}</span>
+                        <span className="other-title">{opt.title}</span>
                       </div>
                       {opt.desc && (
-                        <span className="unselected-desc">{opt.desc}</span>
+                        <div className="other-option-body">
+                          <p className="other-desc">{opt.desc}</p>
+                        </div>
                       )}
                     </div>
                   </div>
                 ))}
-
-                {registrationOptions.length > 3 && (
-                  <button
-                    type="button"
-                    className="btn-view-more-packages-outline"
-                    onClick={() => setShowAllOptions((prev) => !prev)}
-                  >
-                    {showAllOptions ? 'View Less' : 'View More'}
-                  </button>
-                )}
               </div>
+
+              {/* Add to Cart Button */}
+              <button 
+                type="button" 
+                className="btn-sidebar-add-cart"
+                onClick={handleAddToCart}
+              >
+                Add to cart
+              </button>
+
+              {/* View More / View Less Toggle */}
+              {registrationOptions.length > 4 && (
+                <button
+                  type="button"
+                  className="btn-view-more-packages-outline"
+                  onClick={() => setShowAllOptions((prev) => !prev)}
+                >
+                  {showAllOptions ? 'View Less' : 'View More'}
+                </button>
+              )}
             </div>
 
             {/* Recommended Webinars Box */}

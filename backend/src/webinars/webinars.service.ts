@@ -78,7 +78,9 @@ export class WebinarsService {
       this.logger.warn(`PostgreSQL not accessible, looking up ID "${id}" in built-in webinars data`);
     }
 
-    const item = mockWebinars.find((w) => w.id === id);
+    const item = mockWebinars.find((w) => w.id === id) || 
+      (Number.isInteger(Number(id)) && Number(id) >= 1 && Number(id) <= mockWebinars.length ? mockWebinars[Number(id) - 1] : null);
+
     if (item) {
       return {
         success: true,

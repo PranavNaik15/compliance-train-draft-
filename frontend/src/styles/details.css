@@ -53,8 +53,8 @@
 
 .details-two-col-grid {
   display: grid;
-  grid-template-columns: minmax(0, 71.5%) minmax(0, 26.5%);
-  gap: 2%;
+  grid-template-columns: minmax(0, 1fr) 390px;
+  gap: 1.5rem;
   align-items: start;
 }
 
@@ -480,153 +480,447 @@
 .registration-card-ct {
   background-color: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 10px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-  padding: 0.95rem 1.15rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  padding: 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
 }
 
 .registration-card-title {
-  color: #8B1E1E;
+  color: #B91C1C;
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: 1.28rem;
   font-weight: 800;
-  margin: 0 0 0.65rem 0;
+  margin: 0 0 0.15rem 0;
+  letter-spacing: -0.01em;
 }
 
-.selected-option-block {
+/* Radio Indicator */
+.option-radio-indicator {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border-radius: 50%;
+  border: 2px solid #94A3B8;
+  background: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.option-radio-indicator.selected {
+  border-color: #0066CC;
+  background: #FFFFFF;
+}
+
+.option-radio-indicator.selected::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #0066CC;
+  display: block;
+}
+
+/* 1. Live Session Boxed Option */
+.live-session-wrapper {
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  margin-bottom: 0.75rem;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
 }
 
-.selected-option-header {
+.live-session-radio-col {
+  padding-top: 0.65rem;
+}
+
+.live-session-content-box {
+  flex: 1;
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.live-session-wrapper.selected .live-session-content-box {
+  border-color: #CBD5E1;
+}
+
+.live-session-header-row {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid #EEF2F6;
   display: flex;
   align-items: baseline;
-  gap: 0.4rem;
+  justify-content: flex-start;
 }
 
-.selected-radio-dot {
-  width: 14px;
-  height: 14px;
-  min-width: 14px;
-  border-radius: 50%;
-  border: 4px solid #0066CC;
-  background: #FFFFFF;
-  display: inline-block;
+.live-session-header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  white-space: nowrap;
 }
 
-.selected-option-price {
-  color: #8B1E1E;
+.live-session-price {
+  color: #B91C1C;
   font-weight: 800;
-  font-size: 1.15rem;
+  font-size: 1.02rem;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.selected-option-title {
-  color: #0A3366;
+.live-session-title {
+  color: #0A2540;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.attendee-options-list {
+  padding: 0.65rem 0.85rem 0.75rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.attendee-option-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.attendee-option-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.attendee-row-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.attendee-checkbox {
+  width: 15px;
+  height: 15px;
+  min-width: 15px;
+  border-radius: 3px;
+  border: 1.5px solid #94A3B8;
+  background: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.attendee-checkbox.checked {
+  border-color: #0066CC;
+  background: #0066CC;
+}
+
+.attendee-label {
+  color: #1E293B;
+  font-weight: 600;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.attendee-details-box {
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 0.65rem 0.75rem;
+  margin-top: 0.45rem;
+  margin-left: 1.45rem;
+}
+
+.attendee-details-bullets {
+  margin: 0;
+  padding-left: 1.15rem;
+  color: #475569;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  list-style-type: disc;
+}
+
+.attendee-details-bullets li {
+  margin-bottom: 0.3rem;
+}
+
+.attendee-details-bullets li:last-child {
+  margin-bottom: 0;
+}
+
+.btn-toggle-more-attendees {
+  background: none;
+  border: none;
+  color: #0066CC;
   font-weight: 700;
   font-size: 0.82rem;
+  cursor: pointer;
+  text-align: left;
+  padding: 0.35rem 0 0.15rem 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: underline;
+  transition: color 0.15s ease;
 }
 
-.selected-option-note {
-  font-size: 0.74rem;
-  color: #64748B;
+.btn-toggle-more-attendees:hover {
+  color: #004C99;
+}
+
+/* 2. Access Recorded Version Boxed Option */
+.recorded-session-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.recorded-session-radio-col {
+  padding-top: 0.65rem;
+}
+
+.recorded-session-content-box {
+  flex: 1;
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.recorded-session-wrapper.selected .recorded-session-content-box {
+  border-color: #CBD5E1;
+}
+
+.recorded-session-header-row {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid #EEF2F6;
+  display: flex;
+  align-items: baseline;
+}
+
+.recorded-session-header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+
+.recorded-session-price {
+  color: #B91C1C;
+  font-weight: 800;
+  font-size: 1.02rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.recorded-session-title {
+  color: #0A2540;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.recorded-suboptions-list {
+  padding: 0.65rem 0.85rem 0.75rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.recorded-suboption-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.recorded-suboption-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.recorded-row-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.recorded-checkbox {
+  width: 15px;
+  height: 15px;
+  min-width: 15px;
+  border-radius: 3px;
+  border: 1.5px solid #94A3B8;
+  background: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.recorded-checkbox.checked {
+  border-color: #0066CC;
+  background: #0066CC;
+}
+
+.recorded-label {
+  color: #1E293B;
+  font-weight: 600;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.recorded-details-box {
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 0.65rem 0.75rem;
+  margin-top: 0.45rem;
+  margin-left: 1.45rem;
+}
+
+.recorded-details-bullets {
+  margin: 0;
+  padding-left: 1.15rem;
+  color: #475569;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  list-style-type: disc;
+}
+
+.recorded-details-bullets li {
+  margin-bottom: 0.3rem;
+}
+
+.recorded-details-bullets li:last-child {
+  margin-bottom: 0;
+}
+
+/* 3. Other Registration Options (Elevated Cards Matching Reference) */
+.other-registration-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.other-option-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.other-option-radio-col {
+  padding-top: 0.65rem;
+}
+
+.other-option-content-box {
+  flex: 1;
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.other-option-row.selected .other-option-content-box {
+  border-color: #CBD5E1;
+}
+
+.other-option-header-row {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid #EEF2F6;
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+.other-price {
+  color: #B91C1C;
+  font-weight: 800;
+  font-size: 1.02rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.other-title {
+  color: #0A2540;
+  font-weight: 700;
+  font-size: 0.95rem;
   line-height: 1.35;
-  margin-left: 1.35rem;
+  flex: 1;
+  min-width: 0;
 }
 
+.other-option-body {
+  padding: 0.65rem 0.85rem 0.75rem 0.85rem;
+}
+
+.other-desc {
+  font-size: 0.8rem;
+  color: #64748B;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Bottom Action Buttons */
 .btn-sidebar-add-cart {
   width: 100%;
-  background-color: #0A3366;
+  background-color: #0A2540;
   color: #FFFFFF;
   font-weight: 700;
-  font-size: 0.84rem;
-  padding: 0.55rem 1rem;
-  border-radius: 4px;
+  font-size: 0.92rem;
+  padding: 0.7rem 1rem;
+  border-radius: 6px;
   border: none;
   cursor: pointer;
   transition: background-color var(--transition-fast);
-  margin-top: 0.35rem;
+  margin-top: 0.25rem;
 }
 
 .btn-sidebar-add-cart:hover {
-  background-color: #004C99;
-}
-
-.unselected-options-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  margin-top: 0.65rem;
-  padding-top: 0.65rem;
-  border-top: 1px solid #F1F5F9;
-}
-
-.unselected-option-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  cursor: pointer;
-}
-
-.unselected-radio-circle {
-  width: 14px;
-  height: 14px;
-  min-width: 14px;
-  border-radius: 50%;
-  border: 1.5px solid #94A3B8;
-  margin-top: 2px;
-}
-
-.unselected-option-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-}
-
-.unselected-option-header {
-  display: flex;
-  align-items: baseline;
-  gap: 0.35rem;
-}
-
-.unselected-price {
-  color: #8B1E1E;
-  font-weight: 800;
-  font-size: 0.88rem;
-}
-
-.unselected-title {
-  color: #1E293B;
-  font-weight: 700;
-  font-size: 0.8rem;
-}
-
-.unselected-desc {
-  font-size: 0.72rem;
-  color: #64748B;
-  line-height: 1.3;
+  background-color: #06182C;
 }
 
 .btn-view-more-packages-outline {
   display: block;
   width: 100%;
   background: transparent;
-  border: 1px solid #0066CC;
+  border: 1.5px solid #0066CC;
   color: #0066CC;
-  font-size: 0.78rem;
+  font-size: 0.88rem;
   font-weight: 700;
-  padding: 0.35rem;
-  border-radius: 4px;
+  padding: 0.55rem 1rem;
+  border-radius: 6px;
   text-align: center;
   cursor: pointer;
-  margin-top: 0.65rem;
+  margin-top: -0.35rem;
   transition: all var(--transition-fast);
 }
 
 .btn-view-more-packages-outline:hover {
-  background-color: #0066CC;
-  color: #FFFFFF;
+  background-color: #EFF6FF;
+  color: #004C99;
 }
 
 /* Recommended Webinars Card */
