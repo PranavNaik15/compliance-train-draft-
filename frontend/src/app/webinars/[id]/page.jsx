@@ -15,12 +15,11 @@ export default function WebinarDetailsPage() {
   const [allWebinars, setAllWebinars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedOption, setSelectedOption] = useState('transcript');
+  const [selectedOption, setSelectedOption] = useState('single');
   const [selectedAttendee, setSelectedAttendee] = useState(1);
-  const [showMoreAttendees, setShowMoreAttendees] = useState(true);
-  const [recordedTier, setRecordedTier] = useState('single');
+  const [showMoreAttendees, setShowMoreAttendees] = useState(false);
   const [showBioModal, setShowBioModal] = useState(false);
-  const [showAllOptions, setShowAllOptions] = useState(true);
+  const [showAllOptions, setShowAllOptions] = useState(false);
 
   const liveAttendeeOptions = [
     { count: 1, price: 179, label: '1 Attendee - $179' },
@@ -138,9 +137,6 @@ export default function WebinarDetailsPage() {
       const attendeeOpt = liveAttendeeOptions.find((opt) => opt.count === selectedAttendee) || liveAttendeeOptions[0];
       finalPrice = attendeeOpt.price;
       packageType = 'LIVE';
-    } else if (selectedOption === 'recorded') {
-      finalPrice = recordedTier === 'single' ? 199 : 239;
-      packageType = 'RECORDED';
     } else {
       const selected = registrationOptions.find((opt) => opt.id === selectedOption) || registrationOptions[0];
       finalPrice = selected.price;
@@ -222,12 +218,9 @@ export default function WebinarDetailsPage() {
 
   const currentAttendeeOpt = liveAttendeeOptions.find((opt) => opt.count === selectedAttendee) || liveAttendeeOptions[0];
   const currentLivePrice = currentAttendeeOpt.price;
-  const currentRecordedPrice = recordedTier === 'single' ? 199 : 239;
 
   const currentOption = selectedOption === 'single'
     ? { ...registrationOptions[0], price: currentLivePrice }
-    : selectedOption === 'recorded'
-    ? { ...registrationOptions[1], price: currentRecordedPrice }
     : (registrationOptions.find((opt) => opt.id === selectedOption) || registrationOptions[0]);
 
   return (
@@ -639,104 +632,9 @@ export default function WebinarDetailsPage() {
                 </div>
               </div>
 
-              {/* 2. Access Recorded Version Section (Expandable with Single User & Multiple Users) */}
-              <div 
-                className={`recorded-session-wrapper ${selectedOption === 'recorded' ? 'selected' : ''}`}
-                onClick={() => {
-                  if (selectedOption !== 'recorded') setSelectedOption('recorded');
-                }}
-              >
-                <div className="recorded-session-radio-col">
-                  <span className={`option-radio-indicator ${selectedOption === 'recorded' ? 'selected' : ''}`} aria-hidden="true"></span>
-                </div>
-
-                <div className="recorded-session-content-box">
-                  {/* Recorded Version Header */}
-                  <div className="recorded-session-header-row">
-                    <div className="recorded-session-header-left">
-                      <span className="recorded-session-price">${currentRecordedPrice}</span>
-                      <span className="recorded-session-title">Access Recorded Version</span>
-                    </div>
-                  </div>
-
-                  {/* Sub-Options: Single User & Multiple Users */}
-                  <div className="recorded-suboptions-list">
-                    {/* Option A: Single User */}
-                    <div className="recorded-suboption-group">
-                      <div 
-                        className={`recorded-suboption-row ${selectedOption === 'recorded' && recordedTier === 'single' ? 'selected' : ''}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedOption('recorded');
-                          setRecordedTier('single');
-                        }}
-                      >
-                        <div className="recorded-row-left">
-                          <span className={`recorded-checkbox ${selectedOption === 'recorded' && recordedTier === 'single' ? 'checked' : ''}`} aria-hidden="true">
-                            {selectedOption === 'recorded' && recordedTier === 'single' && (
-                              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
-                                <polyline points="20 6 9 17 4 12" />
-                              </svg>
-                            )}
-                          </span>
-                          <span className="recorded-label">Single User</span>
-                        </div>
-                      </div>
-
-                      {/* Single User Info Details Box */}
-                      {selectedOption === 'recorded' && recordedTier === 'single' && (
-                        <div className="recorded-details-box">
-                          <ul className="recorded-details-bullets">
-                            <li>Play video on the website itself</li>
-                            <li>Available in 24 hours after Live Event</li>
-                            <li>3 months unlimited access</li>
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Option B: Multiple Users */}
-                    <div className="recorded-suboption-group">
-                      <div 
-                        className={`recorded-suboption-row ${selectedOption === 'recorded' && recordedTier === 'multiple' ? 'selected' : ''}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedOption('recorded');
-                          setRecordedTier('multiple');
-                        }}
-                      >
-                        <div className="recorded-row-left">
-                          <span className={`recorded-checkbox ${selectedOption === 'recorded' && recordedTier === 'multiple' ? 'checked' : ''}`} aria-hidden="true">
-                            {selectedOption === 'recorded' && recordedTier === 'multiple' && (
-                              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
-                                <polyline points="20 6 9 17 4 12" />
-                              </svg>
-                            )}
-                          </span>
-                          <span className="recorded-label">Multiple Users - $239</span>
-                        </div>
-                      </div>
-
-                      {/* Multiple Users Info Details Box */}
-                      {selectedOption === 'recorded' && recordedTier === 'multiple' && (
-                        <div className="recorded-details-box">
-                          <ul className="recorded-details-bullets">
-                            <li>Up to 10 users get access</li>
-                            <li>Add users using My Account</li>
-                            <li>Available in 24 hours after Live Event</li>
-                            <li>Play video on the website itself</li>
-                            <li>3 months unlimited access</li>
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* 3. Other Registration Options (Transcript, Combo, DVD, Flash Drive) */}
+              {/* 2. Other Registration Options (Access Recorded Version, Transcript, Combo, DVD, Flash Drive) */}
               <div className="other-registration-options-list">
-                {(showAllOptions ? registrationOptions.slice(2) : registrationOptions.slice(2, 4)).map((opt) => (
+                {(showAllOptions ? registrationOptions.slice(1) : registrationOptions.slice(1, 4)).map((opt) => (
                   <div 
                     key={opt.id} 
                     className={`other-option-row ${selectedOption === opt.id ? 'selected' : ''}`}
