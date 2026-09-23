@@ -1424,3 +1424,562 @@
   }
 }
 
+/* ==========================================================================
+   See Where You Stand Button & Hover Tooltip
+   ========================================================================== */
+.see-stand-btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.4rem 0 0.2rem 0;
+  width: 100%;
+}
+
+.see-stand-tooltip-wrapper {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.btn-see-where-you-stand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background-color: #DC2626;
+  color: #FFFFFF !important;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 0.62rem 1.65rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.28);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: 0.01em;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-see-where-you-stand:hover {
+  background-color: #B91C1C;
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 18px rgba(220, 38, 38, 0.38);
+}
+
+.btn-see-where-you-stand:active {
+  transform: translateY(0);
+}
+
+.see-stand-icon {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.see-stand-arrow {
+  font-size: 1.05rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.btn-see-where-you-stand:hover .see-stand-arrow {
+  transform: translateX(3px);
+}
+
+/* Tooltip Above Button */
+.see-stand-tooltip {
+  position: absolute;
+  bottom: calc(100% + 9px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background-color: #182230;
+  color: #FFFFFF;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.45rem 0.85rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  z-index: 100;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Downward Pointer Triangle */
+.see-stand-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px 5px 0 5px;
+  border-style: solid;
+  border-color: #182230 transparent transparent transparent;
+}
+
+.see-stand-tooltip-wrapper:hover .see-stand-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ==========================================================================
+   Webinar Infographic Master Styles (Crisp, Detailed, Compact 1:1 Match)
+   ========================================================================== */
+
+.infographic-root-layout {
+  background: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid #DCE5EE;
+  box-shadow: 0 4px 18px rgba(10, 37, 64, 0.05);
+  padding: 1.25rem 1.4rem 1.4rem 1.4rem;
+  margin-top: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  box-sizing: border-box;
+}
+
+/* Module Common Headers */
+.module-header-group {
+  margin-bottom: 0.65rem;
+}
+
+.module-title-with-bar {
+  display: inline-block;
+  margin-bottom: 0.25rem;
+}
+
+.module-heading-text {
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.heading-navy {
+  color: #0A2540;
+}
+
+.heading-blue {
+  color: #0066CC;
+}
+
+.module-heading-accent-bar {
+  height: 3.5px;
+  width: 48px;
+  background: #0052CC;
+  border-radius: 2px;
+  margin-top: 3px;
+}
+
+.module-intro-paragraph {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #475569;
+  margin: 0.35rem 0 0 0;
+  max-width: 95%;
+}
+
+/* --------------------------------------------------------------------------
+   MODULE 1: Why Should You Attend & Circular Hub Stage
+   -------------------------------------------------------------------------- */
+.infographic-hub-stage {
+  display: grid;
+  grid-template-columns: 1fr 165px 1fr;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  margin-top: 0.4rem;
+}
+
+.hub-cards-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.hub-feature-card {
+  background-color: #F0F6FC;
+  border: 1px solid #D9E8F8;
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 1px 4px rgba(0, 82, 204, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-height: 60px;
+  box-sizing: border-box;
+}
+
+.hub-feature-card:hover {
+  transform: translateY(-1.5px);
+  box-shadow: 0 3px 10px rgba(0, 82, 204, 0.08);
+}
+
+.feature-card-outer-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1.5px solid #BFDBFE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 5px rgba(0, 102, 204, 0.12);
+}
+
+.feature-card-inner-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0066CC 0%, #004D99 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+}
+
+.feature-card-text-block {
+  flex: 1;
+}
+
+.feature-card-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #0A2540;
+  margin: 0 0 1px 0;
+  line-height: 1.25;
+}
+
+.feature-card-desc {
+  font-size: 0.73rem;
+  color: #4B5563;
+  line-height: 1.3;
+  margin: 0;
+}
+
+/* Central Circular Hub */
+.hub-center-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 165px;
+}
+
+.hub-circuit-svg {
+  position: absolute;
+  top: 0;
+  left: -15px;
+  width: calc(100% + 30px);
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hub-circular-node {
+  width: 118px;
+  height: 118px;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  box-shadow: 0 0 20px rgba(0, 102, 204, 0.22);
+}
+
+.hub-segmented-arcs {
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 3px dashed #38BDF8;
+  opacity: 0.9;
+  animation: hubRotateSlow 24s linear infinite;
+}
+
+@keyframes hubRotateSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.hub-navy-core {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 30%, #1A4478 0%, #0A2244 70%, #06162D 100%);
+  border: 2.5px solid #60A5FA;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  text-align: center;
+  padding: 0.35rem;
+  box-sizing: border-box;
+}
+
+.hub-shield-emblem {
+  background: #FFFFFF;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.hub-text-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hub-text-line-1 {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #FFFFFF;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.hub-text-line-2 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  color: #FFFFFF;
+  line-height: 1.1;
+}
+
+/* --------------------------------------------------------------------------
+   MODULE 2: Areas Covered 4-Column Grid (100% Match to Reference)
+   -------------------------------------------------------------------------- */
+.module-areas {
+  border-top: 1.5px solid #E2E8F0;
+  padding-top: 1.25rem;
+}
+
+.areas-grid-4col {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem 0.85rem;
+  margin-top: 0.85rem;
+  width: 100%;
+}
+
+.area-card-item {
+  background: #F0F6FC;
+  border: 1px solid #D9E8F8;
+  border-radius: 10px;
+  padding: 0.75rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 1px 4px rgba(0, 82, 204, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  min-height: 64px;
+  box-sizing: border-box;
+}
+
+.area-card-item:hover {
+  transform: translateY(-1.5px);
+  box-shadow: 0 3px 10px rgba(0, 82, 204, 0.08);
+  border-color: #BFDBFE;
+}
+
+.area-card-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1.5px solid #BFDBFE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 102, 204, 0.12);
+}
+
+.area-card-icon-inner {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0066CC 0%, #004D99 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+}
+
+.area-card-text-block {
+  flex: 1;
+  min-width: 0;
+}
+
+.area-card-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0A2540;
+  margin: 0 0 2px 0;
+  line-height: 1.25;
+}
+
+.area-card-sub {
+  font-size: 0.72rem;
+  color: #4B5563;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* --------------------------------------------------------------------------
+   MODULE 3: Who Will Benefit Banner Audience Cards (Compact & Detailed)
+   -------------------------------------------------------------------------- */
+.module-audience {
+  border-top: 1.5px solid #E2E8F0;
+  padding-top: 1.1rem;
+}
+
+.audience-pill-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.audience-banner-card {
+  background: #F8FAFC;
+  border: 1px solid #D9E8F8;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.audience-card-header-bar {
+  background: linear-gradient(90deg, #0A2540 0%, #0052CC 100%);
+  color: #FFFFFF;
+  padding: 0.45rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.audience-header-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #0052CC;
+  border: 2px solid #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.audience-header-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #FFFFFF;
+}
+
+.audience-banner-card-body {
+  padding: 0.8rem 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.audience-col-split-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem 0.75rem;
+}
+
+.audience-pill-bullet-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.audience-pill-bullet-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+}
+
+.audience-blue-circle-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: #2563EB;
+  color: #FFFFFF;
+  font-size: 0.58rem;
+  font-weight: 800;
+  flex-shrink: 0;
+  margin-top: 1.5px;
+}
+
+.audience-pill-bullet-text {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #334155;
+  line-height: 1.3;
+}
+
+.audience-card-watermark {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .infographic-hub-stage {
+    grid-template-columns: 1fr;
+  }
+  .hub-center-stage {
+    order: -1;
+    margin-bottom: 0.75rem;
+  }
+  .hub-circuit-svg {
+    display: none;
+  }
+  .areas-grid-4col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .audience-pill-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 580px) {
+  .areas-grid-4col {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+
+

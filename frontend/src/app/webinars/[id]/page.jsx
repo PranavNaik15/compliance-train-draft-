@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { getWebinarById, getWebinars } from '../../../api/webinarApi';
 import WebinarCardVisual from '../../../components/WebinarCardVisual';
+import WebinarInfographic from '../../../components/WebinarInfographic';
 import '../../../styles/details.css';
 
 export default function WebinarDetailsPage() {
@@ -336,198 +337,26 @@ export default function WebinarDetailsPage() {
               </div>
             </section>
 
-            {/* Why Should You Attend? (No number badge) */}
-            <article className="detail-section-card">
-              <div className="section-card-header">
-                <h2 className="section-card-title">Why Should You Attend?</h2>
-              </div>
-              <div className="section-card-body">
-                <p className="section-intro-text">
-                  This webinar will help you understand what's new with HIPAA from a regulation, enforcement and risk standpoint. You will get clarity on the latest updates and practical guidance to protect your practice or business.
-                </p>
-
-                <div className="attend-features-grid">
-                  {/* Feature 1 - Blue */}
-                  <div className="attend-feature-box blue-box">
-                    <div className="feature-icon-circle blue-icon" aria-hidden="true">
-                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                        <polyline points="14 2 14 8 20 8"></polyline>
-                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                        <polyline points="10 9 9 9 8 9"></polyline>
-                      </svg>
-                    </div>
-                    <div className="feature-text-content">
-                      <h4 className="feature-title blue-title">2026 HIPAA Changes</h4>
-                      <p className="feature-desc">Understand the latest regulatory updates and proposed changes.</p>
-                    </div>
-                  </div>
-
-                  {/* Feature 2 - Blue */}
-                  <div className="attend-feature-box blue-box">
-                    <div className="feature-icon-circle blue-icon" aria-hidden="true">
-                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                      </svg>
-                    </div>
-                    <div className="feature-text-content">
-                      <h4 className="feature-title blue-title">Enforcement & Audits</h4>
-                      <p className="feature-desc">Learn about OCR's audit program, current enforcement trends and real-life cases.</p>
-                    </div>
-                  </div>
-
-                  {/* Feature 3 - Blue */}
-                  <div className="attend-feature-box blue-box">
-                    <div className="feature-icon-circle blue-icon" aria-hidden="true">
-                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                      </svg>
-                    </div>
-                    <div className="feature-text-content">
-                      <h4 className="feature-title blue-title">Security & Breach Risks</h4>
-                      <p className="feature-desc">Get insights on increasing cyber attacks, state laws and liability for patient remedies.</p>
-                    </div>
-                  </div>
-
-                  {/* Feature 4 - Blue */}
-                  <div className="attend-feature-box blue-box">
-                    <div className="feature-icon-circle blue-icon" aria-hidden="true">
-                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                      </svg>
-                    </div>
-                    <div className="feature-text-content">
-                      <h4 className="feature-title blue-title">Practical Compliance Guidance</h4>
-                      <p className="feature-desc">Learn actionable steps to avoid fines, reduce risk and stay compliant.</p>
-                    </div>
-                  </div>
+            {/* 1. See Where You Stand Button with Hover Tooltip (Centered horizontally in left column) */}
+            <div className="see-stand-btn-container">
+              <div className="see-stand-tooltip-wrapper">
+                <div className="see-stand-tooltip" role="tooltip">
+                  Take a quick test to see your compliance knowledge.
                 </div>
+                <Link
+                  href={`/compliance-check?webinarId=${encodeURIComponent(id || webinar?._id || webinar?.id || "")}`}
+                  className="btn-see-where-you-stand"
+                  aria-label="See Where You Stand - Take a quick compliance knowledge check"
+                >
+                  <span className="see-stand-icon" aria-hidden="true">💡</span>
+                  <span>See Where You Stand</span>
+                  <span className="see-stand-arrow" aria-hidden="true">→</span>
+                </Link>
               </div>
-            </article>
+            </div>
 
-            {/* Areas Covered (No number badge) */}
-            <article className="detail-section-card">
-              <div className="section-card-header">
-                <h2 className="section-card-title">Areas Covered</h2>
-              </div>
-              <div className="section-card-body">
-                <div className="areas-two-col-grid">
-                  <div className="areas-col">
-                    <div className="area-check-row">
-                      <span className="area-check-badge" aria-hidden="true">✓</span>
-                      <span>HIPAA Administrative Simplification Updates (Privacy Rule and Security Rule)</span>
-                    </div>
-                    <div className="area-check-row">
-                      <span className="area-check-badge" aria-hidden="true">✓</span>
-                      <span>NPRM's for the HIPAA Security Rule and updates for the HIPAA Privacy Rule</span>
-                    </div>
-                    <div className="area-check-row">
-                      <span className="area-check-badge" aria-hidden="true">✓</span>
-                      <span>Rights of Access, Care Coordination and Information Sharing</span>
-                    </div>
-                    <div className="area-check-row">
-                      <span className="area-check-badge" aria-hidden="true">✓</span>
-                      <span>Notice of Privacy Practices, 21st Century Cures Act and Telemedicine (Do's and Don'ts)</span>
-                    </div>
-                  </div>
-
-                  <div className="areas-col">
-                    <div className="area-check-row">
-                      <span className="area-check-badge" aria-hidden="true">✓</span>
-                      <span>Fines, Portable Devices, Texting and Emailing – New Guidelines</span>
-                    </div>
-                    <div className="area-check-row">
-                      <span className="area-check-badge" aria-hidden="true">✓</span>
-                      <span>New Definition of Protected Health Information</span>
-                    </div>
-                    <div className="area-check-row">
-                      <span className="area-check-badge" aria-hidden="true">✓</span>
-                      <span>Real-Life Audits and Litigated Cases</span>
-                    </div>
-                    <div className="area-check-row">
-                      <span className="area-check-badge" aria-hidden="true">✓</span>
-                      <span>Business Associates and the Increased Burden</span>
-                    </div>
-                    <div className="area-check-row">
-                      <span className="area-check-badge" aria-hidden="true">✓</span>
-                      <span>Breach Notification and Risk Factors</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </article>
-
-            {/* Who Will Benefit? (No number badge) */}
-            <article className="detail-section-card">
-              <div className="section-card-header">
-                <h2 className="section-card-title">Who Will Benefit?</h2>
-              </div>
-              <div className="section-card-body">
-                <div className="benefit-two-boxes-grid">
-                  {/* Healthcare Professionals Box */}
-                  <div className="benefit-card-box blue-box">
-                    <div className="benefit-icon-circle blue-icon" aria-hidden="true">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                      </svg>
-                    </div>
-                    <div className="benefit-box-content">
-                      <h4 className="benefit-box-title blue-title">Healthcare Professionals</h4>
-                      <ul className="benefit-bullet-list">
-                        <li>Practice Managers</li>
-                        <li>MD's and other Medical Professionals</li>
-                        <li>Compliance Officers</li>
-                        <li>Business Associates working with medical practices or hospitals</li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  {/* Companies / Organizations Box */}
-                  <div className="benefit-card-box blue-box">
-                    <div className="benefit-icon-circle blue-icon" aria-hidden="true">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
-                        <line x1="9" y1="22" x2="9" y2="22.01"></line>
-                        <line x1="15" y1="22" x2="15" y2="22.01"></line>
-                        <line x1="9" y1="6" x2="9" y2="6.01"></line>
-                        <line x1="15" y1="6" x2="15" y2="6.01"></line>
-                        <line x1="9" y1="10" x2="9" y2="10.01"></line>
-                        <line x1="15" y1="10" x2="15" y2="10.01"></line>
-                        <line x1="9" y1="14" x2="9" y2="14.01"></line>
-                        <line x1="15" y1="14" x2="15" y2="14.01"></line>
-                        <line x1="9" y1="18" x2="9" y2="18.01"></line>
-                        <line x1="15" y1="18" x2="15" y2="18.01"></line>
-                      </svg>
-                    </div>
-                    <div className="benefit-box-content">
-                      <h4 className="benefit-box-title blue-title">Companies / Organizations</h4>
-                      <div className="orgs-subcolumns">
-                        <ul className="benefit-bullet-list">
-                          <li>Private Practice</li>
-                          <li>Hospitals</li>
-                          <li>Billing Companies</li>
-                          <li>Transcription Companies</li>
-                          <li>Home Health Groups</li>
-                        </ul>
-                        <ul className="benefit-bullet-list">
-                          <li>Health insurance</li>
-                          <li>Ambulatory Services</li>
-                          <li>IT Companies</li>
-                          <li>Attorneys</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </article>
+            {/* 2. Reusable Webinar Infographic (Why Attend, Circular Hub + 4 Cards, Areas Covered, Who Will Benefit) */}
+            <WebinarInfographic webinar={webinar} />
           </div>
 
           {/* Right Column: Registration Options, Tags & Recommended Webinars */}

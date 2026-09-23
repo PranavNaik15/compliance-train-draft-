@@ -88,9 +88,9 @@ export default function CartPage() {
     if (!promoCode.trim()) return;
 
     const code = promoCode.trim().toUpperCase();
-    if (code === 'SAVE10' || code === 'COMPLIANCE10' || code === 'HIPAA10') {
+    if (code === 'COMPLY10' || code === 'SAVE10' || code === 'COMPLIANCE10' || code === 'HIPAA10') {
       setPromoDiscount(0.1);
-      setPromoMessage({ type: 'success', text: 'Promo code applied! 10% discount added.' });
+      setPromoMessage({ type: 'success', text: 'Promo code applied! $10 discount added.' });
     } else if (code === 'SAVE20' || code === 'COMPLIANCE20') {
       setPromoDiscount(0.2);
       setPromoMessage({ type: 'success', text: 'Promo code applied! 20% discount added.' });

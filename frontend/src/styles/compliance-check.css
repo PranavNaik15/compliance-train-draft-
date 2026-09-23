@@ -1,0 +1,569 @@
+/* ==========================================================================
+   Compliance Knowledge Check Page Styles
+   ========================================================================== */
+
+.compliance-check-page {
+  background-color: #F8FAFC;
+  min-height: 100vh;
+  padding-bottom: 4rem;
+}
+
+.compliance-check-container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem 1rem;
+}
+
+/* Header Banner */
+.compliance-check-header {
+  background: linear-gradient(135deg, #0A1A2F 0%, #112A45 100%);
+  color: #FFFFFF;
+  border-radius: 12px;
+  padding: 2rem 2.2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 18px rgba(10, 26, 47, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.compliance-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: rgba(220, 38, 38, 0.2);
+  color: #FCA5A5;
+  border: 1px solid rgba(220, 38, 38, 0.4);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  margin-bottom: 0.75rem;
+}
+
+.compliance-check-header h1 {
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.25;
+}
+
+.compliance-check-subtitle {
+  color: #94A3B8;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.compliance-linked-webinar-bar {
+  margin-top: 1.2rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  border-left: 3px solid #DC2626;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.86rem;
+}
+
+.linked-webinar-text {
+  color: #E2E8F0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.linked-webinar-title {
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.linked-webinar-link {
+  color: #60A5FA;
+  text-decoration: none;
+  font-weight: 600;
+  flex-shrink: 0;
+  font-size: 0.82rem;
+}
+
+.linked-webinar-link:hover {
+  text-decoration: underline;
+}
+
+/* Assessment Card */
+.quiz-card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Progress Tracker */
+.quiz-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.quiz-step-count {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0A3366;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.quiz-topic-tag {
+  background-color: #EFF6FF;
+  color: #1D4ED8;
+  border: 1px solid #DBEAFE;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 6px;
+}
+
+.quiz-progress-bar-bg {
+  width: 100%;
+  height: 6px;
+  background-color: #E2E8F0;
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-bottom: 1.75rem;
+}
+
+.quiz-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #DC2626 0%, #EF4444 100%);
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+/* Question Content */
+.quiz-question-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0F172A;
+  line-height: 1.45;
+  margin-bottom: 1.5rem;
+}
+
+/* Options */
+.quiz-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.quiz-option-btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  text-align: left;
+  background-color: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  font-size: 0.92rem;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  line-height: 1.4;
+}
+
+.quiz-option-btn:hover {
+  border-color: #94A3B8;
+  background-color: #F8FAFC;
+  transform: translateX(2px);
+}
+
+.quiz-option-btn.selected {
+  border-color: #DC2626;
+  background-color: #FEF2F2;
+  color: #0F172A;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.08);
+}
+
+.quiz-option-letter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #F1F5F9;
+  color: #64748B;
+  font-weight: 700;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+  transition: all 0.18s ease;
+}
+
+.quiz-option-btn.selected .quiz-option-letter {
+  background-color: #DC2626;
+  color: #FFFFFF;
+}
+
+.quiz-option-text {
+  flex: 1;
+}
+
+/* Navigation Buttons */
+.quiz-actions-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid #F1F5F9;
+}
+
+.btn-quiz-prev {
+  background: transparent;
+  border: 1px solid #CBD5E1;
+  color: #475569;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-quiz-prev:hover:not(:disabled) {
+  background-color: #F1F5F9;
+  color: #0F172A;
+}
+
+.btn-quiz-prev:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-quiz-next {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: #DC2626;
+  color: #FFFFFF;
+  border: none;
+  padding: 0.65rem 1.6rem;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(220, 38, 38, 0.25);
+  transition: all 0.2s ease;
+}
+
+.btn-quiz-next:hover:not(:disabled) {
+  background-color: #B91C1C;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(220, 38, 38, 0.35);
+}
+
+.btn-quiz-next:disabled {
+  background-color: #E2E8F0;
+  color: #94A3B8;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   Results Screen Styles
+   ========================================================================== */
+
+.result-card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+  padding: 2.5rem 2.2rem;
+  text-align: center;
+}
+
+.result-score-badge-wrapper {
+  margin-bottom: 1.25rem;
+}
+
+.result-score-pill {
+  display: inline-block;
+  background: linear-gradient(135deg, #0A1A2F 0%, #1E3A8A 100%);
+  color: #FFFFFF;
+  padding: 0.6rem 1.75rem;
+  border-radius: 9999px;
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 16px rgba(10, 26, 47, 0.18);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.result-heading {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin-bottom: 0.75rem;
+}
+
+.result-message-box {
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.25rem auto 1.75rem auto;
+  max-width: 680px;
+  text-align: center;
+}
+
+.result-message-main {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #1E293B;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+
+.result-message-sub {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: #475569;
+  margin: 0;
+}
+
+/* Coupon Card */
+.result-coupon-box {
+  background: linear-gradient(135deg, #FEF2F2 0%, #FFF7ED 100%);
+  border: 2px dashed #DC2626;
+  border-radius: 12px;
+  padding: 1.5rem 1.75rem;
+  margin: 1.75rem auto;
+  max-width: 580px;
+  text-align: center;
+  position: relative;
+}
+
+.coupon-badge-top {
+  display: inline-block;
+  background-color: #DC2626;
+  color: #FFFFFF;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 10px;
+  border-radius: 6px;
+  margin-bottom: 0.6rem;
+}
+
+.coupon-description-text {
+  font-size: 0.96rem;
+  color: #991B1B;
+  font-weight: 600;
+  margin-bottom: 0.9rem;
+}
+
+.coupon-code-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.coupon-code-display {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0A1A2F;
+  background: #FFFFFF;
+  padding: 0.45rem 1.2rem;
+  border-radius: 8px;
+  border: 1px solid #FECACA;
+  letter-spacing: 0.1em;
+}
+
+.btn-copy-coupon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #0A3366;
+  color: #FFFFFF;
+  border: none;
+  padding: 0.55rem 1.15rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-copy-coupon:hover {
+  background-color: #082850;
+  transform: translateY(-1px);
+}
+
+.btn-copy-coupon.copied {
+  background-color: #16A34A;
+}
+
+.coupon-target-webinar-note {
+  font-size: 0.82rem;
+  color: #64748B;
+  margin-top: 0.85rem;
+}
+
+/* Action CTA Buttons on Result */
+.result-actions-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.btn-return-webinar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #DC2626;
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 0.75rem 1.75rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.28);
+  transition: all 0.2s ease;
+}
+
+.btn-return-webinar:hover {
+  background-color: #B91C1C;
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 18px rgba(220, 38, 38, 0.38);
+}
+
+.btn-retake-quiz {
+  background: transparent;
+  color: #475569;
+  border: 1.5px solid #CBD5E1;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 0.72rem 1.4rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-retake-quiz:hover {
+  background-color: #F1F5F9;
+  color: #0F172A;
+  border-color: #94A3B8;
+}
+
+/* Review Breakdown Toggle */
+.quiz-review-section {
+  margin-top: 2.5rem;
+  text-align: left;
+  border-top: 1px solid #E2E8F0;
+  padding-top: 2rem;
+}
+
+.review-section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.review-item-card {
+  background: #F8FAFC;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+  padding: 1.1rem 1.3rem;
+  margin-bottom: 0.85rem;
+}
+
+.review-item-card.correct {
+  border-left: 4px solid #16A34A;
+}
+
+.review-item-card.incorrect {
+  border-left: 4px solid #DC2626;
+}
+
+.review-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.review-item-q-title {
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: #0F172A;
+  flex: 1;
+}
+
+.review-status-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.review-status-tag.correct {
+  background-color: #DCFCE7;
+  color: #15803D;
+}
+
+.review-status-tag.incorrect {
+  background-color: #FEE2E2;
+  color: #B91C1C;
+}
+
+.review-item-explanation {
+  font-size: 0.84rem;
+  color: #475569;
+  line-height: 1.5;
+  margin-top: 0.5rem;
+  background: #FFFFFF;
+  padding: 0.6rem 0.85rem;
+  border-radius: 6px;
+  border: 1px solid #E2E8F0;
+}
+
+@media (max-width: 640px) {
+  .compliance-check-header {
+    padding: 1.5rem 1.25rem;
+  }
+  .quiz-card, .result-card {
+    padding: 1.5rem 1.2rem;
+  }
+  .coupon-code-row {
+    flex-direction: column;
+  }
+  .result-actions-row {
+    flex-direction: column;
+    width: 100%;
+  }
+  .btn-return-webinar, .btn-retake-quiz {
+    width: 100%;
+    justify-content: center;
+  }
+}
