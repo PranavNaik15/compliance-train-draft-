@@ -1,27 +1,76 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import '../../styles/membership.css';
 
 export default function MembershipPage() {
   const [membershipType, setMembershipType] = useState('individual');
   const [expandedFaq, setExpandedFaq] = useState(null);
+  const [categories, setCategories] = useState(null);
+
+  useEffect(() => {
+    async function fetchMemberships() {
+      try {
+        const res = await fetch('/api/memberships');
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && Array.isArray(json.data)) {
+            setCategories(json.data);
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching membership data:', err);
+      }
+    }
+    fetchMemberships();
+  }, []);
 
   const toggleFaq = (index) => {
     setExpandedFaq(expandedFaq === index ? null : index);
   };
 
-  const handleSubscribe = (planName, price) => {
-    alert(`Selected plan: ${planName} (${price}). Our advisory team will contact you to confirm activation.`);
+  const handleSubscribe = async (plan) => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('ct_auth_token') : null;
+    if (!token) {
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('open_auth_modal', { detail: { mode: 'login' } }));
+      }
+      alert('Please Sign In or Create an Account to subscribe to a membership plan.');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/memberships/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          membershipId: membershipType,
+          planId: plan.id,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || (data.errors && data.errors[0]) || 'Subscription failed.');
+      }
+
+      alert(data.message || `Successfully subscribed to ${plan.name}!`);
+    } catch (err) {
+      alert(err.message || 'Unable to process subscription. Please try again.');
+    }
   };
 
-  const individualPlans = [
+  const defaultIndividualPlans = [
     {
       id: 'ind-1m',
       name: '1 Month Membership',
       duration: '1 Month',
       price: '$199',
+      priceDisplay: '$199',
       frequency: '/ month',
       effectiveRate: null,
       isBestValue: false,
@@ -39,6 +88,7 @@ export default function MembershipPage() {
       name: '6 Months Membership',
       duration: '6 Months',
       price: '$899',
+      priceDisplay: '$899',
       frequency: '/ 6 months',
       effectiveRate: '$150/month when billed semi-annually',
       isBestValue: false,
@@ -57,6 +107,7 @@ export default function MembershipPage() {
       name: '1 Year Membership',
       duration: '1 Year',
       price: '$1,499',
+      priceDisplay: '$1,499',
       frequency: '/ year',
       effectiveRate: '$125/month when billed annually',
       isBestValue: true,
@@ -72,12 +123,13 @@ export default function MembershipPage() {
     },
   ];
 
-  const corporatePlans = [
+  const defaultCorporatePlans = [
     {
       id: 'corp-1m',
       name: '1 Month Corporate',
       duration: '1 Month',
       price: '$499',
+      priceDisplay: '$499',
       frequency: '/ month',
       effectiveRate: null,
       isBestValue: false,
@@ -96,6 +148,7 @@ export default function MembershipPage() {
       name: '6 Months Corporate',
       duration: '6 Months',
       price: '$2,399',
+      priceDisplay: '$2,399',
       frequency: '/ 6 months',
       effectiveRate: '$400/month when billed semi-annually',
       isBestValue: false,
@@ -114,6 +167,7 @@ export default function MembershipPage() {
       name: '1 Year Corporate',
       duration: '1 Year',
       price: '$3,999',
+      priceDisplay: '$3,999',
       frequency: '/ year',
       effectiveRate: '$333/month when billed annually',
       isBestValue: true,
@@ -128,6 +182,9 @@ export default function MembershipPage() {
       ],
     },
   ];
+
+  const individualPlans = categories?.find((c) => c.id === 'individual')?.plans || defaultIndividualPlans;
+  const corporatePlans = categories?.find((c) => c.id === 'corporate')?.plans || defaultCorporatePlans;
 
   const faqs = [
     {
@@ -249,7 +306,7 @@ export default function MembershipPage() {
                 <div className="card-pricing-block">
                   <div className="pricing-main-line">
                     <span className="pricing-currency">$</span>
-                    <span className="pricing-amount">{plan.price.replace('$', '')}</span>
+                    <span className="pricing-amount">{(plan.priceDisplay ? plan.priceDisplay : String(plan.price)).replace('$', '')}</span>
                     <span className="pricing-frequency">{plan.frequency}</span>
                   </div>
                   <div className="pricing-effective-rate">
@@ -274,7 +331,7 @@ export default function MembershipPage() {
                 <button
                   type="button"
                   className={`btn-subscribe ${plan.isBestValue ? 'btn-highlight' : ''}`}
-                  onClick={() => handleSubscribe(plan.name, `${plan.price} ${plan.frequency}`)}
+                  onClick={() => handleSubscribe(plan)}
                 >
                   Subscribe
                 </button>

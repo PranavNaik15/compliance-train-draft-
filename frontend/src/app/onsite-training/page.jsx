@@ -14,14 +14,43 @@ export default function OnsiteTrainingPage() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.phone || !form.industry) {
       alert('Please fill in all required fields marked with *');
       return;
     }
-    setSubmitted(true);
+
+    try {
+      setLoading(true);
+      const res = await fetch('/api/onsite-training', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim(),
+          industry: form.industry.trim(),
+          preferredTime: form.preferredTime || undefined,
+          specificNeeds: form.specificNeeds ? form.specificNeeds.trim() : undefined,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || (data.errors && data.errors[0]) || 'Failed to submit request. Please try again.');
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      alert(err.message || 'An error occurred while submitting your request. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

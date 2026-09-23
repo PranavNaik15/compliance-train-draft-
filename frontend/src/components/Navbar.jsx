@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import '../styles/navbar.css';
@@ -8,10 +8,22 @@ import '../styles/navbar.css';
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [cartCount, setCartCount] = useState(2);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  // Auth modal states
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authMode, setAuthMode] = useState('login'); // 'login' | 'register'
+  const [authName, setAuthName] = useState('');
+  const [authEmail, setAuthEmail] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
+  const [authError, setAuthError] = useState('');
+  const [authLoading, setAuthLoading] = useState(false);
+
   const router = useRouter();
   const pathname = usePathname();
 
-  React.useEffect(() => {
+  useEffect(() => {
+    // Check cart count
     const updateCount = () => {
       try {
         const stored = localStorage.getItem('ct_cart_items');
@@ -27,6 +39,14 @@ export default function Navbar() {
       setCartCount(2);
     };
 
+    // Check logged in user
+    try {
+      const storedUser = localStorage.getItem('ct_auth_user');
+      if (storedUser) {
+        setCurrentUser(JSON.parse(storedUser));
+      }
+    } catch (e) {}
+
     updateCount();
     window.addEventListener('storage', updateCount);
     return () => window.removeEventListener('storage', updateCount);
@@ -39,6 +59,83 @@ export default function Navbar() {
     } else {
       router.push('/live-webinars');
     }
+  };
+
+  const openAuthModal = (mode) => {
+    setAuthMode(mode);
+    setAuthError('');
+    setIsAuthModalOpen(true);
+  };
+
+  const closeAuthModal = () => {
+    setIsAuthModalOpen(false);
+    setAuthError('');
+    setAuthEmail('');
+    setAuthPassword('');
+    setAuthName('');
+  };
+
+  const handleAuthSubmit = async (e) => {
+    e.preventDefault();
+    setAuthError('');
+    setAuthLoading(true);
+
+    try {
+      if (authMode === 'register') {
+        const response = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: authName.trim(),
+            email: authEmail.trim(),
+            password: authPassword,
+          }),
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message || (data.errors && data.errors[0]) || 'Registration failed.');
+        }
+
+        if (data.token) {
+          localStorage.setItem('ct_auth_token', data.token);
+          localStorage.setItem('ct_auth_user', JSON.stringify(data.user));
+          setCurrentUser(data.user);
+        }
+        closeAuthModal();
+      } else {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: authEmail.trim(),
+            password: authPassword,
+          }),
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message || (data.errors && data.errors[0]) || 'Invalid credentials.');
+        }
+
+        if (data.token) {
+          localStorage.setItem('ct_auth_token', data.token);
+          localStorage.setItem('ct_auth_user', JSON.stringify(data.user));
+          setCurrentUser(data.user);
+        }
+        closeAuthModal();
+      }
+    } catch (err) {
+      setAuthError(err.message || 'Authentication request failed.');
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('ct_auth_token');
+    localStorage.removeItem('ct_auth_user');
+    setCurrentUser(null);
   };
 
   return (
@@ -97,16 +194,40 @@ export default function Navbar() {
             </Link>
 
             <div className="auth-buttons">
-              <button 
-                type="button" 
-                className="btn-pill-outline"
-                onClick={() => alert('Corporate SSO Login')}
-              >
-                Sign In <span style={{ fontSize: '0.7rem' }}>&#9662;</span>
-              </button>
-              <Link href="/live-webinars" className="btn-pill-primary">
-                Sign Up
-              </Link>
+              {currentUser ? (
+                <>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#0A3366', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10B981', display: 'inline-block' }}></span>
+                    {currentUser.name || 'Member'}
+                  </span>
+                  <button 
+                    type="button" 
+                    className="btn-pill-outline"
+                    onClick={handleLogout}
+                    style={{ padding: '0.35rem 0.8rem', fontSize: '0.8rem' }}
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button 
+                    type="button" 
+                    className="btn-pill-outline"
+                    onClick={() => openAuthModal('login')}
+                  >
+                    Sign In <span style={{ fontSize: '0.7rem' }}>&#9662;</span>
+                  </button>
+                  <button 
+                    type="button" 
+                    className="btn-pill-primary"
+                    onClick={() => openAuthModal('register')}
+                    style={{ border: 'none', cursor: 'pointer' }}
+                  >
+                    Sign Up
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -180,6 +301,225 @@ export default function Navbar() {
           </ul>
         </div>
       </nav>
+
+      {/* Auth Modal */}
+      {isAuthModalOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="auth-modal-title"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 99999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'rgba(10, 30, 60, 0.65)',
+            backdropFilter: 'blur(3px)',
+            padding: '1rem',
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeAuthModal();
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '14px',
+              maxWidth: '420px',
+              width: '100%',
+              boxShadow: '0 20px 30px rgba(0, 0, 0, 0.2)',
+              overflow: 'hidden',
+              position: 'relative',
+            }}
+          >
+            {/* Modal Header */}
+            <div style={{ backgroundColor: '#0A3366', padding: '1.25rem 1.5rem', color: '#FFFFFF', position: 'relative' }}>
+              <button
+                type="button"
+                onClick={closeAuthModal}
+                aria-label="Close modal"
+                style={{
+                  position: 'absolute',
+                  top: '1rem',
+                  right: '1rem',
+                  background: 'none',
+                  border: 'none',
+                  color: '#FFFFFF',
+                  fontSize: '1.25rem',
+                  cursor: 'pointer',
+                  lineHeight: 1,
+                }}
+              >
+                ✕
+              </button>
+              <h2 id="auth-modal-title" style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: '#FFFFFF' }}>
+                {authMode === 'login' ? 'Sign In to ComplianceTrain' : 'Create an Account'}
+              </h2>
+              <p style={{ margin: '0.35rem 0 0', fontSize: '0.8rem', color: '#93C5FD' }}>
+                {authMode === 'login' ? 'Access your webinars, recordings, and certificates.' : 'Join thousands of healthcare compliance professionals.'}
+              </p>
+            </div>
+
+            {/* Modal Body */}
+            <div style={{ padding: '1.5rem' }}>
+              {authError && (
+                <div
+                  style={{
+                    backgroundColor: '#FEF2F2',
+                    border: '1px solid #FCA5A5',
+                    color: '#991B1B',
+                    padding: '0.65rem 0.85rem',
+                    borderRadius: '8px',
+                    fontSize: '0.825rem',
+                    marginBottom: '1rem',
+                  }}
+                >
+                  {authError}
+                </div>
+              )}
+
+              <form onSubmit={handleAuthSubmit}>
+                {authMode === 'register' && (
+                  <div style={{ marginBottom: '1rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.825rem', fontWeight: 600, color: '#1E293B', marginBottom: '0.35rem' }}>
+                      Full Name
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Dr. Sarah Jenkins"
+                      value={authName}
+                      onChange={(e) => setAuthName(e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '0.65rem 0.85rem',
+                        border: '1px solid #CBD5E1',
+                        borderRadius: '8px',
+                        fontSize: '0.9rem',
+                        outline: 'none',
+                        boxSizing: 'border-box',
+                      }}
+                    />
+                  </div>
+                )}
+
+                <div style={{ marginBottom: '1rem' }}>
+                  <label style={{ display: 'block', fontSize: '0.825rem', fontWeight: 600, color: '#1E293B', marginBottom: '0.35rem' }}>
+                    Work Email
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="name@organization.org"
+                    value={authEmail}
+                    onChange={(e) => setAuthEmail(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '0.65rem 0.85rem',
+                      border: '1px solid #CBD5E1',
+                      borderRadius: '8px',
+                      fontSize: '0.9rem',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                    }}
+                  />
+                </div>
+
+                <div style={{ marginBottom: '1.25rem' }}>
+                  <label style={{ display: 'block', fontSize: '0.825rem', fontWeight: 600, color: '#1E293B', marginBottom: '0.35rem' }}>
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    placeholder="Minimum 6 characters"
+                    value={authPassword}
+                    onChange={(e) => setAuthPassword(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '0.65rem 0.85rem',
+                      border: '1px solid #CBD5E1',
+                      borderRadius: '8px',
+                      fontSize: '0.9rem',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                    }}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={authLoading}
+                  style={{
+                    width: '100%',
+                    backgroundColor: '#0066CC',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.75rem',
+                    fontSize: '0.95rem',
+                    fontWeight: 700,
+                    cursor: authLoading ? 'not-allowed' : 'pointer',
+                    opacity: authLoading ? 0.7 : 1,
+                    transition: 'background-color 0.15s ease',
+                  }}
+                >
+                  {authLoading
+                    ? 'Processing...'
+                    : authMode === 'login'
+                    ? 'Sign In →'
+                    : 'Create Account →'}
+                </button>
+              </form>
+
+              {/* Toggle Mode */}
+              <div style={{ marginTop: '1.25rem', textAlign: 'center', fontSize: '0.85rem', color: '#64748B' }}>
+                {authMode === 'login' ? (
+                  <>
+                    Don&apos;t have an account?{' '}
+                    <button
+                      type="button"
+                      onClick={() => openAuthModal('register')}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#0066CC',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        padding: 0,
+                        textDecoration: 'underline',
+                      }}
+                    >
+                      Sign Up
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    Already have an account?{' '}
+                    <button
+                      type="button"
+                      onClick={() => openAuthModal('login')}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#0066CC',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        padding: 0,
+                        textDecoration: 'underline',
+                      }}
+                    >
+                      Sign In
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

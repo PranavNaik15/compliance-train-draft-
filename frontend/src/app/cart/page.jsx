@@ -8,6 +8,8 @@ import '../../styles/cart.css';
 const DEFAULT_CART_ITEMS = [
   {
     id: 'webinar-hipaa-2',
+    cartItemId: 'webinar-hipaa-2',
+    productId: 'webinar-hipaa-2',
     title: '2026 NEW HIPAA AND ARTIFICIAL INTELLIGENCE (AI) CHANGES AND UPDATES',
     price: 179,
     quantity: 1,
@@ -16,6 +18,8 @@ const DEFAULT_CART_ITEMS = [
   },
   {
     id: 'webinar-hipaa-1',
+    cartItemId: 'webinar-hipaa-1',
+    productId: 'webinar-hipaa-1',
     title: 'NEW HIPAA CHANGES AND UPDATES FOR 2026',
     price: 179,
     quantity: 1,
@@ -23,6 +27,19 @@ const DEFAULT_CART_ITEMS = [
     image: '/speaker-brian.jpg',
   },
 ];
+
+function mapBackendCartItem(item) {
+  return {
+    id: item.id || item.productId,
+    cartItemId: item.id,
+    productId: item.productId,
+    title: item.productTitle || item.title,
+    price: Number(item.unitPrice || item.price || 0),
+    quantity: Number(item.quantity || 1),
+    type: item.itemType ? (item.itemType.toUpperCase().includes('RECORD') ? 'RECORDED' : 'LIVE') : (item.type || 'LIVE'),
+    image: item.image || '/speaker-brian.jpg',
+  };
+}
 
 export default function CartPage() {
   const router = useRouter();
@@ -34,21 +51,47 @@ export default function CartPage() {
   const [promoMessage, setPromoMessage] = useState(null);
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem('ct_cart_items');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setCartItems(parsed);
-          setIsLoaded(true);
-          return;
+    async function loadCart() {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('ct_auth_token') : null;
+      if (token) {
+        try {
+          const res = await fetch('/api/cart', {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.success && Array.isArray(data.items) && data.items.length > 0) {
+              const mapped = data.items.map(mapBackendCartItem);
+              setCartItems(mapped);
+              setIsLoaded(true);
+              return;
+            }
+          }
+        } catch (err) {
+          console.error('Failed to fetch backend cart:', err);
         }
       }
-    } catch (e) {
-      // fallback
+
+      try {
+        const stored = localStorage.getItem('ct_cart_items');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setCartItems(parsed);
+            setIsLoaded(true);
+            return;
+          }
+        }
+      } catch (e) {
+        // fallback
+      }
+      setCartItems(DEFAULT_CART_ITEMS);
+      setIsLoaded(true);
     }
-    setCartItems(DEFAULT_CART_ITEMS);
-    setIsLoaded(true);
+
+    loadCart();
   }, []);
 
   useEffect(() => {
@@ -63,10 +106,30 @@ export default function CartPage() {
     }
   }, [cartItems, isLoaded]);
 
-  const handleUpdateQuantity = (id, delta) => {
+  const handleUpdateQuantity = async (id, delta) => {
+    const targetItem = cartItems.find((item) => item.id === id || item.cartItemId === id);
+    const token = typeof window !== 'undefined' ? localStorage.getItem('ct_auth_token') : null;
+
+    if (token && targetItem && delta > 0) {
+      try {
+        await fetch('/api/cart/items', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            itemType: targetItem.type === 'RECORDED' ? 'recorded_webinar' : 'live_webinar',
+            productId: targetItem.productId || targetItem.id,
+            quantity: delta,
+          }),
+        });
+      } catch (err) {}
+    }
+
     setCartItems((prev) =>
       prev.map((item) => {
-        if (item.id === id) {
+        if (item.id === id || item.cartItemId === id) {
           const newQty = Math.max(1, item.quantity + delta);
           return { ...item, quantity: newQty };
         }
@@ -75,8 +138,42 @@ export default function CartPage() {
     );
   };
 
-  const handleRemoveItem = (id) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  const handleRemoveItem = async (id) => {
+    const itemToRemove = cartItems.find((item) => item.id === id || item.cartItemId === id);
+    const cartItemId = itemToRemove?.cartItemId || id;
+
+    const token = typeof window !== 'undefined' ? localStorage.getItem('ct_auth_token') : null;
+    if (token) {
+      try {
+        await fetch(`/api/cart/items/${cartItemId}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+      } catch (err) {
+        console.error('Failed to remove item from backend cart:', err);
+      }
+    }
+
+    setCartItems((prev) => prev.filter((item) => item.id !== id && item.cartItemId !== id));
+  };
+
+  const handleClearCart = async () => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('ct_auth_token') : null;
+    if (token) {
+      try {
+        await fetch('/api/cart', {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+      } catch (err) {
+        console.error('Failed to clear backend cart:', err);
+      }
+    }
+    setCartItems([]);
   };
 
   const handleUpgrade = () => {

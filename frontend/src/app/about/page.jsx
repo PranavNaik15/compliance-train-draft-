@@ -14,6 +14,7 @@ export default function AboutPage() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.hash === '#contact') {
@@ -26,13 +27,41 @@ export default function AboutPage() {
     }
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.phone || !form.message) {
       alert('Please fill in all required fields marked with *');
       return;
     }
-    setSubmitted(true);
+
+    try {
+      setLoading(true);
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim(),
+          queryType: form.queryType || undefined,
+          subject: form.queryType || undefined,
+          message: form.message.trim(),
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || (data.errors && data.errors[0]) || 'Failed to submit query. Please try again.');
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      alert(err.message || 'An error occurred while submitting your message. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

@@ -14,7 +14,7 @@ export default function LiveSupportWidget() {
     }
   ]);
 
-  const handleSendMessage = (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!inputMsg.trim()) return;
 
@@ -25,7 +25,44 @@ export default function LiveSupportWidget() {
     ]);
     setInputMsg('');
 
-    setTimeout(() => {
+    try {
+      let userName = undefined;
+      let userEmail = undefined;
+      try {
+        const storedUser = localStorage.getItem('ct_auth_user');
+        if (storedUser) {
+          const parsed = JSON.parse(storedUser);
+          userName = parsed.name;
+          userEmail = parsed.email;
+        }
+      } catch (err) {}
+
+      const res = await fetch('/api/support', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: userText,
+          name: userName,
+          email: userEmail,
+          category: 'Live Support Chat',
+          subject: 'Live Support Chat',
+        }),
+      });
+
+      const data = await res.json();
+      const replyText = data.message || 'Thank you for reaching out! A HIPAA & SAMHSA compliance advisor is available to help with clinic registrations or custom group training.';
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: 'Live Support',
+          text: replyText,
+          time: 'Just now'
+        }
+      ]);
+    } catch (err) {
       setMessages((prev) => [
         ...prev,
         {
@@ -34,7 +71,7 @@ export default function LiveSupportWidget() {
           time: 'Just now'
         }
       ]);
-    }, 600);
+    }
   };
 
   if (!isOpen) {
