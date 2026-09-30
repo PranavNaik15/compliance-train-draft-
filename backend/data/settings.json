@@ -1,0 +1,33 @@
+{
+  "general": {
+    "siteName": "ComplianceTrain Healthcare Learning Network",
+    "adminFullName": "System Administrator",
+    "adminEmail": "admin@compliancetrain.internal",
+    "supportEmail": "contactus@compliancetrain.com",
+    "supportPhone": "+1-888-222-5917",
+    "defaultCurrency": "USD",
+    "timezone": "EDT",
+    "dateFormat": "YYYY-MM-DD"
+  },
+  "website": {
+    "originalEnabled": true,
+    "bridgeEnabled": true,
+    "originalUrl": "http://localhost:5173",
+    "bridgeUrl": "http://localhost:5174",
+    "backendApiUrl": "http://localhost:5001/api"
+  },
+  "notifications": {
+    "emailNotificationsEnabled": true,
+    "adminNotificationsEnabled": true,
+    "notifyNewRegistration": true,
+    "notifyNewSupportTicket": true,
+    "notifyNewOnsiteTraining": true,
+    "notifyNewOrder": true
+  },
+  "system": {
+    "maintenanceMode": false,
+    "defaultPaginationSize": 10,
+    "sessionTimeoutMinutes": 60
+  },
+  "updatedAt": "2026-09-29T14:40:35.914Z"
+}

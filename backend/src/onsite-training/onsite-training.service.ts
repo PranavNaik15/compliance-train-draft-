@@ -2,110 +2,110 @@ import {
   Injectable,
   BadRequestException,
   NotFoundException,
+  InternalServerErrorException,
   Logger,
-  OnModuleInit,
 } from '@nestjs/common';
-import { DatabaseService } from '../database/database.service';
+import * as fs from 'fs';
+import * as path from 'path';
 import { CreateOnsiteTrainingDto } from './dto/create-onsite-training.dto';
-import { OnsiteTrainingRequest } from './entities/onsite-training.entity';
+
+export interface OnsiteTrainingRecord {
+  id: string;
+  name: string;
+  organization: string;
+  email: string;
+  phone: string;
+  industry?: string | null;
+  preferredTime?: string | null;
+  preferredDate?: string | null;
+  specificNeeds?: string | null;
+  trainingTopic?: string | null;
+  requirements?: string | null;
+  participants?: string | null;
+  attendeeCount?: string | number | null;
+  website: 'ORIGINAL' | 'BRIDGE' | string;
+  date?: string;
+  status: 'NEW' | 'IN_PROGRESS' | 'SCHEDULED' | 'RESOLVED' | 'COMPLETED' | 'CANCELLED' | string;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UpdateOnsiteTrainingDto {
+  status?: string;
+  notes?: string;
+}
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 @Injectable()
-export class OnsiteTrainingService implements OnModuleInit {
+export class OnsiteTrainingService {
   private readonly logger = new Logger(OnsiteTrainingService.name);
-  private inMemoryRequests: Map<string, OnsiteTrainingRequest> = new Map();
+  private readonly dataDir = path.resolve(process.cwd(), 'data');
+  private readonly filePath = path.resolve(process.cwd(), 'data', 'onsite-training-requests.json');
 
-  constructor(private readonly db: DatabaseService) {}
-
-  async onModuleInit() {
-    await this.initOnsiteTrainingTable();
+  constructor() {
+    this.ensureDataFile();
   }
 
-  private async initOnsiteTrainingTable() {
+  private ensureDataFile(): void {
     try {
-      await this.db.query(`
-        CREATE TABLE IF NOT EXISTS onsite_training_requests (
-          id VARCHAR(100) PRIMARY KEY,
-          name VARCHAR(150) NOT NULL,
-          email VARCHAR(255) NOT NULL,
-          phone VARCHAR(50) NOT NULL,
-          industry VARCHAR(150) NOT NULL,
-          preferred_time VARCHAR(100),
-          specific_needs TEXT,
-          organization VARCHAR(255),
-          participants_count INTEGER,
-          created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-        );
-      `);
-      this.logger.log('🐘 onsite_training_requests table initialized in PostgreSQL.');
+      if (!fs.existsSync(this.dataDir)) {
+        fs.mkdirSync(this.dataDir, { recursive: true });
+      }
+      if (!fs.existsSync(this.filePath)) {
+        fs.writeFileSync(this.filePath, JSON.stringify([], null, 2), 'utf-8');
+        this.logger.log(`Created new onsite training storage file at ${this.filePath}`);
+      }
     } catch (err: any) {
-      this.logger.warn(`PostgreSQL onsite_training_requests table init skipped: ${err.message}. Using in-memory fallback.`);
+      this.logger.error(`Error ensuring onsite training file: ${err.message}`);
     }
   }
 
-  /**
-   * Submit a new onsite training request.
-   */
-  async create(dto: CreateOnsiteTrainingDto) {
-    const {
-      name,
-      email,
-      phone,
-      industry,
-      preferredTime,
-      specificNeeds,
-      organization,
-      participantsCount,
-      trainingRequirements,
-    } = dto || {};
+  public readOnsite(): OnsiteTrainingRecord[] {
+    try {
+      this.ensureDataFile();
+      const content = fs.readFileSync(this.filePath, 'utf-8');
+      if (!content || !content.trim()) return [];
+      return JSON.parse(content);
+    } catch (err: any) {
+      this.logger.error(`Failed to read onsite-training-requests.json: ${err.message}`);
+      throw new InternalServerErrorException('Failed to read onsite training storage.');
+    }
+  }
 
+  public writeOnsite(records: OnsiteTrainingRecord[]): void {
+    try {
+      this.ensureDataFile();
+      fs.writeFileSync(this.filePath, JSON.stringify(records, null, 2), 'utf-8');
+    } catch (err: any) {
+      this.logger.error(`Failed to write onsite-training-requests.json: ${err.message}`);
+      throw new InternalServerErrorException('Failed to write onsite training storage.');
+    }
+  }
+
+  async create(dto: CreateOnsiteTrainingDto & { website?: string; organization?: string; participants?: string; trainingTopic?: string }) {
+    const { name, email, phone, industry, preferredTime, preferredDate, specificNeeds, organization, participants, trainingTopic, website } = dto || {};
     const errors: string[] = [];
 
-    // 1. Name validation
     if (!name || typeof name !== 'string' || !name.trim()) {
       errors.push('Full name is required.');
     } else if (name.trim().length < 2) {
       errors.push('Name must be at least 2 characters long.');
-    } else if (name.trim().length > 150) {
-      errors.push('Name must not exceed 150 characters.');
     }
 
-    // 2. Email validation
     if (!email || typeof email !== 'string' || !email.trim()) {
-      errors.push('Email address is required.');
+      errors.push('Work email is required.');
     } else if (!EMAIL_REGEX.test(email.trim())) {
-      errors.push('Please provide a valid email address.');
+      errors.push('Please provide a valid work email address.');
     }
 
-    // 3. Phone validation
     if (!phone || typeof phone !== 'string' || !phone.trim()) {
       errors.push('Phone number is required.');
-    } else if (phone.trim().length < 5) {
-      errors.push('Phone number must be at least 5 characters.');
-    } else if (phone.trim().length > 50) {
-      errors.push('Phone number must not exceed 50 characters.');
     }
 
-    // 4. Industry validation
     if (!industry || typeof industry !== 'string' || !industry.trim()) {
-      errors.push('Your Industry is required.');
-    } else if (industry.trim().length > 150) {
-      errors.push('Industry must not exceed 150 characters.');
-    }
-
-    // 5. Participants Count validation (if provided)
-    if (participantsCount !== undefined && participantsCount !== null && participantsCount !== ('' as any)) {
-      const parsedCount = Number(participantsCount);
-      if (isNaN(parsedCount) || !Number.isInteger(parsedCount) || parsedCount < 1) {
-        errors.push('Number of participants must be a positive integer greater than or equal to 1.');
-      }
-    }
-
-    // 6. Text length validation
-    const resolvedNeeds = specificNeeds || trainingRequirements;
-    if (resolvedNeeds && typeof resolvedNeeds === 'string' && resolvedNeeds.trim().length > 3000) {
-      errors.push('Specific training needs must not exceed 3000 characters.');
+      errors.push('Industry / organization domain is required.');
     }
 
     if (errors.length > 0) {
@@ -120,139 +120,152 @@ export class OnsiteTrainingService implements OnModuleInit {
     const trimmedEmail = email.trim().toLowerCase();
     const trimmedPhone = phone.trim();
     const trimmedIndustry = industry.trim();
-    const trimmedTime = preferredTime && typeof preferredTime === 'string' ? preferredTime.trim() : undefined;
-    const trimmedNeeds = resolvedNeeds && typeof resolvedNeeds === 'string' ? resolvedNeeds.trim() : undefined;
-    const trimmedOrg = organization && typeof organization === 'string' ? organization.trim() : undefined;
-    const numParticipants = participantsCount ? Number(participantsCount) : undefined;
+    const resolvedOrg = (organization && typeof organization === 'string' && organization.trim()) ? organization.trim() : `${trimmedIndustry} Organization`;
+    const resolvedTopic = (trainingTopic && typeof trainingTopic === 'string' && trainingTopic.trim()) ? trainingTopic.trim() : (specificNeeds || `${trimmedIndustry} Compliance Workshop`);
+    const resolvedNeeds = (specificNeeds && typeof specificNeeds === 'string' && specificNeeds.trim()) ? specificNeeds.trim() : resolvedTopic;
+    const resolvedParticipants = (participants && typeof participants === 'string' && participants.trim()) ? participants.trim() : '15-30 Staff Members';
 
-    const requestId = `onsite-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+    const nextNum = Math.floor(400 + Math.random() * 9500);
+    const id = `ONS-${nextNum}`;
     const now = new Date().toISOString();
+    const dateStr = now.slice(0, 10);
+    const originWeb = (website || 'ORIGINAL').toUpperCase() === 'BRIDGE' ? 'BRIDGE' : 'ORIGINAL';
 
-    const record: OnsiteTrainingRequest = {
-      id: requestId,
+    const newRecord: OnsiteTrainingRecord = {
+      id,
       name: trimmedName,
+      organization: resolvedOrg,
       email: trimmedEmail,
       phone: trimmedPhone,
       industry: trimmedIndustry,
-      preferredTime: trimmedTime,
-      specificNeeds: trimmedNeeds,
-      organization: trimmedOrg,
-      participantsCount: numParticipants,
+      preferredTime: preferredTime || preferredDate || 'Flexible / Business Hours',
+      preferredDate: preferredDate || preferredTime || 'TBD with Coordinator',
+      specificNeeds: resolvedNeeds,
+      requirements: resolvedNeeds,
+      trainingTopic: resolvedTopic,
+      participants: resolvedParticipants,
+      attendeeCount: resolvedParticipants,
+      website: originWeb,
+      date: dateStr,
+      status: 'NEW',
       createdAt: now,
+      updatedAt: now,
     };
 
-    // Save to PostgreSQL or in-memory
-    try {
-      await this.db.query(
-        `INSERT INTO onsite_training_requests (
-          id, name, email, phone, industry, preferred_time, specific_needs, organization, participants_count, created_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, CURRENT_TIMESTAMP);`,
-        [
-          record.id,
-          record.name,
-          record.email,
-          record.phone,
-          record.industry,
-          record.preferredTime || null,
-          record.specificNeeds || null,
-          record.organization || null,
-          record.participantsCount || null,
-        ],
-      );
-    } catch (err: any) {
-      this.inMemoryRequests.set(record.id, record);
-    }
-
-    this.inMemoryRequests.set(record.id, record);
+    const records = this.readOnsite();
+    records.unshift(newRecord);
+    this.writeOnsite(records);
 
     return {
       success: true,
-      message: `Thank you, ${record.name}. A ComplianceTrain coordinator will contact you promptly at ${record.phone} to customize your onsite program.`,
-      data: record,
+      message: 'Thank you! Your on-site training consultation request has been received. An institutional training coordinator will contact you to finalize syllabus and dates.',
+      data: newRecord,
+      requestId: id,
     };
   }
 
-  /**
-   * Retrieve all onsite training requests.
-   */
-  async findAll(): Promise<{ success: boolean; count: number; data: OnsiteTrainingRequest[] }> {
-    let requests: OnsiteTrainingRequest[] = [];
+  async findAll(query?: { search?: string; status?: string; website?: string }) {
+    let list = this.readOnsite();
 
-    try {
-      const { rows } = await this.db.query(
-        'SELECT * FROM onsite_training_requests ORDER BY created_at DESC',
+    if (query?.status && query.status !== 'all') {
+      const s = query.status.toUpperCase();
+      list = list.filter((r) => {
+        const rStatus = (r.status || '').toUpperCase();
+        if (s === 'NEW') return rStatus === 'NEW';
+        if (s === 'IN_PROGRESS') return rStatus === 'IN_PROGRESS';
+        if (s === 'RESOLVED' || s === 'SCHEDULED') return rStatus === 'RESOLVED' || rStatus === 'SCHEDULED';
+        if (s === 'COMPLETED') return rStatus === 'COMPLETED';
+        if (s === 'CANCELLED') return rStatus === 'CANCELLED';
+        return rStatus === s;
+      });
+    }
+
+    if (query?.website && query.website !== 'all') {
+      const w = query.website.toUpperCase();
+      list = list.filter((r) => {
+        const rWeb = (r.website || '').toUpperCase();
+        if (w === 'ORIGINAL') return rWeb === 'ORIGINAL' || rWeb === 'BOTH';
+        if (w === 'BRIDGE') return rWeb === 'BRIDGE' || rWeb === 'BOTH';
+        return rWeb === w;
+      });
+    }
+
+    if (query?.search && query.search.trim()) {
+      const q = query.search.trim().toLowerCase();
+      list = list.filter(
+        (r) =>
+          r.id.toLowerCase().includes(q) ||
+          r.name.toLowerCase().includes(q) ||
+          (r.organization && r.organization.toLowerCase().includes(q)) ||
+          r.email.toLowerCase().includes(q) ||
+          (r.phone && r.phone.toLowerCase().includes(q)) ||
+          (r.trainingTopic && r.trainingTopic.toLowerCase().includes(q)) ||
+          (r.specificNeeds && r.specificNeeds.toLowerCase().includes(q)) ||
+          (r.industry && r.industry.toLowerCase().includes(q)),
       );
-      if (rows && rows.length > 0) {
-        requests = rows.map((r) => ({
-          id: r.id,
-          name: r.name,
-          email: r.email,
-          phone: r.phone,
-          industry: r.industry,
-          preferredTime: r.preferred_time || undefined,
-          specificNeeds: r.specific_needs || undefined,
-          organization: r.organization || undefined,
-          participantsCount: r.participants_count ? Number(r.participants_count) : undefined,
-          createdAt: r.created_at,
-        }));
-      }
-    } catch (err: any) {
-      requests = Array.from(this.inMemoryRequests.values());
     }
 
-    if (requests.length === 0 && this.inMemoryRequests.size > 0) {
-      requests = Array.from(this.inMemoryRequests.values());
-    }
+    // Sort by createdAt descending
+    list.sort((a, b) => new Date(b.createdAt || b.date || 0).getTime() - new Date(a.createdAt || a.date || 0).getTime());
 
     return {
       success: true,
-      count: requests.length,
-      data: requests,
+      total: list.length,
+      data: list,
     };
   }
 
-  /**
-   * Retrieve a single onsite training request by ID.
-   */
-  async findOne(id: string): Promise<{ success: boolean; data: OnsiteTrainingRequest }> {
-    const trimmedId = (id || '').trim();
+  async findOne(id: string) {
+    const list = this.readOnsite();
+    const item = list.find((r) => r.id === id || r.id.toLowerCase() === id.toLowerCase());
+    if (!item) {
+      throw new NotFoundException(`On-site training request with ID "${id}" not found.`);
+    }
+    return {
+      success: true,
+      data: item,
+    };
+  }
 
-    try {
-      const { rows } = await this.db.query(
-        'SELECT * FROM onsite_training_requests WHERE id = $1',
-        [trimmedId],
-      );
-      if (rows && rows.length > 0) {
-        const r = rows[0];
-        return {
-          success: true,
-          data: {
-            id: r.id,
-            name: r.name,
-            email: r.email,
-            phone: r.phone,
-            industry: r.industry,
-            preferredTime: r.preferred_time || undefined,
-            specificNeeds: r.specific_needs || undefined,
-            organization: r.organization || undefined,
-            participantsCount: r.participants_count ? Number(r.participants_count) : undefined,
-            createdAt: r.created_at,
-          },
-        };
-      }
-    } catch (err: any) {}
-
-    const found = this.inMemoryRequests.get(trimmedId);
-    if (found) {
-      return {
-        success: true,
-        data: found,
-      };
+  async update(id: string, dto: UpdateOnsiteTrainingDto) {
+    const list = this.readOnsite();
+    const index = list.findIndex((r) => r.id === id || r.id.toLowerCase() === id.toLowerCase());
+    if (index === -1) {
+      throw new NotFoundException(`On-site training request with ID "${id}" not found.`);
     }
 
-    throw new NotFoundException({
-      success: false,
-      message: `Onsite training request with ID "${id}" not found.`,
-    });
+    const existing = list[index];
+    const now = new Date().toISOString();
+
+    const updatedRecord: OnsiteTrainingRecord = {
+      ...existing,
+      status: dto.status ? dto.status.toUpperCase() : existing.status,
+      notes: dto.notes !== undefined ? dto.notes : existing.notes,
+      updatedAt: now,
+    };
+
+    list[index] = updatedRecord;
+    this.writeOnsite(list);
+
+    return {
+      success: true,
+      message: 'On-site training request updated successfully.',
+      data: updatedRecord,
+    };
+  }
+
+  async remove(id: string) {
+    const list = this.readOnsite();
+    const index = list.findIndex((r) => r.id === id || r.id.toLowerCase() === id.toLowerCase());
+    if (index === -1) {
+      throw new NotFoundException(`On-site training request with ID "${id}" not found.`);
+    }
+    const removed = list.splice(index, 1)[0];
+    this.writeOnsite(list);
+    return {
+      success: true,
+      message: `On-site training request "${id}" removed.`,
+      data: removed,
+    };
   }
 }

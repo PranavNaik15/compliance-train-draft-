@@ -2,17 +2,24 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getWebinars } from '../api/webinarApi';
+import { getWebinars, getWebsiteContent } from '../api/webinarApi';
 import WebinarCard from '../components/WebinarCard';
 
 export default function HomePage() {
   const [webinars, setWebinars] = useState([]);
+  const [pageContent, setPageContent] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [visibleCount, setVisibleCount] = useState(8);
 
   useEffect(() => {
     let isMounted = true;
+
+    getWebsiteContent('HOMEPAGE')
+      .then((data) => {
+        if (isMounted && data) setPageContent(data);
+      })
+      .catch(() => {});
 
     async function loadWebinars() {
       try {
@@ -267,8 +274,12 @@ export default function HomePage() {
                     className="hero-main-img"
                   />
                   <div className="hero-floating-badge" aria-hidden="true">
-                    <p className="floating-badge-bold">Practical. Relevant.</p>
-                    <p className="floating-badge-sub">Expert-Led HIPAA &amp; SAMHSA.</p>
+                    <p className="floating-badge-bold">
+                      {pageContent.hero_title ? pageContent.hero_title.split('.')[0] + '.' : 'Practical. Relevant.'}
+                    </p>
+                    <p className="floating-badge-sub">
+                      {pageContent.hero_tagline || 'Expert-Led HIPAA & SAMHSA.'}
+                    </p>
                   </div>
                 </div>
               </div>

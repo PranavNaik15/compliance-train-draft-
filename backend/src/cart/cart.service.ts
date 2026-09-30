@@ -6,10 +6,13 @@ import {
   Logger,
   OnModuleInit,
 } from '@nestjs/common';
+import * as fs from 'fs';
+import * as path from 'path';
 import { DatabaseService } from '../database/database.service';
 import { webinars as mockWebinars } from '../data/webinars';
 import { MEMBERSHIP_CATEGORIES } from '../data/memberships';
 import { AddCartItemDto } from './dto/add-cart-item.dto';
+
 
 export interface CartItem {
   id: string;
@@ -100,6 +103,28 @@ export class CartService implements OnModuleInit {
     }
   }
 
+  private readDynamicPlans(): any[] {
+    try {
+      const p = path.resolve(process.cwd(), 'data', 'membership-plans.json');
+      if (fs.existsSync(p)) {
+        const c = fs.readFileSync(p, 'utf-8');
+        return c ? JSON.parse(c) : [];
+      }
+    } catch {}
+    return [];
+  }
+
+  private readDynamicWebinars(): any[] {
+    try {
+      const p = path.resolve(process.cwd(), 'data', 'webinars.json');
+      if (fs.existsSync(p)) {
+        const c = fs.readFileSync(p, 'utf-8');
+        return c ? JSON.parse(c) : [];
+      }
+    } catch {}
+    return [];
+  }
+
   /**
    * Resolve authoritative product details and pricing.
    */
@@ -113,42 +138,47 @@ export class CartService implements OnModuleInit {
     date?: string;
     time?: string;
   } {
-    const { itemType, productId, optionType, membershipId } = dto;
+    const { itemType, productId, optionType } = dto;
 
     if (itemType === 'membership') {
-      // Look up membership plan
-      let matchedPlan: any = null;
-      let matchedCategory: any = null;
+      const dynamicPlans = this.readDynamicPlans();
+      const matched = dynamicPlans.find(
+        (p) => p.id === productId || p.id.toLowerCase() === (productId || '').toLowerCase(),
+      );
+
+      if (matched) {
+        return {
+          productTitle: `${matched.type === 'CORPORATE' ? 'Corporate Membership' : 'Individual Membership'} (${matched.name})`,
+          optionTitle: matched.duration,
+          unitPrice: Number(matched.price),
+          membershipId: matched.id,
+        };
+      }
 
       for (const cat of MEMBERSHIP_CATEGORIES) {
         const foundPlan = cat.plans.find((p) => p.id === productId || p.id === dto.productId);
         if (foundPlan) {
-          matchedPlan = foundPlan;
-          matchedCategory = cat;
-          break;
+          return {
+            productTitle: `${cat.title} (${foundPlan.name})`,
+            optionTitle: foundPlan.duration,
+            unitPrice: foundPlan.price,
+            membershipId: cat.id,
+          };
         }
       }
 
-      if (!matchedPlan) {
-        throw new NotFoundException({
-          success: false,
-          message: `Membership plan with ID "${productId}" not found.`,
-        });
-      }
-
-      return {
-        productTitle: `${matchedCategory.title} (${matchedPlan.name})`,
-        optionTitle: matchedPlan.duration,
-        unitPrice: matchedPlan.price,
-        membershipId: matchedCategory.id,
-      };
+      throw new NotFoundException({
+        success: false,
+        message: `Membership plan with ID "${productId}" not found.`,
+      });
     }
 
-    // Look up webinar product
+    // Look up webinar product from persistent JSON
     const webinarId = dto.webinarId || productId;
-    const webinar = mockWebinars.find(
-      (w) => w.id === webinarId || String(w.id) === String(productId),
-    );
+    const dynamicWebinars = this.readDynamicWebinars();
+    const webinar =
+      dynamicWebinars.find((w) => w.id === webinarId || String(w.id) === String(productId)) ||
+      mockWebinars.find((w) => w.id === webinarId || String(w.id) === String(productId));
 
     if (!webinar) {
       throw new NotFoundException({
@@ -157,14 +187,14 @@ export class CartService implements OnModuleInit {
       });
     }
 
-    let unitPrice = 199;
+    let unitPrice = Number(webinar.price) || 179;
     let optionTitle = 'Single Live Attendee';
 
     if (optionType && STANDARD_OPTION_PRICES[optionType]) {
       unitPrice = STANDARD_OPTION_PRICES[optionType].price;
       optionTitle = STANDARD_OPTION_PRICES[optionType].title;
     } else if (itemType === 'recorded_webinar') {
-      unitPrice = 249;
+      unitPrice = 159;
       optionTitle = 'On-Demand Recording';
     } else if (itemType === 'dvd') {
       unitPrice = 299;

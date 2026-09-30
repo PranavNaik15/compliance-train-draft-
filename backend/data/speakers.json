@@ -1,0 +1,50 @@
+[
+  {
+    "id": "spk-1790589399233",
+    "name": "TEST SPEAKER",
+    "designation": "Senior Test Compliance Consultant",
+    "organization": "Test Organization",
+    "bio": "Test speaker for Stage 3 verification.",
+    "photo": "/speaker-brian.jpg",
+    "profileLink": "",
+    "status": "active",
+    "createdAt": "2026-09-28T09:56:39.233Z",
+    "updatedAt": "2026-09-28T09:56:39.233Z"
+  },
+  {
+    "id": "spk-1",
+    "name": "Brian L. Tuttle",
+    "designation": "Certified HIPAA Consultant, CHP, CBRA, CCVO",
+    "organization": "InGauge Healthcare Solutions",
+    "bio": "Brian is a nationally renowned compliance consultant with 20+ years specializing in HIPAA, SAMHSA, and OCR audit defense.",
+    "photo": "/speaker-brian.jpg",
+    "profileLink": "https://linkedin.com",
+    "status": "active",
+    "createdAt": "2026-09-28T06:00:00.000Z",
+    "updatedAt": "2026-09-28T06:00:00.000Z"
+  },
+  {
+    "id": "spk-2",
+    "name": "Dr. Evelyn Martinez",
+    "designation": "Chief Health Informatics & Privacy Officer",
+    "organization": "Apex Health Systems",
+    "bio": "Specialist in clinical workflow data governance, modern AI integration standards, and SAMHSA Part 2 consent architectures.",
+    "photo": "/hero-executive.jpg",
+    "profileLink": "https://linkedin.com",
+    "status": "active",
+    "createdAt": "2026-09-28T06:00:00.000Z",
+    "updatedAt": "2026-09-28T06:00:00.000Z"
+  },
+  {
+    "id": "spk-3",
+    "name": "Marcus Sterling, JD, CHC",
+    "designation": "Healthcare Regulatory Counsel",
+    "organization": "Sterling & Partners Law",
+    "bio": "Former HHS/OCR enforcement attorney advising hospital systems on breach litigation, corrective action plans, and regulatory settlements.",
+    "photo": "/hero-executive.jpg",
+    "profileLink": "https://linkedin.com",
+    "status": "active",
+    "createdAt": "2026-09-28T06:00:00.000Z",
+    "updatedAt": "2026-09-28T06:00:00.000Z"
+  }
+]

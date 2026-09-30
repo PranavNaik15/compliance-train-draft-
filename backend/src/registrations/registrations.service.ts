@@ -5,48 +5,158 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import { DatabaseService } from '../database/database.service';
+import * as fs from 'fs';
+import * as path from 'path';
 import { CreateRegistrationDto } from './dto/create-registration.dto';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export interface RegistrationFormatted {
+export interface RegistrationRecord {
   id: string;
+  userId?: string;
+  name: string;
+  fullName: string;
+  email: string;
+  workEmail: string;
+  companyName: string;
+  jobRole: string;
   webinarId: string;
+  webinar: string;
   webinarTitle: string;
   webinarDate: string;
   webinarTime: string;
-  fullName: string;
-  companyName: string;
-  workEmail: string;
-  jobRole: string;
+  tier?: string;
+  date: string;
   registeredAt: string;
+  status: 'confirmed' | 'pending' | 'cancelled' | 'completed';
+  website: 'ORIGINAL' | 'BRIDGE' | string;
 }
 
 @Injectable()
 export class RegistrationsService {
   private readonly logger = new Logger(RegistrationsService.name);
+  private readonly dataDir = path.resolve(process.cwd(), 'data');
+  private readonly regsFilePath = path.resolve(process.cwd(), 'data', 'registrations.json');
+  private readonly usersFilePath = path.resolve(process.cwd(), 'data', 'users.json');
+  private readonly webinarsFilePath = path.resolve(process.cwd(), 'data', 'webinars.json');
 
-  constructor(private readonly db: DatabaseService) {}
-
-  formatRegistration(row: any): RegistrationFormatted | null {
-    if (!row) return null;
-    return {
-      id: row.id,
-      webinarId: row.webinar_id,
-      webinarTitle: row.webinar_title,
-      webinarDate: row.webinar_date,
-      webinarTime: row.webinar_time,
-      fullName: row.full_name,
-      companyName: row.company_name,
-      workEmail: row.work_email,
-      jobRole: row.job_role,
-      registeredAt: row.registered_at,
-    };
+  constructor() {
+    this.ensureDataFile();
   }
 
-  async create(dto: CreateRegistrationDto) {
-    const { webinarId, fullName, companyName, workEmail, jobRole } = dto || {};
+  private ensureDataFile(): void {
+    try {
+      if (!fs.existsSync(this.dataDir)) {
+        fs.mkdirSync(this.dataDir, { recursive: true });
+      }
+
+      if (!fs.existsSync(this.regsFilePath)) {
+        fs.writeFileSync(this.regsFilePath, '[]', 'utf-8');
+      }
+
+      if (!fs.existsSync(this.usersFilePath)) {
+        fs.writeFileSync(this.usersFilePath, '[]', 'utf-8');
+      }
+    } catch (err: any) {
+      this.logger.error(`Failed to initialize data files: ${err.message}`);
+    }
+  }
+
+  private readRegistrations(): RegistrationRecord[] {
+    this.ensureDataFile();
+    try {
+      const content = fs.readFileSync(this.regsFilePath, 'utf-8');
+      if (!content || !content.trim()) return [];
+      return JSON.parse(content) as RegistrationRecord[];
+    } catch (err: any) {
+      this.logger.error(`Error reading ${this.regsFilePath}: ${err.message}`);
+      throw new InternalServerErrorException('Failed to read registrations file.');
+    }
+  }
+
+  private writeRegistrations(records: RegistrationRecord[]): void {
+    try {
+      if (!fs.existsSync(this.dataDir)) {
+        fs.mkdirSync(this.dataDir, { recursive: true });
+      }
+      fs.writeFileSync(this.regsFilePath, JSON.stringify(records, null, 2), 'utf-8');
+    } catch (err: any) {
+      this.logger.error(`Error writing ${this.regsFilePath}: ${err.message}`);
+      throw new InternalServerErrorException('Failed to write registrations file.');
+    }
+  }
+
+  private readUsers(): any[] {
+    try {
+      if (!fs.existsSync(this.usersFilePath)) return [];
+      const content = fs.readFileSync(this.usersFilePath, 'utf-8');
+      if (!content || !content.trim()) return [];
+      return JSON.parse(content);
+    } catch {
+      return [];
+    }
+  }
+
+  private writeUsers(users: any[]): void {
+    try {
+      fs.writeFileSync(this.usersFilePath, JSON.stringify(users, null, 2), 'utf-8');
+    } catch (err: any) {
+      this.logger.warn(`Failed to sync user: ${err.message}`);
+    }
+  }
+
+  private readWebinars(): any[] {
+    try {
+      if (!fs.existsSync(this.webinarsFilePath)) return [];
+      const content = fs.readFileSync(this.webinarsFilePath, 'utf-8');
+      if (!content || !content.trim()) return [];
+      return JSON.parse(content);
+    } catch {
+      return [];
+    }
+  }
+
+  private syncUserOnRegistration(fullName: string, email: string, companyName?: string, jobRole?: string): string {
+    const users = this.readUsers();
+    const normalizedEmail = email.trim().toLowerCase();
+    const existingIndex = users.findIndex((u) => u.email && u.email.trim().toLowerCase() === normalizedEmail);
+
+    const now = new Date().toISOString();
+    const today = now.slice(0, 10);
+
+    if (existingIndex >= 0) {
+      const existing = users[existingIndex];
+      users[existingIndex] = {
+        ...existing,
+        name: fullName.trim() || existing.name,
+        organization: companyName?.trim() || existing.organization || 'Independent Healthcare Professional',
+        jobRole: jobRole?.trim() || existing.jobRole || '',
+        updatedAt: now,
+      };
+      this.writeUsers(users);
+      return existing.id;
+    } else {
+      const newUserId = `USR-${Math.floor(1000 + Math.random() * 9000)}`;
+      const newUser = {
+        id: newUserId,
+        name: fullName.trim(),
+        email: email.trim(),
+        organization: companyName?.trim() || 'Independent Healthcare Professional',
+        jobRole: jobRole?.trim() || '',
+        membership: 'None (Pay-per-webinar)',
+        status: 'active',
+        registeredDate: today,
+        createdAt: now,
+        updatedAt: now,
+      };
+      users.unshift(newUser);
+      this.writeUsers(users);
+      return newUserId;
+    }
+  }
+
+  async create(dto: CreateRegistrationDto & { website?: string; tier?: string }) {
+    const { webinarId, fullName, companyName, workEmail, jobRole, website, tier } = dto || {};
     const errors: string[] = [];
 
     if (!webinarId || typeof webinarId !== 'string' || !webinarId.trim()) {
@@ -79,99 +189,169 @@ export class RegistrationsService {
     const trimmedEmail = workEmail.trim();
     const normalizedEmail = trimmedEmail.toLowerCase();
 
-    try {
-      // 1. Verify webinar exists
-      const webinarResult = await this.db.query(
-        'SELECT id, title, date, time FROM webinars WHERE id = $1',
-        [trimmedWebinarId],
-      );
-      if (webinarResult.rows.length === 0) {
-        throw new NotFoundException({
-          success: false,
-          message: 'Webinar not found.',
-          errors: ['Webinar not found.'],
-        });
-      }
-
-      const webinar = webinarResult.rows[0];
-
-      // 2. Check duplicate
-      const existingRegistration = await this.db.query(
-        'SELECT id FROM registrations WHERE webinar_id = $1 AND LOWER(work_email) = $2',
-        [trimmedWebinarId, normalizedEmail],
-      );
-
-      if (existingRegistration.rows.length > 0) {
-        throw new BadRequestException({
-          success: false,
-          message: `Already registered with email "${trimmedEmail}".`,
-          errors: [`Already registered with email "${trimmedEmail}".`],
-        });
-      }
-
-      // 3. Insert
-      const registrationId = `reg-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
-      const insertResult = await this.db.query(
-        `INSERT INTO registrations (
-          id, webinar_id, webinar_title, webinar_date, webinar_time,
-          full_name, company_name, work_email, job_role, registered_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, CURRENT_TIMESTAMP)
-        RETURNING *;`,
-        [
-          registrationId,
-          webinar.id,
-          webinar.title,
-          webinar.date,
-          webinar.time,
-          fullName.trim(),
-          companyName.trim(),
-          trimmedEmail,
-          jobRole.trim(),
-        ],
-      );
-
-      return {
-        success: true,
-        message: 'Registration successful!',
-        data: this.formatRegistration(insertResult.rows[0]),
-      };
-    } catch (error: any) {
-      if (error instanceof BadRequestException || error instanceof NotFoundException) {
-        throw error;
-      }
-      if (error.code === '23505') {
-        throw new BadRequestException({
-          success: false,
-          message: 'Already registered.',
-          errors: ['Already registered.'],
-        });
-      }
-      this.logger.error('Error during registration:', error);
-      throw new InternalServerErrorException({
+    // 1. Verify webinar exists in webinars.json
+    const webinars = this.readWebinars();
+    const webinar = webinars.find((w) => w.id === trimmedWebinarId);
+    if (!webinar) {
+      throw new NotFoundException({
         success: false,
-        message: 'Internal server error.',
-        error: error.message,
+        message: `Webinar with ID "${trimmedWebinarId}" not found.`,
+        errors: ['Webinar not found.'],
       });
     }
+
+    // 2. Check duplicate registration
+    const allRegistrations = this.readRegistrations();
+    const isDuplicate = allRegistrations.some(
+      (r) =>
+        r.webinarId === trimmedWebinarId &&
+        (r.email?.trim().toLowerCase() === normalizedEmail || r.workEmail?.trim().toLowerCase() === normalizedEmail),
+    );
+
+    if (isDuplicate) {
+      throw new BadRequestException({
+        success: false,
+        message: `Already registered with email "${trimmedEmail}".`,
+        errors: [`Already registered with email "${trimmedEmail}".`],
+      });
+    }
+
+    // 3. Determine website origin
+    let originWebsite: 'ORIGINAL' | 'BRIDGE' = 'ORIGINAL';
+    if (website) {
+      const wUpper = website.toUpperCase();
+      if (wUpper.includes('BRIDGE') || wUpper.includes('5174')) {
+        originWebsite = 'BRIDGE';
+      }
+    }
+
+    // 4. Sync User record in users.json
+    const userId = this.syncUserOnRegistration(fullName, trimmedEmail, companyName, jobRole);
+
+    // 5. Build Registration record
+    const now = new Date();
+    const regId = `REG-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    const newRecord: RegistrationRecord = {
+      id: regId,
+      userId,
+      name: fullName.trim(),
+      fullName: fullName.trim(),
+      email: trimmedEmail,
+      workEmail: trimmedEmail,
+      companyName: companyName.trim(),
+      jobRole: jobRole.trim(),
+      webinarId: webinar.id,
+      webinar: webinar.title,
+      webinarTitle: webinar.title,
+      webinarDate: webinar.date || 'TBD',
+      webinarTime: webinar.time || '10:00 AM PDT',
+      tier: tier || `Single Attendee ($${webinar.price || 179})`,
+      date: now.toISOString().slice(0, 10),
+      registeredAt: now.toISOString(),
+      status: 'confirmed',
+      website: originWebsite,
+    };
+
+    allRegistrations.unshift(newRecord);
+    this.writeRegistrations(allRegistrations);
+
+    return {
+      success: true,
+      message: 'Registration successful!',
+      data: newRecord,
+    };
   }
 
-  async findAll() {
-    try {
-      const { rows } = await this.db.query(
-        'SELECT * FROM registrations ORDER BY registered_at DESC',
+  async findAll(query?: { search?: string; status?: string; website?: string; webinarId?: string; userId?: string }) {
+    const all = this.readRegistrations();
+    let result = all;
+
+    if (query?.search) {
+      const q = query.search.toLowerCase();
+      result = result.filter(
+        (r) =>
+          r.id.toLowerCase().includes(q) ||
+          r.name.toLowerCase().includes(q) ||
+          r.email.toLowerCase().includes(q) ||
+          (r.webinar && r.webinar.toLowerCase().includes(q)) ||
+          (r.companyName && r.companyName.toLowerCase().includes(q)),
       );
-      return {
-        success: true,
-        total: rows.length,
-        data: rows.map((r) => this.formatRegistration(r)),
-      };
-    } catch (error: any) {
-      this.logger.error('Error fetching registrations:', error);
-      throw new InternalServerErrorException({
-        success: false,
-        message: 'Failed to retrieve registrations',
-        error: error.message,
-      });
     }
+
+    if (query?.status && query.status !== 'all') {
+      result = result.filter((r) => r.status.toLowerCase() === query.status.toLowerCase());
+    }
+
+    if (query?.website && query.website !== 'all') {
+      const wQuery = query.website.toUpperCase();
+      result = result.filter((r) => r.website.toUpperCase() === wQuery);
+    }
+
+    if (query?.webinarId) {
+      result = result.filter((r) => r.webinarId === query.webinarId);
+    }
+
+    if (query?.userId) {
+      result = result.filter((r) => r.userId === query.userId);
+    }
+
+    return {
+      success: true,
+      total: result.length,
+      data: result,
+    };
+  }
+
+  async findOne(id: string) {
+    const all = this.readRegistrations();
+    const reg = all.find((r) => r.id === id);
+    if (!reg) {
+      throw new NotFoundException(`Registration with ID "${id}" not found.`);
+    }
+    return {
+      success: true,
+      data: reg,
+    };
+  }
+
+  async update(id: string, updateDto: { status?: 'confirmed' | 'pending' | 'cancelled' | 'completed' }) {
+    const all = this.readRegistrations();
+    const index = all.findIndex((r) => r.id === id);
+    if (index === -1) {
+      throw new NotFoundException(`Registration with ID "${id}" not found.`);
+    }
+
+    const existing = all[index];
+    const updated: RegistrationRecord = {
+      ...existing,
+      status: updateDto.status || existing.status,
+    };
+
+    all[index] = updated;
+    this.writeRegistrations(all);
+
+    return {
+      success: true,
+      message: 'Registration status updated successfully.',
+      data: updated,
+    };
+  }
+
+  async remove(id: string) {
+    const all = this.readRegistrations();
+    const index = all.findIndex((r) => r.id === id);
+    if (index === -1) {
+      throw new NotFoundException(`Registration with ID "${id}" not found.`);
+    }
+
+    all.splice(index, 1);
+    this.writeRegistrations(all);
+
+    return {
+      success: true,
+      message: 'Registration deleted successfully.',
+      data: { id },
+    };
   }
 }

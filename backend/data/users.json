@@ -1,0 +1,98 @@
+[
+  {
+    "id": "USR-2321",
+    "name": "Dr. Jordan Hayes",
+    "email": "jordan.hayes@bridgeregional.org",
+    "organization": "Bridge Regional Clinic",
+    "jobRole": "Medical Director & Privacy Lead",
+    "membership": "None (Pay-per-webinar)",
+    "status": "active",
+    "registeredDate": "2026-09-28",
+    "createdAt": "2026-09-28T10:09:58.744Z",
+    "updatedAt": "2026-09-28T10:09:58.744Z"
+  },
+  {
+    "id": "USR-7674",
+    "name": "Alex Mercer",
+    "email": "alex.mercer@testcare.org",
+    "organization": "TestCare Health Network",
+    "jobRole": "Compliance Analyst",
+    "membership": "None (Pay-per-webinar)",
+    "status": "active",
+    "registeredDate": "2026-09-28",
+    "createdAt": "2026-09-28T10:09:50.164Z",
+    "updatedAt": "2026-09-28T10:11:34.066Z"
+  },
+  {
+    "id": "USR-3041",
+    "name": "Dr. Sarah Jenkins",
+    "email": "sjenkins@memorialhealth.org",
+    "organization": "Memorial Health System",
+    "jobRole": "Chief Compliance Officer",
+    "membership": "Corporate 1-Year",
+    "status": "active",
+    "registeredDate": "2026-01-14",
+    "createdAt": "2026-01-14T08:00:00.000Z",
+    "updatedAt": "2026-09-28T06:00:00.000Z"
+  },
+  {
+    "id": "USR-3042",
+    "name": "David Keller",
+    "email": "keller.d@triwestclinic.com",
+    "organization": "TriWest Family Clinic",
+    "jobRole": "Practice Administrator",
+    "membership": "Individual 6-Month",
+    "status": "active",
+    "registeredDate": "2026-03-22",
+    "createdAt": "2026-03-22T09:30:00.000Z",
+    "updatedAt": "2026-09-28T06:00:00.000Z"
+  },
+  {
+    "id": "USR-3043",
+    "name": "Rachel Adams",
+    "email": "radams@solanabehavioral.org",
+    "organization": "Solana Behavioral Health",
+    "jobRole": "Privacy Officer",
+    "membership": "None (Pay-per-webinar)",
+    "status": "active",
+    "registeredDate": "2026-05-10",
+    "createdAt": "2026-05-10T11:15:00.000Z",
+    "updatedAt": "2026-09-28T06:00:00.000Z"
+  },
+  {
+    "id": "USR-3044",
+    "name": "Robert Thorne",
+    "email": "rthorne@valleychildrens.com",
+    "organization": "Valley Children's Hospital",
+    "jobRole": "IT Security Director",
+    "membership": "Individual Annual",
+    "status": "active",
+    "registeredDate": "2026-06-18",
+    "createdAt": "2026-06-18T14:20:00.000Z",
+    "updatedAt": "2026-09-28T06:00:00.000Z"
+  },
+  {
+    "id": "USR-3045",
+    "name": "Jessica Vance",
+    "email": "jvance@medbillingplus.net",
+    "organization": "MedBilling Plus",
+    "jobRole": "Billing & Compliance Lead",
+    "membership": "None (Pay-per-webinar)",
+    "status": "active",
+    "registeredDate": "2026-07-02",
+    "createdAt": "2026-07-02T16:00:00.000Z",
+    "updatedAt": "2026-09-28T06:00:00.000Z"
+  },
+  {
+    "id": "USR-3046",
+    "name": "Marcus Finch",
+    "email": "mfinch@finchconsulting.io",
+    "organization": "Finch IT Partners",
+    "jobRole": "IT Compliance Auditor",
+    "membership": "Expired",
+    "status": "inactive",
+    "registeredDate": "2025-11-05",
+    "createdAt": "2025-11-05T10:00:00.000Z",
+    "updatedAt": "2026-09-28T06:00:00.000Z"
+  }
+]

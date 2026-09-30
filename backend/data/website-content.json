@@ -1,0 +1,172 @@
+[
+  {
+    "id": "cnt-home-hero-title",
+    "section": "HOMEPAGE",
+    "key": "hero_title",
+    "label": "Homepage Hero Headline",
+    "content": "Practical. Relevant. Expert-Led HIPAA & SAMHSA Training",
+    "website": "BOTH",
+    "status": "ACTIVE",
+    "updatedAt": "2026-09-29T10:00:00.000Z"
+  },
+  {
+    "id": "cnt-home-hero-tagline",
+    "section": "HOMEPAGE",
+    "key": "hero_tagline",
+    "label": "Brand Tagline / Header Slogan",
+    "content": "Trained by Leading GRC & Healthcare Regulatory Experts",
+    "website": "BOTH",
+    "status": "ACTIVE",
+    "updatedAt": "2026-09-29T10:00:00.000Z"
+  },
+  {
+    "id": "cnt-home-trust-strip",
+    "section": "HOMEPAGE",
+    "key": "trust_strip",
+    "label": "Healthcare Trust Strip Badges",
+    "content": "Hospital & Health Systems, Behavioral Health Clinics, Medical Practice Groups, Health IT EHR",
+    "website": "BOTH",
+    "status": "ACTIVE",
+    "updatedAt": "2026-09-29T10:00:00.000Z"
+  },
+  {
+    "id": "cnt-about-overview",
+    "section": "ABOUT",
+    "key": "about_overview",
+    "label": "About Us Overview Paragraph",
+    "content": "A comprehensive compliance training platform connecting healthcare organizations with certified auditors for live webinars and customized onsite programs.",
+    "website": "BOTH",
+    "status": "ACTIVE",
+    "updatedAt": "2026-09-29T10:00:00.000Z"
+  },
+  {
+    "id": "cnt-about-mission",
+    "section": "ABOUT",
+    "key": "mission_statement",
+    "label": "Mission Statement",
+    "content": "Lower client stress and increase regulatory compliance knowledge regarding HIPAA, SAMHSA, and healthcare data governance.",
+    "website": "BOTH",
+    "status": "ACTIVE",
+    "updatedAt": "2026-09-29T10:00:00.000Z"
+  },
+  {
+    "id": "cnt-about-address",
+    "section": "ABOUT",
+    "key": "headquarters_address",
+    "label": "Headquarters Physical Address",
+    "content": "50 E. Corona Ave Oakland, CA 94601 - United States of America",
+    "website": "BOTH",
+    "status": "ACTIVE",
+    "updatedAt": "2026-09-29T10:00:00.000Z"
+  },
+  {
+    "id": "cnt-contact-email-orig",
+    "section": "CONTACT",
+    "key": "advisory_email",
+    "label": "Official Advisory Email",
+    "content": "contactus@compliancetrain.com",
+    "website": "ORIGINAL",
+    "status": "ACTIVE",
+    "updatedAt": "2026-09-29T10:00:00.000Z"
+  },
+  {
+    "id": "cnt-contact-email-bridge",
+    "section": "CONTACT",
+    "key": "advisory_email",
+    "label": "Official Advisory Email",
+    "content": "contactus@compliancebridge.com",
+    "website": "BRIDGE",
+    "status": "ACTIVE",
+    "updatedAt": "2026-09-29T10:00:00.000Z"
+  },
+  {
+    "id": "cnt-contact-phone",
+    "section": "CONTACT",
+    "key": "toll_free_phone",
+    "label": "Toll-Free Phone Number",
+    "content": "+1-888-222-5917",
+    "website": "BOTH",
+    "status": "ACTIVE",
+    "updatedAt": "2026-09-29T10:00:00.000Z"
+  },
+  {
+    "id": "cnt-contact-fax",
+    "section": "CONTACT",
+    "key": "fax_number",
+    "label": "Direct Fax Line",
+    "content": "+1-484-270-4440",
+    "website": "BOTH",
+    "status": "ACTIVE",
+    "updatedAt": "2026-09-29T10:00:00.000Z"
+  },
+  {
+    "id": "cnt-contact-hours",
+    "section": "CONTACT",
+    "key": "support_hours",
+    "label": "Support Hours",
+    "content": "Mon - Fri: 8:00 AM - 6:00 PM EST",
+    "website": "BOTH",
+    "status": "ACTIVE",
+    "updatedAt": "2026-09-29T10:00:00.000Z"
+  },
+  {
+    "id": "cnt-membership-subtitle",
+    "section": "MEMBERSHIP",
+    "key": "membership_subtitle",
+    "label": "Membership Subtitle",
+    "content": "Compliance training that fits your needs with full live & on-demand CEU access.",
+    "website": "BOTH",
+    "status": "ACTIVE",
+    "updatedAt": "2026-09-29T10:00:00.000Z"
+  },
+  {
+    "id": "cnt-membership-ind-desc",
+    "section": "MEMBERSHIP",
+    "key": "individual_desc",
+    "label": "Individual Membership Description",
+    "content": "For healthcare practitioners and privacy officers requiring ongoing CEU training.",
+    "website": "BOTH",
+    "status": "ACTIVE",
+    "updatedAt": "2026-09-29T10:00:00.000Z"
+  },
+  {
+    "id": "cnt-membership-corp-desc",
+    "section": "MEMBERSHIP",
+    "key": "corporate_desc",
+    "label": "Corporate Membership Description",
+    "content": "For organizations that need ongoing compliance training access for their teams.",
+    "website": "BOTH",
+    "status": "ACTIVE",
+    "updatedAt": "2026-09-29T10:00:00.000Z"
+  },
+  {
+    "id": "cnt-webinars-refund-policy",
+    "section": "WEBINARS",
+    "key": "refund_policy",
+    "label": "Webinar Refund & Credit Policy",
+    "content": "Participants may cancel up to 72 hours prior to the live session to receive a full letter of credit valid for 12 months.",
+    "website": "BOTH",
+    "status": "ACTIVE",
+    "updatedAt": "2026-09-29T10:00:00.000Z"
+  },
+  {
+    "id": "cnt-footer-copyright-orig",
+    "section": "FOOTER",
+    "key": "copyright_text",
+    "label": "Footer Copyright Statement",
+    "content": "© 2026 ComplianceTrain. All rights reserved. Healthcare Compliance Education.",
+    "website": "ORIGINAL",
+    "status": "ACTIVE",
+    "updatedAt": "2026-09-29T10:00:00.000Z"
+  },
+  {
+    "id": "cnt-footer-copyright-bridge",
+    "section": "FOOTER",
+    "key": "copyright_text",
+    "label": "Footer Copyright Statement",
+    "content": "© 2026 ComplianceBridge. All rights reserved. Healthcare Regulatory Advisory.",
+    "website": "BRIDGE",
+    "status": "ACTIVE",
+    "updatedAt": "2026-09-29T10:00:00.000Z"
+  }
+]

@@ -1,0 +1,63 @@
+[
+  {
+    "id": "SUP-2126",
+    "user": "Marcus Sterling",
+    "name": "Marcus Sterling",
+    "email": "msterling@sterlinglegal.org",
+    "subject": "CEU Attendance Verification Transcript Request",
+    "message": "Need an urgent expedited verification transcript for the September 2026 HIPAA webinar to submit to state bar accreditation.",
+    "category": "CEU Certificates",
+    "priority": "HIGH",
+    "website": "ORIGINAL",
+    "date": "2026-09-29 09:54",
+    "status": "RESOLVED",
+    "createdAt": "2026-09-29T09:54:46.194Z",
+    "updatedAt": "2026-09-29T09:54:53.611Z",
+    "notes": "CEU certificate PDF emailed to attendee"
+  },
+  {
+    "id": "SUP-801",
+    "user": "Dr. Sarah Jenkins",
+    "name": "Dr. Sarah Jenkins",
+    "email": "sjenkins@memorialhealth.org",
+    "subject": "Webinar joining link not received in confirmation email",
+    "message": "I registered for the upcoming session on October 15th, but have not yet received the Zoom access credentials link.",
+    "category": "Zoom Credentials",
+    "priority": "HIGH",
+    "date": "2026-09-28 10:15",
+    "status": "OPEN",
+    "website": "BRIDGE",
+    "createdAt": "2026-09-28T10:15:00.000Z",
+    "updatedAt": "2026-09-28T10:15:00.000Z"
+  },
+  {
+    "id": "SUP-802",
+    "user": "David Keller",
+    "name": "David Keller",
+    "email": "keller.d@triwestclinic.com",
+    "subject": "Invoice copy required with PO Number #TW-4401",
+    "message": "Please send an updated PDF invoice reflecting our purchase order reference for accounting records.",
+    "category": "Billing / Invoices",
+    "priority": "MEDIUM",
+    "date": "2026-09-27 15:30",
+    "status": "IN_PROGRESS",
+    "website": "ORIGINAL",
+    "createdAt": "2026-09-27T15:30:00.000Z",
+    "updatedAt": "2026-09-27T16:00:00.000Z"
+  },
+  {
+    "id": "SUP-803",
+    "user": "Laura Bennett",
+    "name": "Laura Bennett",
+    "email": "lbennett@summithealth.org",
+    "subject": "On-demand recorded webinar audio playback inquiry",
+    "message": "The slide deck download link on module 3 has been resolved. Thank you for prompt assistance.",
+    "category": "Technical Support",
+    "priority": "LOW",
+    "date": "2026-09-25 11:20",
+    "status": "RESOLVED",
+    "website": "BRIDGE",
+    "createdAt": "2026-09-25T11:20:00.000Z",
+    "updatedAt": "2026-09-26T09:00:00.000Z"
+  }
+]

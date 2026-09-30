@@ -2,51 +2,84 @@ import {
   Injectable,
   BadRequestException,
   NotFoundException,
+  InternalServerErrorException,
   Logger,
-  OnModuleInit,
 } from '@nestjs/common';
-import { DatabaseService } from '../database/database.service';
+import * as fs from 'fs';
+import * as path from 'path';
 import { CreateContactDto } from './dto/create-contact.dto';
-import { ContactSubmission } from './entities/contact.entity';
+
+export interface ContactRecord {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string | null;
+  subject: string;
+  queryType?: string | null;
+  message: string;
+  website: 'ORIGINAL' | 'BRIDGE' | string;
+  date?: string;
+  status: 'NEW' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED' | string;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UpdateContactDto {
+  status?: string;
+  notes?: string;
+}
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 @Injectable()
-export class ContactService implements OnModuleInit {
+export class ContactService {
   private readonly logger = new Logger(ContactService.name);
-  private inMemoryContacts: Map<string, ContactSubmission> = new Map();
+  private readonly dataDir = path.resolve(process.cwd(), 'data');
+  private readonly filePath = path.resolve(process.cwd(), 'data', 'contact-requests.json');
 
-  constructor(private readonly db: DatabaseService) {}
-
-  async onModuleInit() {
-    await this.initContactTable();
+  constructor() {
+    this.ensureDataFile();
   }
 
-  private async initContactTable() {
+  private ensureDataFile(): void {
     try {
-      await this.db.query(`
-        CREATE TABLE IF NOT EXISTS contact_submissions (
-          id VARCHAR(100) PRIMARY KEY,
-          name VARCHAR(150) NOT NULL,
-          email VARCHAR(255) NOT NULL,
-          phone VARCHAR(50),
-          query_type VARCHAR(150),
-          subject VARCHAR(255),
-          message TEXT NOT NULL,
-          created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-        );
-      `);
-      this.logger.log('🐘 contact_submissions table initialized in PostgreSQL.');
+      if (!fs.existsSync(this.dataDir)) {
+        fs.mkdirSync(this.dataDir, { recursive: true });
+      }
+      if (!fs.existsSync(this.filePath)) {
+        fs.writeFileSync(this.filePath, JSON.stringify([], null, 2), 'utf-8');
+        this.logger.log(`Created new contact storage file at ${this.filePath}`);
+      }
     } catch (err: any) {
-      this.logger.warn(`PostgreSQL contact_submissions table init skipped: ${err.message}. Using in-memory fallback.`);
+      this.logger.error(`Error ensuring contact file: ${err.message}`);
     }
   }
 
-  /**
-   * Submit a new contact inquiry.
-   */
-  async create(dto: CreateContactDto) {
-    const { name, email, phone, queryType, subject, message } = dto || {};
+  public readContacts(): ContactRecord[] {
+    try {
+      this.ensureDataFile();
+      const content = fs.readFileSync(this.filePath, 'utf-8');
+      if (!content || !content.trim()) return [];
+      return JSON.parse(content);
+    } catch (err: any) {
+      this.logger.error(`Failed to read contact-requests.json: ${err.message}`);
+      throw new InternalServerErrorException('Failed to read contact storage.');
+    }
+  }
+
+  public writeContacts(records: ContactRecord[]): void {
+    try {
+      this.ensureDataFile();
+      fs.writeFileSync(this.filePath, JSON.stringify(records, null, 2), 'utf-8');
+    } catch (err: any) {
+      this.logger.error(`Failed to write contact-requests.json: ${err.message}`);
+      throw new InternalServerErrorException('Failed to write contact storage.');
+    }
+  }
+
+  async create(dto: CreateContactDto & { website?: string }) {
+    const { name, email, phone, queryType, subject, message, website } = dto || {};
     const errors: string[] = [];
 
     if (!name || typeof name !== 'string' || !name.trim()) {
@@ -86,131 +119,142 @@ export class ContactService implements OnModuleInit {
     const trimmedName = name.trim();
     const trimmedEmail = email.trim().toLowerCase();
     const trimmedPhone = phone && typeof phone === 'string' ? phone.trim() : null;
-    const resolvedQueryType = (queryType && typeof queryType === 'string' ? queryType.trim() : null) ||
-                              (subject && typeof subject === 'string' ? subject.trim() : null) || null;
-    const resolvedSubject = (subject && typeof subject === 'string' ? subject.trim() : null) || resolvedQueryType;
+    const resolvedSubject = (subject && typeof subject === 'string' ? subject.trim() : null) ||
+                            (queryType && typeof queryType === 'string' ? queryType.trim() : 'General Inquiry');
     const trimmedMessage = message.trim();
 
-    const submissionId = `contact-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+    const nextNum = Math.floor(600 + Math.random() * 9300);
+    const submissionId = `CNT-${nextNum}`;
     const now = new Date().toISOString();
+    const dateStr = now.slice(0, 10);
+    const originWeb = (website || 'ORIGINAL').toUpperCase() === 'BRIDGE' ? 'BRIDGE' : 'ORIGINAL';
 
-    const record: ContactSubmission = {
+    const newRecord: ContactRecord = {
       id: submissionId,
       name: trimmedName,
       email: trimmedEmail,
-      phone: trimmedPhone || undefined,
-      queryType: resolvedQueryType || undefined,
-      subject: resolvedSubject || undefined,
+      phone: trimmedPhone,
+      subject: resolvedSubject,
+      queryType: queryType || resolvedSubject,
       message: trimmedMessage,
+      website: originWeb,
+      date: dateStr,
+      status: 'NEW',
       createdAt: now,
+      updatedAt: now,
     };
 
-    // Save to PostgreSQL if available, otherwise in-memory map
-    try {
-      await this.db.query(
-        `INSERT INTO contact_submissions (
-          id, name, email, phone, query_type, subject, message, created_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP);`,
-        [
-          record.id,
-          record.name,
-          record.email,
-          record.phone || null,
-          record.queryType || null,
-          record.subject || null,
-          record.message,
-        ],
-      );
-    } catch (err: any) {
-      this.inMemoryContacts.set(record.id, record);
-    }
-
-    this.inMemoryContacts.set(record.id, record);
+    const contacts = this.readContacts();
+    contacts.unshift(newRecord);
+    this.writeContacts(contacts);
 
     return {
       success: true,
-      message: 'Thank you for reaching out! Your inquiry has been received. Our compliance team will respond promptly.',
-      data: record,
+      message: 'Thank you! Your inquiry has been submitted successfully. A compliance specialist will review and respond shortly.',
+      data: newRecord,
+      submissionId,
     };
   }
 
-  /**
-   * Retrieve all contact submissions.
-   */
-  async findAll(): Promise<{ success: boolean; count: number; data: ContactSubmission[] }> {
-    let submissions: ContactSubmission[] = [];
+  async findAll(query?: { search?: string; status?: string; website?: string }) {
+    let list = this.readContacts();
 
-    try {
-      const { rows } = await this.db.query(
-        'SELECT * FROM contact_submissions ORDER BY created_at DESC',
+    if (query?.status && query.status !== 'all') {
+      const s = query.status.toUpperCase();
+      list = list.filter((c) => {
+        const cStatus = (c.status || '').toUpperCase();
+        if (s === 'NEW') return cStatus === 'NEW';
+        if (s === 'IN_PROGRESS') return cStatus === 'IN_PROGRESS';
+        if (s === 'RESOLVED') return cStatus === 'RESOLVED';
+        if (s === 'CLOSED') return cStatus === 'CLOSED';
+        return cStatus === s;
+      });
+    }
+
+    if (query?.website && query.website !== 'all') {
+      const w = query.website.toUpperCase();
+      list = list.filter((c) => {
+        const cWeb = (c.website || '').toUpperCase();
+        if (w === 'ORIGINAL') return cWeb === 'ORIGINAL' || cWeb === 'BOTH';
+        if (w === 'BRIDGE') return cWeb === 'BRIDGE' || cWeb === 'BOTH';
+        return cWeb === w;
+      });
+    }
+
+    if (query?.search && query.search.trim()) {
+      const q = query.search.trim().toLowerCase();
+      list = list.filter(
+        (c) =>
+          c.id.toLowerCase().includes(q) ||
+          c.name.toLowerCase().includes(q) ||
+          c.email.toLowerCase().includes(q) ||
+          (c.phone && c.phone.toLowerCase().includes(q)) ||
+          (c.subject && c.subject.toLowerCase().includes(q)) ||
+          (c.message && c.message.toLowerCase().includes(q)),
       );
-      if (rows && rows.length > 0) {
-        submissions = rows.map((r) => ({
-          id: r.id,
-          name: r.name,
-          email: r.email,
-          phone: r.phone || undefined,
-          queryType: r.query_type || undefined,
-          subject: r.subject || undefined,
-          message: r.message,
-          createdAt: r.created_at,
-        }));
-      }
-    } catch (err: any) {
-      submissions = Array.from(this.inMemoryContacts.values());
     }
 
-    if (submissions.length === 0 && this.inMemoryContacts.size > 0) {
-      submissions = Array.from(this.inMemoryContacts.values());
-    }
+    // Sort by createdAt descending
+    list.sort((a, b) => new Date(b.createdAt || b.date || 0).getTime() - new Date(a.createdAt || a.date || 0).getTime());
 
     return {
       success: true,
-      count: submissions.length,
-      data: submissions,
+      total: list.length,
+      data: list,
     };
   }
 
-  /**
-   * Retrieve a single contact submission by ID.
-   */
-  async findOne(id: string): Promise<{ success: boolean; data: ContactSubmission }> {
-    const trimmedId = (id || '').trim();
+  async findOne(id: string) {
+    const list = this.readContacts();
+    const item = list.find((c) => c.id === id || c.id.toLowerCase() === id.toLowerCase());
+    if (!item) {
+      throw new NotFoundException(`Contact inquiry with ID "${id}" not found.`);
+    }
+    return {
+      success: true,
+      data: item,
+    };
+  }
 
-    try {
-      const { rows } = await this.db.query(
-        'SELECT * FROM contact_submissions WHERE id = $1',
-        [trimmedId],
-      );
-      if (rows && rows.length > 0) {
-        const r = rows[0];
-        return {
-          success: true,
-          data: {
-            id: r.id,
-            name: r.name,
-            email: r.email,
-            phone: r.phone || undefined,
-            queryType: r.query_type || undefined,
-            subject: r.subject || undefined,
-            message: r.message,
-            createdAt: r.created_at,
-          },
-        };
-      }
-    } catch (err: any) {}
-
-    const found = this.inMemoryContacts.get(trimmedId);
-    if (found) {
-      return {
-        success: true,
-        data: found,
-      };
+  async update(id: string, dto: UpdateContactDto) {
+    const list = this.readContacts();
+    const index = list.findIndex((c) => c.id === id || c.id.toLowerCase() === id.toLowerCase());
+    if (index === -1) {
+      throw new NotFoundException(`Contact inquiry with ID "${id}" not found.`);
     }
 
-    throw new NotFoundException({
-      success: false,
-      message: `Contact submission with ID "${id}" not found.`,
-    });
+    const existing = list[index];
+    const now = new Date().toISOString();
+
+    const updatedRecord: ContactRecord = {
+      ...existing,
+      status: dto.status ? dto.status.toUpperCase() : existing.status,
+      notes: dto.notes !== undefined ? dto.notes : existing.notes,
+      updatedAt: now,
+    };
+
+    list[index] = updatedRecord;
+    this.writeContacts(list);
+
+    return {
+      success: true,
+      message: 'Contact inquiry updated successfully.',
+      data: updatedRecord,
+    };
+  }
+
+  async remove(id: string) {
+    const list = this.readContacts();
+    const index = list.findIndex((c) => c.id === id || c.id.toLowerCase() === id.toLowerCase());
+    if (index === -1) {
+      throw new NotFoundException(`Contact inquiry with ID "${id}" not found.`);
+    }
+    const removed = list.splice(index, 1)[0];
+    this.writeContacts(list);
+    return {
+      success: true,
+      message: `Contact request "${id}" removed.`,
+      data: removed,
+    };
   }
 }

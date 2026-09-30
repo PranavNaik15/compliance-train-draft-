@@ -2,9 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { getWebsiteContent } from '../../api/webinarApi';
 import '../../styles/info-pages.css';
 
 export default function AboutPage() {
+  const [content, setContent] = useState({});
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -17,6 +19,7 @@ export default function AboutPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    getWebsiteContent().then((data) => setContent(data || {})).catch(() => {});
     if (typeof window !== 'undefined' && window.location.hash === '#contact') {
       const el = document.getElementById('contact');
       if (el) {
@@ -170,7 +173,7 @@ export default function AboutPage() {
                     </svg>
                   </div>
                   <address className="contact-detail-text">
-                    50 E. Corona Ave Oakland, CA 94601 - USA
+                    {content.headquarters_address || '50 E. Corona Ave Oakland, CA 94601 - USA'}
                   </address>
                 </div>
 
@@ -183,8 +186,8 @@ export default function AboutPage() {
                     </svg>
                   </div>
                   <div className="contact-detail-text">
-                    <a href="mailto:contactus@compliancebridge.com" className="email-link">
-                      contactus@compliancebridge.com
+                    <a href={`mailto:${content.advisory_email || 'contactus@compliancebridge.com'}`} className="email-link">
+                      {content.advisory_email || 'contactus@compliancebridge.com'}
                     </a>
                   </div>
                 </div>
@@ -198,8 +201,8 @@ export default function AboutPage() {
                     </svg>
                   </div>
                   <div className="contact-detail-text">
-                    <div><strong>Direct:</strong> +1-888-222-5917</div>
-                    <div><strong>Fax:</strong> +1-484-270-4440</div>
+                    <div><strong>Direct:</strong> {content.toll_free_phone || '+1-888-222-5917'}</div>
+                    <div><strong>Fax:</strong> {content.fax_number || '+1-484-270-4440'}</div>
                   </div>
                 </div>
 

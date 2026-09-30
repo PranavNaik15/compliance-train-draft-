@@ -1,11 +1,23 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { getWebsiteContent } from '../api/webinarApi';
 import '../styles/footer.css';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [content, setContent] = useState({});
+
+  useEffect(() => {
+    getWebsiteContent().then((data) => setContent(data || {})).catch(() => {});
+  }, []);
+
+  const copyrightText = content.copyright_text || `© ${currentYear} Compliance Bridge Healthcare Learning Network. All rights reserved.`;
+  const advisoryEmail = content.advisory_email || 'contactus@compliancebridge.com';
+  const phone = content.toll_free_phone || '+1-888-222-5917';
+  const address = content.headquarters_address || '50 E. Corona Ave Oakland, CA 94601';
+  const hours = content.support_hours || 'Mon - Fri: 8:00 AM - 6:00 PM EST';
 
   return (
     <footer className="footer-clean" role="contentinfo">
@@ -17,11 +29,11 @@ export default function Footer() {
               <span className="footer-brand-title">Compliance<span style={{ color: 'var(--color-blue-primary)' }}>Bridge</span></span>
             </div>
             <p className="footer-about-text">
-              A comprehensive HIPAA &amp; SAMHSA healthcare compliance training platform connecting healthcare organizations with certified auditors for live webinars and customized onsite programs.
+              {content.about_overview || 'A comprehensive HIPAA & SAMHSA healthcare compliance training platform connecting healthcare organizations with certified auditors for live webinars and customized onsite programs.'}
             </p>
             <div className="footer-direct-contact">
-              <div><strong>Toll-Free:</strong> +1-888-222-5917</div>
-              <div><strong>Email:</strong> contactus@compliancebridge.com</div>
+              <div><strong>Toll-Free:</strong> {phone}</div>
+              <div><strong>Email:</strong> {advisoryEmail}</div>
             </div>
           </div>
 
@@ -53,14 +65,14 @@ export default function Footer() {
               Oakland, CA 94601<br />
               United States of America<br />
               <span style={{ display: 'block', marginTop: '0.5rem', color: 'var(--color-text-subtle)' }}>
-                Mon - Fri: 8:00 AM - 6:00 PM EST
+                {hours}
               </span>
             </address>
           </div>
         </div>
 
         <div className="footer-bottom-bar">
-          <p>&copy; {currentYear} Compliance Bridge Healthcare Learning Network. All rights reserved.</p>
+          <p>{copyrightText}</p>
           <div className="footer-bottom-links">
             <a href="#privacy" onClick={(e) => e.preventDefault()}>Privacy Policy</a>
             <span>&bull;</span>

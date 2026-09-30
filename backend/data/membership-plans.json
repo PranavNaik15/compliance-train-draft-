@@ -1,0 +1,136 @@
+[
+  {
+    "id": "ind-1m",
+    "name": "1 Month Membership",
+    "type": "INDIVIDUAL",
+    "price": 198,
+    "duration": "1 Month",
+    "durationMonths": 1,
+    "durationUnit": "month",
+    "description": "Flexible short-term compliance training access for individual professionals.",
+    "status": "ACTIVE",
+    "isBestValue": false,
+    "features": [
+      "Access to scheduled live interactive webinars during active month",
+      "Unlimited access to on-demand recorded webinar library",
+      "Downloadable slide decks and reference handouts",
+      "Official certificate of completion for attended sessions",
+      "Standard customer & technical support"
+    ],
+    "createdAt": "2026-09-28T06:00:00.000Z",
+    "updatedAt": "2026-09-29T06:40:17.548Z"
+  },
+  {
+    "id": "ind-6m",
+    "name": "6 Months Membership",
+    "type": "INDIVIDUAL",
+    "price": 899,
+    "duration": "6 Months",
+    "durationMonths": 6,
+    "durationUnit": "months",
+    "description": "Extended compliance training access for ongoing professional education.",
+    "status": "ACTIVE",
+    "isBestValue": false,
+    "features": [
+      "Access to all live interactive webinars during 6-month period",
+      "Unlimited access to on-demand recorded webinar library",
+      "Downloadable slide decks and compliance reference materials",
+      "Certificates of completion for all completed courses",
+      "Member-only regulatory updates & guidance documents",
+      "Standard customer & technical support"
+    ],
+    "createdAt": "2026-09-28T06:00:00.000Z",
+    "updatedAt": "2026-09-28T06:00:00.000Z"
+  },
+  {
+    "id": "ind-1y",
+    "name": "1 Year Membership",
+    "type": "INDIVIDUAL",
+    "price": 1499,
+    "duration": "1 Year",
+    "durationMonths": 12,
+    "durationUnit": "year",
+    "description": "Comprehensive year-round compliance training and resource access.",
+    "status": "ACTIVE",
+    "isBestValue": true,
+    "features": [
+      "Full access to all scheduled live interactive webinars for 12 months",
+      "24/7 unlimited access to complete on-demand recording library",
+      "Complete training materials, checklists & slide decks",
+      "Verified CEU & attendance certificates for all sessions",
+      "Priority regulatory updates and compliance newsletters",
+      "Priority customer & coordinator support"
+    ],
+    "createdAt": "2026-09-28T06:00:00.000Z",
+    "updatedAt": "2026-09-28T06:00:00.000Z"
+  },
+  {
+    "id": "corp-1m",
+    "name": "1 Month Corporate",
+    "type": "CORPORATE",
+    "price": 499,
+    "duration": "1 Month",
+    "durationMonths": 1,
+    "durationUnit": "month",
+    "seats": "Up to 5 team members",
+    "description": "Flexible short-term compliance training access for healthcare teams and clinics.",
+    "status": "ACTIVE",
+    "isBestValue": false,
+    "features": [
+      "Team access for up to 5 users from your organization",
+      "Access to live interactive webinars for registered team members",
+      "Unlimited access to on-demand recorded webinar library",
+      "Downloadable training handouts & presentation decks",
+      "Individual certificates of completion for each attendee",
+      "Dedicated team coordination support"
+    ],
+    "createdAt": "2026-09-28T06:00:00.000Z",
+    "updatedAt": "2026-09-28T06:00:00.000Z"
+  },
+  {
+    "id": "corp-6m",
+    "name": "6 Months Corporate",
+    "type": "CORPORATE",
+    "price": 2399,
+    "duration": "6 Months",
+    "durationMonths": 6,
+    "durationUnit": "months",
+    "seats": "Up to 10 team members",
+    "description": "Multi-user compliance training package for mid-size practices and clinical groups.",
+    "status": "ACTIVE",
+    "isBestValue": false,
+    "features": [
+      "Team access for up to 10 registered team members",
+      "Full access to all scheduled live interactive webinars",
+      "24/7 access to complete on-demand webinar library",
+      "Administrative dashboard with attendance & completion tracking",
+      "Official certificates of completion for all participating staff",
+      "Custom billing and centralized invoicing"
+    ],
+    "createdAt": "2026-09-28T06:00:00.000Z",
+    "updatedAt": "2026-09-28T06:00:00.000Z"
+  },
+  {
+    "id": "corp-1y",
+    "name": "1 Year Corporate Enterprise",
+    "type": "CORPORATE",
+    "price": 4299,
+    "duration": "1 Year",
+    "durationMonths": 12,
+    "durationUnit": "year",
+    "seats": "Up to 25 team members",
+    "description": "Comprehensive enterprise compliance solution for large organizations.",
+    "status": "ACTIVE",
+    "isBestValue": true,
+    "features": [
+      "Organization-wide access for up to 25 registered team members",
+      "Unlimited access to all live and on-demand webinars for 12 months",
+      "Dedicated enterprise account coordinator & compliance advisor",
+      "Customized webinar recommendations & compliance roadmaps",
+      "Automated group certificate issuance and LMS integration support",
+      "Priority support and custom invoicing with Net-30 payment terms"
+    ],
+    "createdAt": "2026-09-28T06:00:00.000Z",
+    "updatedAt": "2026-09-28T06:00:00.000Z"
+  }
+]
